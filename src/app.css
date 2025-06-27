@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
 body {
-    @apply bg-gray-200;
+    @apply h-screen w-screen overflow-hidden;
+        background-image: url('/texture/45-degree-fabric-light.png');
+    background-size: 100px;
+    background-color: black;
 }
