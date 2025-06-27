@@ -27,24 +27,8 @@
 	}
 
 	let zoom = $state(0.3);
-	let scroll_dir = { x: 0, y: 0 };
-	let scroll_position = $state({ x: 0, y: -40 });
-
-	let prev_loop = new Date();
-	function scroll_loop() {
-		let dt = new Date().getTime() - prev_loop.getTime();
-
-		console.log('loop', dt);
-
-		scroll_position.x += scroll_dir.x ** 3 * dt * -0.1;
-		scroll_position.y += scroll_dir.y ** 3 * dt * -0.1;
-
-		requestAnimationFrame(scroll_loop);
-		prev_loop = new Date();
-	}
-	onMount(() => {
-		scroll_loop();
-	});
+	let scroll_position = $state({ x: 370, y: 20 });
+	let drag_locked = false;
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
 		e.preventDefault();
@@ -56,104 +40,87 @@
 	}
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
-        
-
-		const bodyRect = e.currentTarget.getBoundingClientRect();
-		let x = e.clientX;
-		let w = bodyRect.width;
-		const limitX = w * 0.25;
-		let x_factor = 0;
-		if (x < limitX) {
-			x_factor = x / limitX - 1;
-		} else if (x - w > -limitX) {
-			x_factor = (x - w) / limitX + 1;
+		if (e.buttons == 1 && !drag_locked) {
+			scroll_position.x += e.movementX;
+			scroll_position.y += e.movementY;
 		}
-
-		let y = e.clientY;
-		let h = bodyRect.height;
-		const limitY = h * 0.25;
-		let y_factor = 0;
-		if (y < limitY) {
-			y_factor = y / limitY - 1;
-		} else if (y - h > -limitY) {
-			y_factor = (y - h) / limitY + 1;
-		}
-
-		// console.log(x_factor, y_factor);
-
-		scroll_dir = {
-			x: x_factor,
-			y: y_factor
-		};
-	}
-	function onmouseout() {
-		scroll_dir = { x: 0, y: 0 };
 	}
 </script>
 
-<svelte:body {onwheel} {onmousemove} {onmouseout} />
+<svelte:body {onwheel} {onmousemove} />
 
 <div class="board" style="--zoom: {zoom}; --x: {scroll_position.x}px; --y: {scroll_position.y}px">
-    <div class="bg"></div>
+	<div class="bg"></div>
 	<div class="playmat playmat--1">
 		<div class="texture"></div>
 	</div>
 	<div class="playmat playmat--2">
 		<div class="texture"></div>
 	</div>
-	each
 	{#each cards as data}
-		<Card {data} {zoom} on_top={() => put_on_top(data)} />
+		<Card
+			{data}
+			{zoom}
+			start_drag={() => {
+				put_on_top(data);
+				drag_locked = true;
+			}}
+			end_drag={()=>{
+				drag_locked = false;
+			}}
+		/>
 	{/each}
 </div>
 
 <style>
-    .bg{
-        position: absolute;
-        transform: translate(-250vw, -250vh);
-        width: calc(2160px * 4);
-        height: calc(1080px * 4);
-        background-color: black;
-        background-image: url('/texture/45-degree-fabric-light.png');
-        /* background-size: 300px; */
-    }
+	.bg {
+		position: absolute;
+		transform: translate(-250vw, -250vh);
+		width: calc(2160px * 4);
+		height: calc(1080px * 4);
+		background-color: black;
+		background-image: url('/texture/45-degree-fabric-light.png');
+		/* background-size: 300px; */
+	}
 	.board {
 		position: absolute;
 		/* transform: perspective(200px) rotateX(2deg); */
-        width: 720px;
-        height: 420px;
+		width: 100px;
+		height: 100px;
 		scale: var(--zoom);
 		translate: var(--x) var(--y);
 
-        backface-visibility: hidden;
+		backface-visibility: hidden;
 
-        transform-origin: center;
+		transform-origin: calc(var(--x) * var(--zoom)) calc(var(--y) * var(--zoom));
 
 		/* transition:
-			scale 600ms cubic-bezier(0.16, 1, 0.3, 1), */
+			scale 600ms cubic-bezier(0.16, 1, 0.3, 1); */
 	}
 	.playmat {
-        position: absolute;
-        width: 2160px;
-        height: 1080px;
-        flex-grow: 1;
-        /* height: max-content; */
-        /* margin: 100px; */
+		position: absolute;
+		width: 2160px;
+		height: 1080px;
+		flex-grow: 1;
+		/* height: max-content; */
+		/* margin: 100px; */
 
 		background-repeat: no-repeat;
 		background-size: cover;
 
 		border-radius: 20px;
-        overflow: hidden;
+		overflow: hidden;
 
 		/* border: solid #171717 4px; */
-        box-shadow: 0px 0px 0px 8px black;
+		box-shadow: 0px 0px 0px 8px black;
+
+		translate: -1080px -1080px;
 	}
 	.playmat--1 {
 		background-image: url('/bg/01.jpg');
 	}
 	.playmat--2 {
-        top: 1200px;
+		top: 1200px;
 		background-image: url('/bg/02.jpg');
 	}
 

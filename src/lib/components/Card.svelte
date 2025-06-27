@@ -2,9 +2,12 @@
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { CardData } from '$lib/types/Card';
 
-	let { data, on_top, zoom }: { data: CardData; on_top: () => void; zoom: number } = $props();
-
-	// console.log(card_id);
+	let {
+		data,
+		start_drag,
+		end_drag,
+		zoom
+	}: { data: CardData; start_drag: () => void; end_drag: () => void; zoom: number } = $props();
 
 	const slide_scale = 5;
 	let tapped = $state(false);
@@ -13,9 +16,9 @@
 	let dragStart = { x: 0, y: 0 };
 	let initialPosition = { x: 0, y: 0 };
 
+	let dragging = $state(false);
+	let moved = false;
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		var rect = e.currentTarget.getBoundingClientRect();
-
 		if (dragging) {
 			// Calculate the delta from the initial drag position
 			const deltaX = e.clientX - dragStart.x;
@@ -23,60 +26,33 @@
 
 			position.x = initialPosition.x + deltaX / zoom;
 			position.y = initialPosition.y + deltaY / zoom;
-
-			console.log(zoom);
-
-			// position.x = Math.round(position.x / 20) * 20;
-			// position.y = Math.round(position.y / 20) * 20;
-		} else {
-			// var locX = e.clientX - rect.left;
-			// var locY = e.clientY - rect.top;
-			// let rx = ((locX / e.currentTarget.offsetWidth) * 2 - 1) * slide_scale;
-			// let ry = ((locY / e.currentTarget.offsetHeight) * 2 - 1) * slide_scale;
-			// e.currentTarget.style.setProperty('--mouse-x', rx.toString());
-			// e.currentTarget.style.setProperty('--mouse-y', ry.toString());
 		}
-	}
-
-	let drag_timeout = 0;
-	let dragging = $state(false);
-
-	function cancel_drag_timer() {
-		clearTimeout(drag_timeout);
-		drag_timeout = 0;
+		moved = true;
 	}
 	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
 		const rect = e.currentTarget.getBoundingClientRect();
 
-		if (drag_timeout != 0) {
-			cancel_drag_timer();
-		}
+		dragging = true;
+		moved = false;
 
-		drag_timeout = setTimeout(() => {
-			drag_timeout = 0;
+		dragStart.x = e.clientX;
+		dragStart.y = e.clientY;
 
-			dragging = true;
+		initialPosition = { ...position };
 
-			dragStart.x = e.clientX;
-			dragStart.y = e.clientY;
-
-			initialPosition = { ...position };
-
-			on_top();
-		}, 100);
+		start_drag();
 	}
 
 	function onmouseup() {
-		if (!dragging && drag_timeout != 0) {
-			cancel_drag_timer();
+		if (!moved) {
 			tapped = !tapped;
-		} else {
-			dragging = false;
 		}
+		dragging = false;
+		end_drag();
 	}
 </script>
 
-<svelte:body {onmousemove} {onmouseup} />
+<svelte:body {onmousemove} {onmouseup} oncontextmenu={(e) => e.preventDefault()} />
 
 <button
 	class="card"
