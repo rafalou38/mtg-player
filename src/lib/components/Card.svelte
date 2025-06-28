@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { CardData } from '$lib/types/Card';
-	import { boardState } from '$lib/stores/Cards.svelte';
+	import { board_self, boardState, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 
 	let {
 		data,
@@ -9,8 +9,9 @@
 		end_drag,
 		zoom,
 		scroll_position,
-		hand,
-		force_drag
+		hand: in_hand,
+		force_drag,
+		force_index
 	}: {
 		data: CardData;
 		start_drag: () => void;
@@ -19,6 +20,7 @@
 		scroll_position: { x: number; y: number };
 		hand?: boolean;
 		force_drag?: boolean;
+		force_index?: number;
 	} = $props();
 
 	const slide_scale = 5;
@@ -53,6 +55,9 @@
 		dragging = true;
 		moved = false;
 
+		boardState.dragging_card = data;
+		boardState.dragging = true;
+
 		dragStart.x = e.clientX;
 		dragStart.y = e.clientY;
 
@@ -62,12 +67,27 @@
 	}
 
 	function onmouseup() {
-		if (hand) return;
+		if (in_hand) return;
+
+		if (dragging && boardState.hand_dropping_index != undefined) {
+			console.log('dropping', boardState.hand_dropping_index);
+			setHand(
+				hand.map((c) => {
+					if (c.id == -1) {
+						c.id = data.id;
+					}
+					return c;
+				})
+			);
+			setBoardSelf(board_self.filter((c) => c.id != data.id));
+		}
 
 		if (!moved) {
 			tapped = !tapped;
 		}
 		dragging = false;
+		boardState.dragging_card = undefined;
+		boardState.dragging = false;
 		end_drag();
 	}
 
@@ -80,6 +100,9 @@
 
 		dragging = true;
 		moved = true;
+
+		boardState.dragging_card = data;
+		boardState.dragging = true;
 
 		console.log(scroll_position);
 
@@ -98,17 +121,15 @@
 			force_drag = false;
 		}
 	});
-	$effect(() => {
-		boardState.dragging = dragging;
-	});
 </script>
 
 <svelte:body {onmousemove} {onmouseup} oncontextmenu={(e) => e.preventDefault()} />
 
 <button
 	class="card"
-	class:hand
+	class:hand={in_hand}
 	style="--x: {position.x}px; --y: {position.y}px; z-index: {data.order}"
+	hidden={dragging && boardState.hand_dropping_index != undefined}
 	class:tapped
 	class:dragging
 	{onmousedown}
@@ -145,7 +166,7 @@
 		&.hand {
 			translate: 0 0;
 			scale: 1;
-			position: relative;
+			/* position: relative; */
 			width: auto;
 			height: auto;
 			border-radius: 8px;

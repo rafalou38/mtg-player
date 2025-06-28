@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { boardState, hand } from '$lib/stores/Cards.svelte';
+	import { boardState, hand, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { scale } from 'svelte/transition';
 	import Card from './Card.svelte';
@@ -43,8 +43,8 @@
 	$effect(() => {
 		if (!handElement) return;
 		let rect = handElement.getBoundingClientRect();
-		let n_gap = rect.width / hand.length - 200;
-		if (n_gap > -40) n_gap = -40;
+		let n_gap = rect.width / hand.length - 150;
+		if (n_gap > -20) n_gap = -20;
 
 		if (gap != n_gap) {
 			gap = n_gap;
@@ -67,6 +67,32 @@
 			}
 		};
 	}
+
+	let removeTimeout = 0;
+	function onCardHover(card: CardData) {
+		clearTimeout(removeTimeout);
+
+		if (card.id == -1) {
+			return;
+		}
+		// Insert virtual card just before hovered card if draging.
+		setHand(hand.filter((c) => c.id != -1));
+		if (boardState.dragging && boardState.dragging_card) {
+			let index = hand.indexOf(card);
+			if (index > -1) {
+				hand.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
+				boardState.hand_dropping_index = index;
+
+				// hand.splice(index + 1, 1);
+			}
+		}
+	}
+	function onCardLeave() {
+		removeTimeout = setTimeout(() => {
+			setHand(hand.filter((c) => c.id != -1));
+            boardState.hand_dropping_index = undefined;
+		}, 100);
+	}
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -77,25 +103,34 @@
 	bind:this={handElement}
 >
 	{#each hand as card, i (card.id)}
-		<div class="hand-item" transition:drag_out_transition>
+		<div
+			class="hand-item border-2 border-black"
+			out:drag_out_transition
+			onmouseleave={() => onCardLeave()}
+			onmouseenter={() => onCardHover(card)}
+		>
 			<div
 				class="card-wrapper"
-                style="--index: {Math.round(i - hand.length/2)}"
+				style="--index: {Math.round(i - hand.length / 2)}"
 				onmouseenter={() => {
 					// active_card = i;
 				}}
 			>
-				<Card
-					hand
-					data={card}
-					{zoom}
-					start_drag={() => {
-						hand.splice(i, 1);
-						dragOut(card);
-					}}
-					end_drag={() => {}}
-					scroll_position={{ x: 0, y: 0 }}
-				/>
+				<!-- {#if card.id != -1} -->
+					<Card
+						hand
+						data={card}
+						{zoom}
+						start_drag={() => {
+                            if(card.id == -1) return;
+							hand.splice(i, 1);
+							dragOut(card);
+						}}
+						end_drag={() => {}}
+						scroll_position={{ x: 0, y: 0 }}
+						force_index={1000 + i}
+					/>
+				<!-- {/if} -->
 			</div>
 		</div>
 	{/each}
@@ -110,7 +145,7 @@
 		height: 160px;
 
 		display: flex;
-        flex-direction: row-reverse;
+		flex-direction: row-reverse;
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;
@@ -123,9 +158,10 @@
 		flex-grow: 0;
 		flex-shrink: 0;
 		width: 150px;
+		min-height: 200px;
 		margin-right: var(--gap);
 		margin-left: 0px;
-		
+
 		z-index: 1000;
 
 		transition: all 400ms linear;
@@ -139,7 +175,7 @@
 			margin-left: 0px;
 			width: 100%;
 			translate: 0 calc(abs(var(--index)) * 5px);
-            rotate: calc(var(--index) * -1deg);
+			rotate: calc(var(--index) * -1deg);
 			transition: all 400ms linear;
 		}
 	}
@@ -151,7 +187,7 @@
 
 		.card-wrapper {
 			translate: 0 -200px;
-            rotate: 0deg;
+			rotate: 0deg;
 		}
 	}
 </style>

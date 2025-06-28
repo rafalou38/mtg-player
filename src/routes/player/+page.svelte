@@ -15,7 +15,7 @@
 			equipped_to: undefined
 		}))
 	);
-	setHand(board_self.splice(0, 15));
+	setHand(board_self.splice(0, 7));
 
 	function put_on_top(data: CardData) {
 		let base_order = data.order;

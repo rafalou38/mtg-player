@@ -5,6 +5,8 @@ export const hand = $state([]) as CardData[];
 export const library = $state([]) as CardData[];
 export const boardState = $state({
     dragging: false,
+    hand_dropping_index: undefined as number|undefined,
+    dragging_card: undefined as CardData|undefined
 });
 
 
