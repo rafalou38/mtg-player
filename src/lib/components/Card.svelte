@@ -1,13 +1,25 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { CardData } from '$lib/types/Card';
+	import { boardState } from '$lib/stores/Cards.svelte';
 
 	let {
 		data,
 		start_drag,
 		end_drag,
-		zoom
-	}: { data: CardData; start_drag: () => void; end_drag: () => void; zoom: number } = $props();
+		zoom,
+		scroll_position,
+		hand,
+		force_drag
+	}: {
+		data: CardData;
+		start_drag: () => void;
+		end_drag: () => void;
+		zoom: number;
+		scroll_position: { x: number; y: number };
+		hand?: boolean;
+		force_drag?: boolean;
+	} = $props();
 
 	const slide_scale = 5;
 	let tapped = $state(false);
@@ -18,7 +30,13 @@
 
 	let dragging = $state(false);
 	let moved = false;
+	let clientX = 0;
+	let clientY = 0;
+
+	let ECard: HTMLButtonElement;
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		clientX = e.clientX;
+		clientY = e.clientY;
 		if (dragging) {
 			// Calculate the delta from the initial drag position
 			const deltaX = e.clientX - dragStart.x;
@@ -44,22 +62,57 @@
 	}
 
 	function onmouseup() {
+		if (hand) return;
+
 		if (!moved) {
 			tapped = !tapped;
 		}
 		dragging = false;
 		end_drag();
 	}
+
+	function start_forced_drag() {
+		const board = document.querySelector('.board');
+		if (!board) return;
+
+		const boardRect = board.getBoundingClientRect();
+		const rect = ECard.getBoundingClientRect();
+
+		dragging = true;
+		moved = true;
+
+		console.log(scroll_position);
+
+		dragStart.x = clientX;
+		dragStart.y = clientY;
+
+		initialPosition.x = (clientX - boardRect.left - rect.width / 2) / zoom;
+		initialPosition.y = (clientY - boardRect.top - rect.height / 2) / zoom;
+
+		start_drag();
+	}
+
+	$effect(() => {
+		if (force_drag) {
+			start_forced_drag();
+			force_drag = false;
+		}
+	});
+	$effect(() => {
+		boardState.dragging = dragging;
+	});
 </script>
 
 <svelte:body {onmousemove} {onmouseup} oncontextmenu={(e) => e.preventDefault()} />
 
 <button
 	class="card"
+	class:hand
 	style="--x: {position.x}px; --y: {position.y}px; z-index: {data.order}"
 	class:tapped
 	class:dragging
 	{onmousedown}
+	bind:this={ECard}
 >
 	<img src={data.img.replace('normal', 'large')} alt="" draggable="false" />
 </button>
@@ -73,7 +126,6 @@
 		width: 200px;
 		overflow: hidden;
 		border-radius: 13px;
-		margin: 1em;
 		/* box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.24); */
 		transform-origin: center;
 
@@ -89,6 +141,15 @@
 			user-select: none;
 		}
 
+		&.hand {
+			translate: 0 0;
+			scale: 1;
+			position: relative;
+			width: auto;
+			height: auto;
+			border-radius: 0;
+		}
+
 		&.tapped {
 			rotate: 90deg;
 		}
@@ -98,7 +159,8 @@
 			box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, 0.24);
 		}
 		&.dragging {
-			scale: 1.05 !important;
+			scale: 1.025 !important;
+			z-index: 1000000;
 		}
 		/* &:active {
 			cursor: pointer;

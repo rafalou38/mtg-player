@@ -1,11 +1,13 @@
 <script lang="ts">
 	import Card from '$lib/components/Card.svelte';
+	import Hand from '$lib/components/Hand.svelte';
 	import images from '$lib/data/test_deck.json';
+	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { onMount } from 'svelte';
 	import type { WheelEventHandler } from 'svelte/elements';
 
-	const cards: CardData[] = $state(
+	setBoardSelf(
 		images.map((link, i) => ({
 			img: link,
 			id: Math.random(),
@@ -13,11 +15,12 @@
 			equipped_to: undefined
 		}))
 	);
+	setHand(board_self.splice(0, 7));
 
 	function put_on_top(data: CardData) {
 		let base_order = data.order;
 		let max_order = 0;
-		cards.forEach((c) => {
+		board_self.forEach((c) => {
 			if (c.order > max_order) max_order = c.order;
 
 			if (c.order > base_order) c.order--;
@@ -26,9 +29,10 @@
 		data.order = max_order;
 	}
 
-	let zoom = $state(0.3);
-	let scroll_position = $state({ x: 370, y: 20 });
+	let zoom = $state(1);
+	let scroll_position = $state({ x: 0, y: 0 });
 	let drag_locked = false;
+	let force_drag : CardData | undefined = $state(undefined);
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
 		e.preventDefault();
@@ -37,6 +41,11 @@
 		} else {
 			zoom *= 1.1;
 		}
+
+		console.log(zoom);
+
+		if (zoom > 1) zoom = 1;
+		if (zoom < 0.2) zoom = 0.2;
 	}
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
@@ -45,11 +54,21 @@
 			scroll_position.y += e.movementY;
 		}
 	}
+
+	function dragOutOfHand(card: CardData) {
+		board_self.push(card);
+		put_on_top(card);
+		drag_locked = true;
+		force_drag = card;
+	}
 </script>
 
 <svelte:body {onwheel} {onmousemove} />
 
-<div class="board" style="--zoom: {zoom}; --x: {scroll_position.x}px; --y: {scroll_position.y}px">
+<div
+	class="board"
+	style="--zoom: {zoom}; --scroll-x: {scroll_position.x}px; --scroll-y: {scroll_position.y}px"
+>
 	<div class="bg"></div>
 	<div class="playmat playmat--1">
 		<div class="texture"></div>
@@ -57,20 +76,24 @@
 	<div class="playmat playmat--2">
 		<div class="texture"></div>
 	</div>
-	{#each cards as data}
+	{#each board_self as data}
 		<Card
 			{data}
 			{zoom}
+			{scroll_position}
 			start_drag={() => {
 				put_on_top(data);
 				drag_locked = true;
 			}}
-			end_drag={()=>{
+			end_drag={() => {
 				drag_locked = false;
 			}}
+			force_drag={force_drag == data}
 		/>
 	{/each}
 </div>
+
+<Hand dragOut={dragOutOfHand} />
 
 <style>
 	.bg {
@@ -88,11 +111,11 @@
 		width: 100px;
 		height: 100px;
 		scale: var(--zoom);
-		translate: var(--x) var(--y);
+		translate: var(--scroll-x) var(--scroll-y);
 
 		backface-visibility: hidden;
 
-		transform-origin: calc(var(--x) * var(--zoom)) calc(var(--y) * var(--zoom));
+		/* transform-origin: calc(var(--scroll-x) * var(--zoom)) calc(var(--scroll-y) * var(--zoom)); */
 
 		/* transition:
 			scale 600ms cubic-bezier(0.16, 1, 0.3, 1); */
