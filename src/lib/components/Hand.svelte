@@ -80,6 +80,7 @@
 		<div class="hand-item" transition:drag_out_transition>
 			<div
 				class="card-wrapper"
+                style="--index: {Math.round(i - hand.length/2)}"
 				onmouseenter={() => {
 					// active_card = i;
 				}}
@@ -109,28 +110,26 @@
 		height: 160px;
 
 		display: flex;
+        flex-direction: row-reverse;
 		flex-wrap: nowrap;
 		justify-content: center;
 		align-items: center;
 
-		translate: var(--offset) 100px;
+		translate: var(--offset) 90px;
 
 		overflow-y: visible;
-		/* overflow-x: scroll; */
 	}
 	.hand-item {
-		flex-grow: 0; /* Don't grow */
-		flex-shrink: 0; /* Don't shrink */
+		flex-grow: 0;
+		flex-shrink: 0;
 		width: 150px;
 		margin-right: var(--gap);
 		margin-left: 0px;
-		box-shadow: -2px 0px 5px 0 black;
+		
 		z-index: 1000;
 
-		transition: all 400ms ease-out;
+		transition: all 400ms linear;
 
-		/* overflow: hidden;
-        border-radius: 11px; */
 		&:last-of-type {
 			margin-left: 0;
 		}
@@ -139,8 +138,9 @@
 			margin-right: 0px;
 			margin-left: 0px;
 			width: 100%;
-			translate: 0 0px;
-			transition: all 400ms ease-out;
+			translate: 0 calc(abs(var(--index)) * 5px);
+            rotate: calc(var(--index) * -1deg);
+			transition: all 400ms linear;
 		}
 	}
 
@@ -151,6 +151,7 @@
 
 		.card-wrapper {
 			translate: 0 -200px;
+            rotate: 0deg;
 		}
 	}
 </style>

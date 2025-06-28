@@ -15,7 +15,7 @@
 			equipped_to: undefined
 		}))
 	);
-	setHand(board_self.splice(0, 7));
+	setHand(board_self.splice(0, 15));
 
 	function put_on_top(data: CardData) {
 		let base_order = data.order;
@@ -44,7 +44,7 @@
 
 		console.log(zoom);
 
-		if (zoom > 1) zoom = 1;
+		if (zoom > 1.2) zoom = 1.2;
 		if (zoom < 0.2) zoom = 0.2;
 	}
 

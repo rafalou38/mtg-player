@@ -125,7 +125,8 @@
 
 		width: 200px;
 		overflow: hidden;
-		border-radius: 13px;
+		border-radius: 10px;
+		box-shadow: -1px 2px 5px 0 rgba(0, 0, 0, 0.2);
 		/* box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.24); */
 		transform-origin: center;
 
@@ -147,7 +148,8 @@
 			position: relative;
 			width: auto;
 			height: auto;
-			border-radius: 0;
+			border-radius: 8px;
+			box-shadow: -6px 2px 5px 0 black;
 		}
 
 		&.tapped {
