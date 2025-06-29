@@ -13,7 +13,6 @@
 	let handElement: HTMLDivElement;
 	let zoom = 1;
 
-	let offset = $state(0);
 	let gap = $state(-40);
 
 	let hand_state = $state(hand);
@@ -47,19 +46,33 @@
 	}
 
 	let removeTimeout = 0;
-	function onCardHover(card: CardData) {
+	let prevX = 0;
+	function onCardHover(
+		card: CardData,
+		e: MouseEvent & {
+			currentTarget: HTMLElement;
+		}
+	) {
 		clearTimeout(removeTimeout);
 
 		if (card.id == -1) {
 			return;
 		}
 
+		let d = prevX - e.clientX;
+		prevX = e.clientX;
+
 		// Insert virtual card just before hovered card if draging.
 		hand_state = hand_state.filter((c) => c.id != -1);
 		if (boardState.dragging && boardState.dragging_card) {
 			let index = hand_state.indexOf(card);
 			if (index > -1) {
-				hand_state.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
+				if (d > 0) {
+					hand_state.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
+				} else {
+					// OK
+					hand_state.splice(index, 0, { ...boardState.dragging_card, id: -1 });
+				}
 				boardState.hand_dropping_index = index;
 			}
 		}
@@ -101,7 +114,7 @@
 <div
 	class="hand"
 	class:dragging={boardState.dragging}
-	style="--offset: {offset}px; --gap: {gap}px"
+	style="--gap: {gap}px"
 	bind:this={handElement}
 >
 	{#each hand_state as card, i (card.id)}
@@ -110,7 +123,7 @@
 			class:dropped={card.id == -1}
 			out:drag_out_transition
 			onmouseleave={() => onCardLeave()}
-			onmouseenter={() => onCardHover(card)}
+			onmouseenter={(e) => onCardHover(card, e)}
 		>
 			<div
 				class="card-wrapper"
@@ -151,9 +164,11 @@
 		justify-content: center;
 		align-items: center;
 
-		translate: var(--offset) 90px;
+		translate: 0 90px;
 
 		overflow-y: visible;
+
+		transition: all 200ms ease-out;
 	}
 	.hand-item {
 		flex-grow: 0;
@@ -177,7 +192,7 @@
 			width: 100%;
 			translate: 0 calc(abs(var(--index)) * 5px);
 			rotate: calc(var(--index) * -1deg);
-			transition: all 200ms ease-out 150ms;
+			transition: all 200ms ease-out 0ms;
 		}
 		&.dropped {
 			width: 160px;
@@ -188,14 +203,19 @@
 		}
 	}
 
-	.hand:not(.dragging) .hand-item:hover {
-		margin-right: 10px;
-		margin-left: calc(10px - var(--gap));
-		width: 250px;
+	.hand:not(.dragging) {
+		&:hover {
+			translate: 0 -20px;
+		}
+		.hand-item:hover {
+			margin-right: 10px;
+			margin-left: calc(10px - var(--gap));
+			width: 200px;
 
-		.card-wrapper {
-			translate: 0 -200px;
-			rotate: 0deg;
+			.card-wrapper {
+				translate: 0 -80px;
+				rotate: 0deg;
+			}
 		}
 	}
 </style>
