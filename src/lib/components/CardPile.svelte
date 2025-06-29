@@ -110,11 +110,9 @@
 	}
 
 	function onmouseleave() {
-		// if (boardState.pile_dropping || boardState.dragging) {
-			cards_state = cards_state.filter((c) => c.id != -1);
-			save_state();
-			boardState.pile_dropping = undefined;
-		// }
+		cards_state = cards_state.filter((c) => c.id != -1);
+		save_state();
+		boardState.pile_dropping = undefined;
 	}
 </script>
 

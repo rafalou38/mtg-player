@@ -32,7 +32,7 @@
 
 	let ECard: HTMLButtonElement;
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if (!data.position) return;
+		if (!data?.position) return;
 
 		clientX = e.clientX;
 		clientY = e.clientY;
