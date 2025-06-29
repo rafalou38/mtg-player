@@ -1,21 +1,22 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { CardData } from '$lib/types/Card';
-	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 	import { boardState } from '$lib/stores/Board.svelte';
 
 	let {
-		data,
+		data = $bindable(),
 		start_drag,
 		end_drag,
 		hand: in_hand,
-		force_drag
+		force_drag,
+		can_tap
 	}: {
 		data: CardData;
-		start_drag: () => void;
+		start_drag: () => void | true;
 		end_drag: () => void;
 		hand?: boolean;
 		force_drag?: boolean;
+		can_tap?: boolean;
 	} = $props();
 
 	const slide_scale = 5;
@@ -31,7 +32,7 @@
 
 	let ECard: HTMLButtonElement;
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if(!data.position) return;
+		if (!data.position) return;
 
 		clientX = e.clientX;
 		clientY = e.clientY;
@@ -46,8 +47,8 @@
 		moved = true;
 	}
 	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if(!data.position) return;
-
+		if (!data.position) return;
+		if (start_drag()) return;
 
 		const rect = e.currentTarget.getBoundingClientRect();
 
@@ -61,33 +62,21 @@
 		dragStart.y = e.clientY;
 
 		initialPosition = { ...data.position };
-
-		start_drag();
 	}
 
 	function onmouseup() {
 		if (in_hand) return;
 
-		if (dragging && boardState.hand_dropping_index != undefined) {
-			console.log('dropping', boardState.hand_dropping_index);
-			setHand(
-				hand.map((c) => {
-					if (c.id == -1) {
-						c.id = data.id;
-					}
-					return c;
-				})
-			);
-			setBoardSelf(board_self.filter((c) => c.id != data.id));
-		}
-
-		if (!moved) {
+		if (!moved && can_tap) {
 			tapped = !tapped;
 		}
 		dragging = false;
-		boardState.dragging_card = undefined;
-		boardState.dragging = false;
-		end_drag();
+
+		setTimeout(() => {
+			boardState.dragging_card = undefined;
+			boardState.dragging = false;
+			end_drag();
+		}, 10);
 	}
 
 	function start_forced_drag() {
@@ -126,7 +115,7 @@
 	class="card"
 	class:hand={in_hand}
 	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
-	hidden={dragging && boardState.hand_dropping_index != undefined}
+	hidden={dragging && (boardState.hand_dropping_index != undefined || boardState.pile_dropping)}
 	class:tapped
 	class:dragging
 	{onmousedown}
@@ -142,6 +131,7 @@
 		cursor: pointer;
 
 		width: 200px;
+		height: 280px;
 		overflow: hidden;
 		border-radius: 10px;
 		box-shadow: -1px 2px 5px 0 rgba(0, 0, 0, 0.2);
@@ -181,6 +171,7 @@
 		&.dragging {
 			scale: 1.025 !important;
 			z-index: 1000000;
+			pointer-events: none;
 		}
 		/* &:active {
 			cursor: pointer;

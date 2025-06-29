@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { hand, setHand } from '$lib/stores/Cards.svelte';
+	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { scale } from 'svelte/transition';
 	import Card from './Card.svelte';
@@ -16,10 +16,12 @@
 	let offset = $state(0);
 	let gap = $state(-40);
 
+	let hand_state = $state(hand);
+
 	$effect(() => {
 		if (!handElement) return;
 		let rect = handElement.getBoundingClientRect();
-		let n_gap = rect.width / hand.length - 150;
+		let n_gap = rect.width / hand_state.length - 150;
 		if (n_gap > -20) n_gap = -20;
 
 		if (gap != n_gap) {
@@ -38,24 +40,8 @@
 			duration: params.duration || 500,
 			easing: params.easing || expoOut,
 			css: (t, u) => {
-				const width = (1-t) * end_width + (t) * start_width;
+				const width = (1 - t) * end_width + t * start_width;
 				return `width: ${width}px; opacity: 0`;
-			}
-		};
-	}
-	function drag_in_transition(
-		node: HTMLElement,
-		params: { delay?: number; duration?: number; easing?: (t: number) => number }
-	) {
-		const start_width: number = -gap;
-		const end_width: number = 160;
-		return {
-			delay: params.delay || 0,
-			duration: params.duration || 500,
-			easing: params.easing || expoOut,
-			css: (t, u) => {
-				const width = (t) * end_width + (1-t) * start_width;
-				return `width: ${width}px;`;
 			}
 		};
 	}
@@ -67,26 +53,50 @@
 		if (card.id == -1) {
 			return;
 		}
-		// Insert virtual card just before hovered card if draging.
-		setHand(hand.filter((c) => c.id != -1));
-		if (boardState.dragging && boardState.dragging_card) {
-			let index = hand.indexOf(card);
-			if (index > -1) {
-				hand.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
-				boardState.hand_dropping_index = index;
 
-				// hand.splice(index + 1, 1);
+		// Insert virtual card just before hovered card if draging.
+		hand_state = hand_state.filter((c) => c.id != -1);
+		if (boardState.dragging && boardState.dragging_card) {
+			let index = hand_state.indexOf(card);
+			if (index > -1) {
+				hand_state.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
+				boardState.hand_dropping_index = index;
 			}
 		}
 	}
 	function onCardLeave() {
 		removeTimeout = setTimeout(() => {
-			setHand(hand.filter((c) => c.id != -1));
+			hand_state = hand_state.filter((c) => c.id != -1);
 			boardState.hand_dropping_index = undefined;
 		}, 100);
 	}
+
+	function onmouseup() {
+		if (
+			boardState.dragging &&
+			boardState.hand_dropping_index != undefined &&
+			boardState.dragging_card != undefined
+		) {
+			let data = boardState.dragging_card;
+
+			hand_state = hand_state.map((c) => {
+				if (c.id == -1) {
+					return data;
+				}
+				return c;
+			});
+
+			boardState.hand_dropping_index = undefined;
+			boardState.dragging = false;
+			boardState.dragging_card = undefined;
+
+			setBoardSelf(board_self.filter((c) => c.id != data.id));
+			setHand(hand_state);
+		}
+	}
 </script>
 
+<svelte:body {onmouseup} />
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class="hand"
@@ -94,18 +104,17 @@
 	style="--offset: {offset}px; --gap: {gap}px"
 	bind:this={handElement}
 >
-	{#each hand as card, i (card.id)}
+	{#each hand_state as card, i (card.id)}
 		<div
-			class="hand-item border-2 border-black"
+			class="hand-item"
 			class:dropped={card.id == -1}
-			in:drag_in_transition
 			out:drag_out_transition
 			onmouseleave={() => onCardLeave()}
 			onmouseenter={() => onCardHover(card)}
 		>
 			<div
 				class="card-wrapper"
-				style="--index: {Math.round(i - hand.length / 2)}"
+				style="--index: {Math.round(i - hand_state.length / 2)}"
 				onmouseenter={() => {
 					// active_card = i;
 				}}
@@ -113,10 +122,11 @@
 				<!-- {#if card.id != -1} -->
 				<Card
 					hand
-					data={card}
+					bind:data={hand_state[i]}
 					start_drag={() => {
 						if (card.id == -1) return;
-						hand.splice(i, 1);
+						hand_state.splice(i, 1);
+						setHand(hand_state);
 						dragOut(card);
 					}}
 					end_drag={() => {}}

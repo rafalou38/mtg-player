@@ -6,6 +6,8 @@ export const library = $state([]) as CardData[];
 
 
 export function setHand(newHand: CardData[]) {
+    console.log("hand set: ", newHand.length);
+    
     hand.splice(0, hand.length, ...newHand);
 }
 export function setBoardSelf(a: CardData[]) {
