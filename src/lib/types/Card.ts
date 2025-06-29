@@ -3,4 +3,5 @@ export type CardData = {
     id: number,
     order: number,
     equipped_to?: number,
+    position: { x: number, y: number }
 }

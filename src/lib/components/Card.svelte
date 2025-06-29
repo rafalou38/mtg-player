@@ -1,32 +1,26 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { CardData } from '$lib/types/Card';
-	import { board_self, boardState, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
+	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
+	import { boardState } from '$lib/stores/Board.svelte';
 
 	let {
 		data,
 		start_drag,
 		end_drag,
-		zoom,
-		scroll_position,
 		hand: in_hand,
-		force_drag,
-		force_index
+		force_drag
 	}: {
 		data: CardData;
 		start_drag: () => void;
 		end_drag: () => void;
-		zoom: number;
-		scroll_position: { x: number; y: number };
 		hand?: boolean;
 		force_drag?: boolean;
-		force_index?: number;
 	} = $props();
 
 	const slide_scale = 5;
 	let tapped = $state(false);
 
-	let position = $state({ x: 0, y: 0 });
 	let dragStart = { x: 0, y: 0 };
 	let initialPosition = { x: 0, y: 0 };
 
@@ -37,19 +31,24 @@
 
 	let ECard: HTMLButtonElement;
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		if(!data.position) return;
+
 		clientX = e.clientX;
 		clientY = e.clientY;
 		if (dragging) {
-			// Calculate the delta from the initial drag position
+			// Calculate the delta from the initial drag data.position
 			const deltaX = e.clientX - dragStart.x;
 			const deltaY = e.clientY - dragStart.y;
 
-			position.x = initialPosition.x + deltaX / zoom;
-			position.y = initialPosition.y + deltaY / zoom;
+			data.position.x = initialPosition.x + deltaX / boardState.zoom;
+			data.position.y = initialPosition.y + deltaY / boardState.zoom;
 		}
 		moved = true;
 	}
 	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		if(!data.position) return;
+
+
 		const rect = e.currentTarget.getBoundingClientRect();
 
 		dragging = true;
@@ -61,7 +60,7 @@
 		dragStart.x = e.clientX;
 		dragStart.y = e.clientY;
 
-		initialPosition = { ...position };
+		initialPosition = { ...data.position };
 
 		start_drag();
 	}
@@ -104,13 +103,11 @@
 		boardState.dragging_card = data;
 		boardState.dragging = true;
 
-		console.log(scroll_position);
-
 		dragStart.x = clientX;
 		dragStart.y = clientY;
 
-		initialPosition.x = (clientX - boardRect.left - rect.width / 2) / zoom;
-		initialPosition.y = (clientY - boardRect.top - rect.height / 2) / zoom;
+		initialPosition.x = (clientX - boardRect.left - rect.width / 2) / boardState.zoom;
+		initialPosition.y = (clientY - boardRect.top - rect.height / 2) / boardState.zoom;
 
 		start_drag();
 	}
@@ -128,7 +125,7 @@
 <button
 	class="card"
 	class:hand={in_hand}
-	style="--x: {position.x}px; --y: {position.y}px; z-index: {data.order}"
+	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
 	hidden={dragging && boardState.hand_dropping_index != undefined}
 	class:tapped
 	class:dragging

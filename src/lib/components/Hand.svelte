@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { boardState, hand, setHand } from '$lib/stores/Cards.svelte';
+	import { hand, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { scale } from 'svelte/transition';
 	import Card from './Card.svelte';
 	import { expoIn, expoOut } from 'svelte/easing';
+	import { boardState } from '$lib/stores/Board.svelte';
 
 	let { dragOut } = $props() as {
 		dragOut: (card: CardData) => void;
@@ -13,31 +14,6 @@
 	let zoom = 1;
 
 	let offset = $state(0);
-	// let active_card = $state(Math.round(hand.length / 2));
-	// let r = 0.5;
-	// function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
-	// 	let x = e.clientX;
-	// 	r = x/window.innerWidth;
-	// }
-
-	// function loop() {
-	//     requestAnimationFrame(loop);
-
-	//     if(!handElement) return;
-	//     let first = handElement.firstElementChild;
-	//     let first_rect = first?.getBoundingClientRect();
-	//     let last = handElement.lastElementChild;
-	//     let last_rect = last?.getBoundingClientRect();
-	//     if(!first_rect || !last_rect) return;
-
-	//     if(r<0.2 && first_rect.left < 0){
-	//         offset += 10;
-	//     }else if (r>0.8 && last_rect.right > window.innerWidth) {
-	//         offset -= 10;
-	//     }
-	// }
-	// loop();
-
 	let gap = $state(-40);
 
 	$effect(() => {
@@ -55,15 +31,31 @@
 		node: HTMLElement,
 		params: { delay?: number; duration?: number; easing?: (t: number) => number }
 	) {
-		const start_width: number = node.offsetWidth;
+		const start_width: number = 160;
 		const end_width: number = -gap;
 		return {
 			delay: params.delay || 0,
 			duration: params.duration || 500,
 			easing: params.easing || expoOut,
 			css: (t, u) => {
-				const width = (1 - t) * end_width + t * start_width;
-				return `width: ${width}px; opacity: 0;`;
+				const width = (1-t) * end_width + (t) * start_width;
+				return `width: ${width}px; opacity: 0`;
+			}
+		};
+	}
+	function drag_in_transition(
+		node: HTMLElement,
+		params: { delay?: number; duration?: number; easing?: (t: number) => number }
+	) {
+		const start_width: number = -gap;
+		const end_width: number = 160;
+		return {
+			delay: params.delay || 0,
+			duration: params.duration || 500,
+			easing: params.easing || expoOut,
+			css: (t, u) => {
+				const width = (t) * end_width + (1-t) * start_width;
+				return `width: ${width}px;`;
 			}
 		};
 	}
@@ -90,7 +82,7 @@
 	function onCardLeave() {
 		removeTimeout = setTimeout(() => {
 			setHand(hand.filter((c) => c.id != -1));
-            boardState.hand_dropping_index = undefined;
+			boardState.hand_dropping_index = undefined;
 		}, 100);
 	}
 </script>
@@ -105,6 +97,8 @@
 	{#each hand as card, i (card.id)}
 		<div
 			class="hand-item border-2 border-black"
+			class:dropped={card.id == -1}
+			in:drag_in_transition
 			out:drag_out_transition
 			onmouseleave={() => onCardLeave()}
 			onmouseenter={() => onCardHover(card)}
@@ -117,19 +111,16 @@
 				}}
 			>
 				<!-- {#if card.id != -1} -->
-					<Card
-						hand
-						data={card}
-						{zoom}
-						start_drag={() => {
-                            if(card.id == -1) return;
-							hand.splice(i, 1);
-							dragOut(card);
-						}}
-						end_drag={() => {}}
-						scroll_position={{ x: 0, y: 0 }}
-						force_index={1000 + i}
-					/>
+				<Card
+					hand
+					data={card}
+					start_drag={() => {
+						if (card.id == -1) return;
+						hand.splice(i, 1);
+						dragOut(card);
+					}}
+					end_drag={() => {}}
+				/>
 				<!-- {/if} -->
 			</div>
 		</div>
@@ -164,7 +155,7 @@
 
 		z-index: 1000;
 
-		transition: all 400ms linear;
+		transition: all 200ms ease-out;
 
 		&:last-of-type {
 			margin-left: 0;
@@ -176,7 +167,14 @@
 			width: 100%;
 			translate: 0 calc(abs(var(--index)) * 5px);
 			rotate: calc(var(--index) * -1deg);
-			transition: all 400ms linear;
+			transition: all 200ms ease-out 150ms;
+		}
+		&.dropped {
+			width: 160px;
+			.card-wrapper {
+				translate: 0 -20px;
+				rotate: 0deg;
+			}
 		}
 	}
 

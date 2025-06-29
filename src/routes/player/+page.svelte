@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Card from '$lib/components/Card.svelte';
+	import CardPile from '$lib/components/CardPile.svelte';
 	import Hand from '$lib/components/Hand.svelte';
 	import images from '$lib/data/test_deck.json';
+	import { boardState } from '$lib/stores/Board.svelte';
 	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { onMount } from 'svelte';
@@ -12,7 +14,8 @@
 			img: link,
 			id: Math.random(),
 			order: i,
-			equipped_to: undefined
+			equipped_to: undefined,
+			position: { x: 0, y: 0 }
 		}))
 	);
 	setHand(board_self.splice(0, 7));
@@ -29,29 +32,28 @@
 		data.order = max_order;
 	}
 
-	let zoom = $state(1);
-	let scroll_position = $state({ x: 0, y: 0 });
+	
 	let drag_locked = false;
 	let force_drag : CardData | undefined = $state(undefined);
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
 		e.preventDefault();
 		if (e.deltaY > 0) {
-			zoom *= 0.9;
+			boardState.zoom *= 0.9;
 		} else {
-			zoom *= 1.1;
+			boardState.zoom *= 1.1;
 		}
 
-		console.log(zoom);
+		console.log(boardState.zoom);
 
-		if (zoom > 1.2) zoom = 1.2;
-		if (zoom < 0.2) zoom = 0.2;
+		if (boardState.zoom > 1.2) boardState.zoom = 1.2;
+		if (boardState.zoom < 0.2) boardState.zoom = 0.2;
 	}
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
 		if (e.buttons == 1 && !drag_locked) {
-			scroll_position.x += e.movementX;
-			scroll_position.y += e.movementY;
+			boardState.scroll_position.x += e.movementX;
+			boardState.scroll_position.y += e.movementY;
 		}
 	}
 
@@ -67,7 +69,7 @@
 
 <div
 	class="board"
-	style="--zoom: {zoom}; --scroll-x: {scroll_position.x}px; --scroll-y: {scroll_position.y}px"
+	style="--zoom: {boardState.zoom}; --scroll-x: {boardState.scroll_position.x}px; --scroll-y: {boardState.scroll_position.y}px"
 >
 	<div class="bg"></div>
 	<div class="playmat playmat--1">
@@ -79,8 +81,6 @@
 	{#each board_self as data}
 		<Card
 			{data}
-			{zoom}
-			{scroll_position}
 			start_drag={() => {
 				put_on_top(data);
 				drag_locked = true;
@@ -91,6 +91,8 @@
 			force_drag={force_drag == data}
 		/>
 	{/each}
+
+	<CardPile cards={board_self.slice(10, 10)} revealed={true} position={{ x: 1000, y: 0 }} />
 </div>
 
 <Hand dragOut={dragOutOfHand} />
