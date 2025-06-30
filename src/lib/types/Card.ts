@@ -1,7 +1,12 @@
+import type { Vector2 } from "$lib/util/math.svelte"
+
+export type CardId = number
+
 export type CardData = {
     img: string,
-    id: number,
+    id: CardId,
     order: number,
-    equipped_to?: number,
-    position: { x: number, y: number }
+    equipped_to?: CardId,
+    position: Vector2,
+    tapped: boolean
 }

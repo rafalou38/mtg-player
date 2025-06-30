@@ -1,14 +1,9 @@
 <script lang="ts">
-	import { board_self, hand, setBoardSelf, setHand } from '$lib/stores/Cards.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { scale } from 'svelte/transition';
 	import Card from './Card.svelte';
 	import { expoIn, expoOut } from 'svelte/easing';
-	import { boardState } from '$lib/stores/Board.svelte';
-
-	let { dragOut } = $props() as {
-		dragOut: (card: CardData) => void;
-	};
+	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 
 	let handElement: HTMLDivElement;
 	let zoom = 1;
@@ -158,8 +153,7 @@
 								hand_state.splice(i, 1);
 								setHand(hand_state);
 							}, 1000);
-							dragOut(card);
-							console.log(card);
+							gameManager.addToBoardDragging(card);
 						}}
 						end_drag={() => {}}
 					/>

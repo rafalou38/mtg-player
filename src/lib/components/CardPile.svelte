@@ -1,58 +1,47 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import { boardState } from '$lib/stores/Board.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import Card from './Card.svelte';
-	import { board_self, setBoardSelf } from '$lib/stores/Cards.svelte';
+	import { gameManager, GameStateManager } from '$lib/stores/GameStateManager.svelte';
+	import type { PileType } from '$lib/types/Pile';
+	import { Vector2 } from '$lib/util/math.svelte';
+	import { assert } from '$lib/util/assert';
 
 	const {
-		dragOut,
-		label,
-		cards,
-		revealed,
-		position = $bindable()
-	} = $props() as {
-		dragOut: (card: CardData) => void;
-		label: string;
-		cards: CardData[];
-		revealed: boolean;
-		position: { x: number; y: number };
-	};
+		label
+	}: {
+		label: PileType;
+	} = $props();
 
-	let position_state = $state(position);
-	let cards_state = $state(cards);
+	const pile = $derived(gameManager.piles[label]);
+	const last = $derived(pile.cards.at(-1));
+	const shown_card: CardData | null = $derived.by(() => {
+		if (gameManager.pile_dropping == label && gameManager.dragging_card) {
+			return {
+				img: gameManager.dragging_card.img,
+				id: pile.id,
+				order: 0,
+				position: Vector2.zero,
+				tapped: false
+			};
+		}
 
-	const id = Math.random();
-
-	$effect(() => {
-		cards_state.forEach((card) => {
-			if (card.position.x != position.x || card.position.y != position.y) {
-				card.position = position;
-			}
-		});
+		if (pile.cards.length == 0) return null;
+		else
+			return {
+				img: pile.revealed ? pile.cards.at(-1)!.img : 'card_bg.jpg',
+				id: pile.id,
+				order: 0,
+				position: Vector2.zero,
+				tapped: false
+			};
 	});
-	const last = $derived(cards_state.at(-1));
-	let shown_card = $derived(
-		cards_state.length > 0
-			? {
-					img: revealed || last?.id == -1 ? last!.img : 'card_bg.jpg',
-					id: id,
-					order: 0,
-					position: { x: 0, y: 0 }
-				}
-			: null
-	);
 
-	let dragging_pile = $state(false);
 	let pileDragStart = { x: 0, y: 0 };
 	let pileInitialPosition = { x: 0, y: 0 };
 
-	function save_state() {
-		position.x = position_state.x;
-		position.y = position_state.y;
-
-		cards.splice(0, cards_state.length, ...cards_state);
-	}
+	let dragging_pile = $derived(gameManager.dragging_pile == label);
+	let dropping_card = $derived(gameManager.pile_dropping == label);
 
 	function startContainerDrag(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
 		if (e.buttons != 1) return;
@@ -60,59 +49,43 @@
 		const board = document.querySelector('.board');
 		if (!board) return;
 
-		const boardRect = board.getBoundingClientRect();
+		gameManager.startDragPile(label);
 
-		dragging_pile = true;
+		const boardRect = board.getBoundingClientRect();
 
 		pileDragStart.x = e.clientX;
 		pileDragStart.y = e.clientY;
 
-		pileInitialPosition.x = (e.clientX - boardRect.left) / boardState.zoom;
-		pileInitialPosition.y = (e.clientY - boardRect.top) / boardState.zoom;
+		pileInitialPosition.x = (e.clientX - boardRect.left) / gameManager.zoom;
+		pileInitialPosition.y = (e.clientY - boardRect.top) / gameManager.zoom;
+	}
 
-		boardState.drag_locked = true;
+	function onmouseenter() {
+		if (gameManager.dragging && gameManager.dragging_card) {
+			gameManager.pile_dropping = label;
+		}
 	}
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
 		if (dragging_pile) {
-			position_state.x = pileInitialPosition.x + (e.clientX - pileDragStart.x) / boardState.zoom;
-			position_state.y = pileInitialPosition.y + (e.clientY - pileDragStart.y) / boardState.zoom;
+			gameManager.setPilePosition(
+				label,
+				pileInitialPosition.x + (e.clientX - pileDragStart.x) / gameManager.zoom,
+				pileInitialPosition.y + (e.clientY - pileDragStart.y) / gameManager.zoom
+			);
 		}
 	}
 	function onmouseup() {
 		if (dragging_pile) {
-			dragging_pile = false;
-			boardState.drag_locked = false;
-			position.x = position_state.x;
-			position.y = position_state.y;
+			gameManager.stopDragPile();
 		}
 
-		if (boardState.pile_dropping == id && boardState.dragging_card) {
-			boardState.pile_dropping = undefined;
-
-			setBoardSelf(board_self.filter((c) => c != boardState.dragging_card));
-
-			// cards_state = cards_state.filter((c) => c.id != -1);
-			cards_state.push(boardState.dragging_card);
-
-			save_state();
-		}
-	}
-
-	function onmouseenter() {
-		cards_state = cards_state.filter((c) => c.id != -1);
-		if (boardState.dragging && boardState.dragging_card) {
-			boardState.pile_dropping = id;
-			cards_state.push({
-				...boardState.dragging_card,
-				id: -1
-			});
+		if (dropping_card) {
+			gameManager.dropCardOnPile(label);
 		}
 	}
 
 	function onmouseleave() {
-		cards_state = cards_state.filter((c) => c.id != -1);
-		save_state();
-		boardState.pile_dropping = undefined;
+		gameManager.pile_dropping = undefined;
 	}
 </script>
 
@@ -121,11 +94,11 @@
 <div
 	class="card-pile"
 	class:dragging_pile
-	style="--x: {position_state.x}px; --y: {position_state.y}px"
+	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
 	{onmouseenter}
 	{onmouseleave}
 >
-	<div class="label">{label} ({cards_state.length})</div>
+	<div class="label">{label} ({pile.cards.length})</div>
 	<button class="thumb" onmousedown={startContainerDrag}>
 		<Icon className="iconify" icon="mdi:cursor-move" />
 	</button>
@@ -135,23 +108,17 @@
 <div
 	class="card-pile card-pile--container"
 	class:dragging_pile
-	style="--x: {position_state.x}px; --y: {position_state.y}px"
-	class:dropping_card={boardState.dragging}
+	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
+	class:dropping_card={gameManager.dragging}
 >
 	{#if shown_card}
 		<Card
-			bind:data={shown_card}
+			data={shown_card}
 			start_drag={() => {
-				boardState.drag_locked = true;
-				let ret = cards_state.pop();
-				save_state();
-				if (!ret) throw new Error('This should not have happened');
-				dragOut(ret);
+				gameManager.getOutOfPile(label);
 				return true;
 			}}
-			end_drag={() => {
-				boardState.drag_locked = false;
-			}}
+			end_drag={() => {}}
 		/>
 	{/if}
 </div>

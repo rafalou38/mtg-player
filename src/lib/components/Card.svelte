@@ -1,110 +1,98 @@
 <script lang="ts">
 	import type { MouseEventHandler } from 'svelte/elements';
-	import type { CardData } from '$lib/types/Card';
-	import { boardState } from '$lib/stores/Board.svelte';
+	import type { CardData, CardId } from '$lib/types/Card';
+	import { assert } from '$lib/util/assert';
+	import { gameManager } from '$lib/stores/GameStateManager.svelte';
+	import { Vector2 } from '$lib/util/math.svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let {
-		data = $bindable(),
+		data,
 		start_drag,
 		end_drag,
-		hand: in_hand,
-		force_drag,
-		can_tap
+		can_tap,
+		in_hand
 	}: {
 		data: CardData;
 		start_drag: () => void | true;
 		end_drag: () => void;
-		hand?: boolean;
-		force_drag?: boolean;
 		can_tap?: boolean;
+		in_hand?: boolean; // for appearance
 	} = $props();
 
-	const slide_scale = 5;
-	let tapped = $state(false);
-
-	let dragStart = { x: 0, y: 0 };
-	let initialPosition = { x: 0, y: 0 };
+	let dragStart = Vector2.zero;
+	let initialPosition = Vector2.zero;
+	let moved = false;
 
 	let dragging = $state(false);
-	let moved = false;
-	let clientX = 0;
-	let clientY = 0;
 
-	let ECard: HTMLButtonElement;
+	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		assert(data !== undefined && data.position != undefined, 'Card position is undefined');
+
+		gameManager.cursor_position.x = e.clientX;
+		gameManager.cursor_position.y = e.clientY;
+
+		console.log('start drag', e.clientX, e.clientY);
+
+		if (e.buttons != 1) return;
+		if (start_drag()) return;
+
+		console.log('passed drag');
+
+		dragStart.x = e.clientX;
+		dragStart.y = e.clientY;
+
+		initialPosition.x = data.position.x;
+		initialPosition.y = data.position.y;
+
+		dragging = true;
+		moved = false;
+	}
+
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if (!data?.position) return;
+		assert(data != undefined && data.position != undefined, 'Card position is undefined');
 
-		clientX = e.clientX;
-		clientY = e.clientY;
 		if (dragging) {
 			// Calculate the delta from the initial drag data.position
 			const deltaX = e.clientX - dragStart.x;
 			const deltaY = e.clientY - dragStart.y;
 
-			data.position.x = initialPosition.x + deltaX / boardState.zoom;
-			data.position.y = initialPosition.y + deltaY / boardState.zoom;
+			gameManager.setCardPosition(
+				data.id,
+				initialPosition.x + deltaX / gameManager.zoom,
+				initialPosition.y + deltaY / gameManager.zoom
+			);
+			moved = true;
 		}
-		moved = true;
-	}
-	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if (!data?.position) return;
-		if (start_drag()) return;
-
-		const rect = e.currentTarget.getBoundingClientRect();
-
-		dragging = true;
-		moved = false;
-
-		boardState.dragging_card = data;
-		boardState.dragging = true;
-
-		dragStart.x = e.clientX;
-		dragStart.y = e.clientY;
-
-		initialPosition = { ...data.position };
 	}
 
 	function onmouseup() {
-		if (in_hand) return;
-
-		if (!moved && can_tap) {
-			tapped = !tapped;
+		if (!moved && can_tap && dragging) {
+			gameManager.tapCard(data.id);
 		}
+
 		dragging = false;
 
-		setTimeout(() => {
-			boardState.dragging_card = undefined;
-			boardState.dragging = false;
-			end_drag();
-		}, 10);
+		end_drag();
 	}
+	let ECard: HTMLElement;
+	onMount(() => {
+		if (gameManager.dragging && gameManager.dragging_card?.id == data.id) {
+			assert(data !== undefined && data.position != undefined, 'Card position is undefined');
+			const board = document.querySelector('.board');
+			if (!board) return;
 
-	function start_forced_drag() {
-		const board = document.querySelector('.board');
-		if (!board) return;
+			const boardRect = board.getBoundingClientRect();
+			const rect = ECard.getBoundingClientRect();
 
-		const boardRect = board.getBoundingClientRect();
-		const rect = ECard.getBoundingClientRect();
+			dragStart.x = gameManager.cursor_position.x;
+			dragStart.y = gameManager.cursor_position.y;
 
-		dragging = true;
-		moved = true;
+			initialPosition.x = (gameManager.cursor_position.x - boardRect.left - rect.width / 2) / gameManager.zoom;
+			initialPosition.y = (gameManager.cursor_position.y - boardRect.top - rect.height / 2) / gameManager.zoom;
 
-		boardState.dragging_card = data;
-		boardState.dragging = true;
-
-		dragStart.x = clientX;
-		dragStart.y = clientY;
-
-		initialPosition.x = (clientX - boardRect.left - rect.width / 2) / boardState.zoom;
-		initialPosition.y = (clientY - boardRect.top - rect.height / 2) / boardState.zoom;
-
-		start_drag();
-	}
-
-	$effect(() => {
-		if (force_drag) {
-			start_forced_drag();
-			force_drag = false;
+			dragging = true;
+			moved = true;
 		}
 	});
 </script>
@@ -114,10 +102,11 @@
 <button
 	class="card"
 	class:hand={in_hand}
-	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
-	hidden={dragging && (boardState.hand_dropping_index != undefined || boardState.pile_dropping)}
-	class:tapped
+	class:tapped={data.tapped}
 	class:dragging
+	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
+	hidden={dragging &&
+		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
 	{onmousedown}
 	bind:this={ECard}
 >

@@ -2,87 +2,36 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
 	import Hand from '$lib/components/Hand.svelte';
-	import images from '$lib/data/test_deck.json';
-	import { boardState } from '$lib/stores/Board.svelte';
-	import { board_self, hand, library, setBoardSelf, setHand, setLibrary } from '$lib/stores/Cards.svelte';
+
+	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { onMount } from 'svelte';
-	import type { WheelEventHandler } from 'svelte/elements';
 
-	setBoardSelf(
-		images.splice(0, 1).map((link, i) => ({
-			img: link,
-			id: Math.random(),
-			order: i,
-			equipped_to: undefined,
-			position: { x: 0, y: 0 }
-		}))
-	);
-	setHand(
-		images.splice(0, 7).map((link, i) => ({
-			img: link,
-			id: Math.random(),
-			order: i,
-			equipped_to: undefined,
-			position: { x: 0, y: 0 }
-		}))
-	);
-	setLibrary(
-		images.map((link, i) => ({
-			img: link,
-			id: Math.random(),
-			order: i,
-			equipped_to: undefined,
-			position: { x: 0, y: 0 }
-		}))
-	);
-
-	function put_on_top(data: CardData) {
-		let base_order = data.order;
-		let max_order = 0;
-		board_self.forEach((c) => {
-			if (c.order > max_order) max_order = c.order;
-
-			if (c.order > base_order) c.order--;
-		});
-
-		data.order = max_order;
-	}
+	onMount(() => {
+		gameManager.loadTestData();
+	});
 
 	let force_drag: CardData | undefined = $state(undefined);
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
 		e.preventDefault();
 		if (e.deltaY > 0) {
-			boardState.zoom *= 0.9;
+			gameManager.zoom *= 0.9;
 		} else {
-			boardState.zoom *= 1.1;
+			gameManager.zoom *= 1.1;
 		}
 
-		if (boardState.zoom > 1.2) boardState.zoom = 1.2;
-		if (boardState.zoom < 0.2) boardState.zoom = 0.2;
+		if (gameManager.zoom > 1.2) gameManager.zoom = 1.2;
+		if (gameManager.zoom < 0.2) gameManager.zoom = 0.2;
 	}
-
-	let client_x = 0;
-	let client_y = 0;
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
-		if (e.buttons == 1 && !boardState.drag_locked) {
-			boardState.scroll_position.x += e.movementX;
-			boardState.scroll_position.y += e.movementY;
+		if (e.buttons == 1 && !gameManager.dragging && !gameManager.dragging_pile) {
+			gameManager.translate.x += e.movementX;
+			gameManager.translate.y += e.movementY;
 		}
 
-		client_x = e.clientX;
-		client_y = e.clientY;
-	}
-
-	function dragOutOf(card: CardData) {
-		card.position.x = client_x;
-		card.position.y = client_y;
-		board_self.push(card);
-		put_on_top(card);
-		boardState.drag_locked = true;
-		force_drag = card;
+		gameManager.cursor_position.set(e.clientX, e.clientY);
 	}
 </script>
 
@@ -90,8 +39,8 @@
 
 <div
 	class="board"
-	style="--zoom: {boardState.zoom}; --scroll-x: {boardState.scroll_position
-		.x}px; --scroll-y: {boardState.scroll_position.y}px"
+	style="--zoom: {gameManager.zoom}; --scroll-x: {gameManager.translate
+		.x}px; --scroll-y: {gameManager.translate.y}px"
 >
 	<div class="bg"></div>
 	<div class="playmat playmat--1">
@@ -100,34 +49,26 @@
 	<div class="playmat playmat--2">
 		<div class="texture"></div>
 	</div>
-	{#each board_self as data, i}
+	{#each gameManager.board as card, i}
 		<Card
-			bind:data={board_self[i]}
+			data={gameManager.board[i]}
 			start_drag={() => {
-				put_on_top(data);
-				boardState.drag_locked = true;
+				gameManager.setDragging(card);
 			}}
 			end_drag={() => {
-				boardState.drag_locked = false;
+				gameManager.stopDragging();
 			}}
-			force_drag={force_drag == data}
 			can_tap
 		/>
 	{/each}
 
-	<CardPile
-		label="library"
-		cards={library}
-		revealed={false}
-		position={{ x: 1000, y: 100 }}
-		dragOut={dragOutOf}
-	/>
-	<CardPile label="graveyard" cards={[]} revealed={true} position={{ x: 1000, y: 500 }} dragOut={dragOutOf}/>
-	<CardPile label="exile" cards={[]} revealed={true} position={{ x: 1300, y: 500 }} dragOut={dragOutOf}/>
-	<CardPile label="commander" cards={[]} revealed={true} position={{ x: 1300, y: 100 }} dragOut={dragOutOf}/>
+	<CardPile label="library"/>
+	<CardPile label="graveyard"/>
+	<CardPile label="exile"/>
+	<CardPile label="commander"/>
 </div>
 
-<Hand dragOut={dragOutOf} />
+<!-- <Hand /> -->
 
 <style>
 	.bg {
