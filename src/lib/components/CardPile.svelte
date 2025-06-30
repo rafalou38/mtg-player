@@ -2,16 +2,21 @@
 	import Icon from '@iconify/svelte';
 	import type { CardData } from '$lib/types/Card';
 	import Card from './Card.svelte';
-	import { gameManager, GameStateManager } from '$lib/stores/GameStateManager.svelte';
+	import { gameManager as GMRoot, GameStateManager } from '$lib/stores/GameStateManager.svelte';
 	import type { PileType } from '$lib/types/Pile';
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { assert } from '$lib/util/assert';
+	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	const {
-		label
+		label,
+		peer_id
 	}: {
 		label: PileType;
+		peer_id: string | undefined;
 	} = $props();
+
+	const gameManager = $derived(peer_id ? connectionManager.game_managers[peer_id] : GMRoot);
 
 	const pile = $derived(gameManager.piles[label]);
 	const last = $derived(pile.cards.at(-1));
@@ -44,6 +49,7 @@
 	let dropping_card = $derived(gameManager.pile_dropping == label);
 
 	function startContainerDrag(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		if (gameManager.passive) return;
 		if (e.buttons != 1) return;
 
 		const board = document.querySelector('.board');
@@ -61,11 +67,13 @@
 	}
 
 	function onmouseenter() {
+		if (gameManager.passive) return;
 		if (gameManager.dragging && gameManager.dragging_card) {
 			gameManager.pile_dropping = label;
 		}
 	}
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		if (gameManager.passive) return;
 		if (dragging_pile) {
 			gameManager.setPilePosition(
 				label,
@@ -75,6 +83,7 @@
 		}
 	}
 	function onmouseup() {
+		if (gameManager.passive) return;
 		if (dragging_pile) {
 			gameManager.stopDragPile();
 		}
@@ -85,6 +94,7 @@
 	}
 
 	function onmouseleave() {
+		if (gameManager.passive) return;
 		gameManager.pile_dropping = undefined;
 	}
 </script>
@@ -115,6 +125,7 @@
 		<Card
 			data={shown_card}
 			start_drag={() => {
+				if (gameManager.passive) return true;
 				gameManager.getOutOfPile(label);
 				return true;
 			}}

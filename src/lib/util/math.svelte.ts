@@ -30,7 +30,7 @@ export class Vector2 {
         return new Vector2(this.x, this.y);
     }
 
-    serialize() {
+    serialize(): [number, number] {
         return [this.x, this.y];
     }
     static load(data: number[]) {

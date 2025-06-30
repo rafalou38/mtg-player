@@ -1,14 +1,30 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
 	import Hand from '$lib/components/Hand.svelte';
+	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import type { CardData } from '$lib/types/Card';
+	import { assert } from '$lib/util/assert';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
+		if (!connectionManager.connected)
+			return goto('/').then(() => {
+				// refresh the page
+				location.reload();
+			});
+
 		gameManager.loadTestData();
+
+		connectionManager.send_pile_update('library');
+		connectionManager.send_pile_update('graveyard');
+		connectionManager.send_pile_update('exile');
+		connectionManager.send_pile_update('commander');
+
+		connectionManager.send_board_update();
 	});
 
 	let force_drag: CardData | undefined = $state(undefined);
@@ -62,10 +78,30 @@
 		/>
 	{/each}
 
-	<CardPile label="library"/>
-	<CardPile label="graveyard"/>
-	<CardPile label="exile"/>
-	<CardPile label="commander"/>
+	<CardPile label="library" />
+	<CardPile label="graveyard" />
+	<CardPile label="exile" />
+	<CardPile label="commander" />
+
+	{#each Object.keys(connectionManager.game_managers) as peer_id}
+
+		{#each connectionManager.game_managers[peer_id].board as card, i}
+			<Card
+				data={connectionManager.game_managers[peer_id].board[i]}
+				start_drag={() => {
+					return true;
+				}}
+				end_drag={() => {
+				}}
+				can_tap
+			/>
+		{/each}
+
+		<CardPile label="library" {peer_id} />
+		<CardPile label="graveyard" {peer_id} />
+		<CardPile label="exile" {peer_id} />
+		<CardPile label="commander" {peer_id} />
+	{/each}
 </div>
 
 <Hand />
@@ -116,6 +152,9 @@
 	}
 	.playmat--1 {
 		background-image: url('/bg/01.jpg');
+
+		/* flip bg */
+		transform: scaleY(-1);
 	}
 	.playmat--2 {
 		top: 1200px;

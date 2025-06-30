@@ -4,15 +4,16 @@ import { Vector2 } from "$lib/util/math.svelte";
 import images from '$lib/data/test_deck.json';
 import type { Pile, PileType } from "$lib/types/Pile";
 import { assert } from "$lib/util/assert";
+import { connectionManager } from "./ConnectionManager.svelte";
 
 
 export class GameStateManager {
+    passive: boolean;
+
     hand = $state<CardData[]>([]);
     board = $state<CardData[]>([]);
 
     piles: { [key in PileType]: Pile };
-
-    opponent_hand_size = $state(0);
 
 
     // UI state
@@ -30,7 +31,8 @@ export class GameStateManager {
 
     cursor_position = $state<Vector2>(Vector2.zero);
 
-    constructor() {
+    constructor(is_passive: boolean = false) {
+        this.passive = $state(is_passive);
         this.piles = $state({
             library: {
                 cards: [],
@@ -67,6 +69,8 @@ export class GameStateManager {
         if (index !== -1) {
             this.board[index].tapped = !this.board[index].tapped;
         }
+        // TODO: granular updates
+        connectionManager.send_board_update();
     }
 
     setCardPosition(cardId: CardId, x: number, y: number) {
@@ -74,6 +78,9 @@ export class GameStateManager {
         if (index !== -1) {
             this.board[index].position.set(x, y);
         }
+        
+        // TODO: granular updates
+        connectionManager.send_board_update();
     }
 
     addCardToHand(card: CardData, index?: number) {
@@ -118,6 +125,8 @@ export class GameStateManager {
             } else {
                 this.hand.push(card);
             }
+
+            connectionManager.send_board_update();
         }
     }
 
@@ -136,6 +145,9 @@ export class GameStateManager {
         const card = index !== undefined ? this.piles[pile].cards.splice(index, 1)[0] : this.piles[pile].cards.pop();
         assert(card, 'Pile is empty');
 
+        connectionManager.send_pile_update(pile);
+
+
         this.addToBoardDragging(card);
     }
 
@@ -151,6 +163,9 @@ export class GameStateManager {
 
         this.pile_dropping = undefined;
         this.stopDragging();
+
+        connectionManager.send_pile_update(pile);
+        connectionManager.send_board_update();
     }
 
     putCardOnTop(cardId: CardId) {
@@ -159,6 +174,8 @@ export class GameStateManager {
             const [card] = this.board.splice(cardIndex, 1);
             this.board.push(card);
         }
+
+        connectionManager.send_board_update();
 
         /*
         let base_order = data.order;
@@ -175,6 +192,8 @@ export class GameStateManager {
 
     setPilePosition(pile: PileType, x: number, y: number) {
         this.piles[pile].position.set(x, y);
+
+        connectionManager.send_pile_update(pile);
     }
 
     startDragPile(pile: PileType) {
@@ -211,7 +230,7 @@ export class GameStateManager {
                 position: Vector2.zero,
                 tapped: false
             }))
-            .sort(() => Math.random() - 0.5);
+                .sort(() => Math.random() - 0.5);
         this.hand = cards.splice(0, 7);
         this.board = cards.splice(0, 1);
         this.piles["library"].cards = cards;
@@ -219,4 +238,4 @@ export class GameStateManager {
 }
 
 // Export singleton instance
-export const gameManager = new GameStateManager();
+export const gameManager = new GameStateManager(false);
