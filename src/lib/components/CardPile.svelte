@@ -35,7 +35,7 @@
 	let shown_card = $derived(
 		cards_state.length > 0
 			? {
-					img: revealed || last?.id == -1 ? last!.img : 'card_bg.png',
+					img: revealed || last?.id == -1 ? last!.img : 'card_bg.jpg',
 					id: id,
 					order: 0,
 					position: { x: 0, y: 0 }

@@ -47,7 +47,7 @@
 		moved = true;
 	}
 	function onmousedown(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		if (!data.position) return;
+		if (!data?.position) return;
 		if (start_drag()) return;
 
 		const rect = e.currentTarget.getBoundingClientRect();

@@ -16,6 +16,7 @@
 	let gap = $state(-40);
 
 	let hand_state = $state(hand);
+	let stale;
 
 	$effect(() => {
 		if (!handElement) return;
@@ -66,7 +67,10 @@
 		hand_state = hand_state.filter((c) => c.id != -1);
 		if (boardState.dragging && boardState.dragging_card) {
 			let index = hand_state.indexOf(card);
-			if (index > -1) {
+			if (empty) {
+				hand_state = [{ ...boardState.dragging_card, id: -1 }];
+				boardState.hand_dropping_index = 0;
+			} else if (index > -1) {
 				if (d > 0) {
 					hand_state.splice(index + 1, 0, { ...boardState.dragging_card, id: -1 });
 				} else {
@@ -107,6 +111,13 @@
 			setHand(hand_state);
 		}
 	}
+	let empty_hand_card: CardData = {
+		id: -3,
+		img: 'card_bg.jpg',
+		order: 0,
+		position: { x: 0, y: 0 }
+	};
+	let empty = $derived(hand_state.length == 0);
 </script>
 
 <svelte:body {onmouseup} />
@@ -117,7 +128,7 @@
 	style="--gap: {gap}px"
 	bind:this={handElement}
 >
-	{#each hand_state as card, i (card.id)}
+	{#each empty ? [empty_hand_card] : hand_state as card, i (card.id)}
 		<div
 			class="hand-item"
 			class:dropped={card.id == -1}
@@ -133,18 +144,26 @@
 				}}
 			>
 				<!-- {#if card.id != -1} -->
-				<Card
-					hand
-					bind:data={hand_state[i]}
-					start_drag={() => {
-						if (card.id == -1) return;
-						hand_state.splice(i, 1);
-						setHand(hand_state);
-						dragOut(card);
-					}}
-					end_drag={() => {}}
-				/>
-				<!-- {/if} -->
+				{#if empty}
+					<Card hand data={empty_hand_card} start_drag={() => {}} end_drag={() => {}} />
+				{:else}
+					<Card
+						hand
+						bind:data={hand_state[i]}
+						start_drag={() => {
+							if (empty) return;
+							if (card.id == -1) return;
+							boardState.hand_dropping_index = i;
+							setTimeout(() => {
+								hand_state.splice(i, 1);
+								setHand(hand_state);
+							}, 1000);
+							dragOut(card);
+							console.log(card);
+						}}
+						end_drag={() => {}}
+					/>
+				{/if}
 			</div>
 		</div>
 	{/each}
@@ -168,7 +187,7 @@
 
 		overflow-y: visible;
 
-		transition: all 200ms ease-out;
+		transition: all 200ms ease-out 100ms;
 	}
 	.hand-item {
 		flex-grow: 0;
@@ -180,7 +199,7 @@
 
 		z-index: 1000;
 
-		transition: all 200ms ease-out;
+		transition: all 200ms ease-out 100ms;
 
 		&:last-of-type {
 			margin-left: 0;
@@ -192,7 +211,7 @@
 			width: 100%;
 			translate: 0 calc(abs(var(--index)) * 5px);
 			rotate: calc(var(--index) * -1deg);
-			transition: all 200ms ease-out 0ms;
+			transition: all 200ms ease-out 100ms;
 		}
 		&.dropped {
 			width: 160px;

@@ -63,14 +63,22 @@
 		if (boardState.zoom < 0.2) boardState.zoom = 0.2;
 	}
 
+	let client_x = 0;
+	let client_y = 0;
+
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
 		if (e.buttons == 1 && !boardState.drag_locked) {
 			boardState.scroll_position.x += e.movementX;
 			boardState.scroll_position.y += e.movementY;
 		}
+
+		client_x = e.clientX;
+		client_y = e.clientY;
 	}
 
 	function dragOutOf(card: CardData) {
+		card.position.x = client_x;
+		card.position.y = client_y;
 		board_self.push(card);
 		put_on_top(card);
 		boardState.drag_locked = true;
