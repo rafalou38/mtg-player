@@ -105,7 +105,7 @@
 	class:tapped={data.tapped}
 	class:dragging
 	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
-	hidden={dragging &&
+	hidden={dragging && !in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
 	{onmousedown}
 	bind:this={ECard}
