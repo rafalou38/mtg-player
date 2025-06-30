@@ -109,11 +109,15 @@ export class GameStateManager {
             this.board.push(card);
         }
     }
-    moveCardFromBoardToHand(cardId: CardId) {
+    moveCardFromBoardToHand(cardId: CardId, position?: number) {
         const cardIndex = this.board.findIndex(c => c.id === cardId);
         if (cardIndex !== -1) {
             const [card] = this.board.splice(cardIndex, 1);
-            this.hand.push(card);
+            if (position !== undefined) {
+                this.hand.splice(position, 0, card);
+            } else {
+                this.hand.push(card);
+            }
         }
     }
 
@@ -180,6 +184,22 @@ export class GameStateManager {
         this.dragging_pile = undefined;
     }
 
+    moveCardInHand(cardId: CardId, index: number) {
+        const cardIndex = this.hand.findIndex(c => c.id === cardId);
+        if (cardIndex !== -1) {
+            const [card] = this.hand.splice(cardIndex, 1);
+            this.hand.splice(index, 0, card);
+        }
+    }
+
+    // getOutOfHand(cardId: CardId) {
+    //     const cardIndex = this.hand.findIndex(c => c.id === cardId);
+    //     if (cardIndex !== -1) {
+    //         // const [card] = this.hand.splice(cardIndex, 1);
+    //         this.addToBoardDragging(card);
+    //     }
+    // }
+
 
     loadTestData() {
         const cards: CardData[] =
@@ -191,6 +211,7 @@ export class GameStateManager {
                 position: Vector2.zero,
                 tapped: false
             }))
+            .sort(() => Math.random() - 0.5);
         this.hand = cards.splice(0, 7);
         this.board = cards.splice(0, 1);
         this.piles["library"].cards = cards;

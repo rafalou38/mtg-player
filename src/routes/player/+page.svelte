@@ -68,7 +68,7 @@
 	<CardPile label="commander"/>
 </div>
 
-<!-- <Hand /> -->
+<Hand />
 
 <style>
 	.bg {
