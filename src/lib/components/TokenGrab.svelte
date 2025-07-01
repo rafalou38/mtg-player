@@ -3,7 +3,7 @@
 	import type { CardSearchResults } from '$lib/types/ScryfallApi';
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
+	import Window from './Window.svelte';
 
 	let { active = $bindable(false) } = $props();
 	let search = $state('');
@@ -52,15 +52,14 @@
 	});
 </script>
 
-<div
-	class="token-grabber"
-	class:active
-	onclick={() => {
+<Window
+	bind:active
+	on_close={() => {
 		active = false;
 		gameManager.blocked = false;
 	}}
 >
-	<div class="window" onclick={(e) => e.stopPropagation()}>
+	<div class="wrapper">
 		<form class="window-body" onsubmit={submit}>
 			<input type="text" placeholder="search" bind:value={search} />
 		</form>
@@ -70,7 +69,6 @@
 				<img src={img} alt="" onmousedown={(e) => addToken(img, e.clientX, e.clientY)} />
 			{/each}
 		</div>
-
 		<div class="results">
 			{#each images as img}
 				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -78,9 +76,19 @@
 			{/each}
 		</div>
 	</div>
-</div>
+</Window>
 
 <style>
+	.wrapper {
+		max-width: 60vw;
+		max-height: 90vh;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		/* align-items: center; */
+		gap: 16px;
+	}
 	.results {
 		display: flex;
 		flex-wrap: wrap;
@@ -125,39 +133,6 @@
 			&:active {
 				scale: 0.975;
 			}
-		}
-	}
-
-	.token-grabber {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		width: 100%;
-		height: 100%;
-		z-index: 1000;
-
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(2px);
-
-		justify-content: center;
-		align-items: center;
-
-		display: none;
-		&.active {
-			display: flex;
-		}
-
-		.window {
-			display: flex;
-			flex-direction: column;
-			width: 60%;
-			height: 90%;
-			padding: 1em;
-			background: black;
-			background-image: url('/texture/45-degree-fabric-light.png');
-			background-size: 128px 128px;
-			border-radius: 8px;
-			box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.24);
 		}
 	}
 

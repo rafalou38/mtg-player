@@ -315,6 +315,15 @@ export class GameStateManager {
         }
     }
 
+    mulligan() {
+        this.piles["library"].cards = [...this.piles["library"].cards, ...this.hand];
+        this.hand = [];
+        this.shuffle("library");
+        this.draw(7);
+
+        connectionManager.send_pile_update("library");
+    }
+
     loadTestData() {
         const cards: CardData[] =
             images.map((link, i) => ({

@@ -2,10 +2,16 @@
 	import Icon from '@iconify/svelte';
 	import TokenGrab from './TokenGrab.svelte';
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
+	import Mulligan from './Mulligan.svelte';
 
-	let token_active = $state(true);
+	let token_active = $state(false);
+    let mulligan_active = $state(false);
 	function addToken() {
         token_active = true;
+        gameManager.blocked = true;
+    }
+	function mulligan() {
+        mulligan_active = true;
         gameManager.blocked = true;
     }
 </script>
@@ -15,11 +21,14 @@
 		<!-- <Icon icon="streamline:interface-id-user-identification-angle-secure-human-id-person-face-silhouette-security-brackets" /> -->
 		<Icon icon="mdi:card-plus" />
 	</button>
+	<button onclick={mulligan}>
+		<!-- <Icon icon="streamline:interface-id-user-identification-angle-secure-human-id-person-face-silhouette-security-brackets" /> -->
+		<Icon icon="mdi:shuffle" />
+	</button>
 </div>
 
-{#if token_active}
-	<TokenGrab bind:active={token_active} />
-{/if}
+<TokenGrab bind:active={token_active} />
+<Mulligan bind:active={mulligan_active} />
 
 
 <style>
