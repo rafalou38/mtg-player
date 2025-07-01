@@ -6,12 +6,10 @@
 
 	const {
 		gameManager,
-		peer_id,
-		playmat
+		peer_id
 	}: {
 		gameManager: GameStateManager;
 		peer_id: string | undefined;
-		playmat: string;
 	} = $props();
 
 	const root: Vector2 = $derived(gameManager.root);
@@ -20,7 +18,7 @@
 
 <div
 	class="playmat"
-	style="--playmat: url('{playmat}'); --root-x: {flipped
+	style="--playmat: url('{gameManager.playmat_url}'); --root-x: {flipped
 		? root.x - 2160
 		: root.x}px; --root-y: {flipped ? root.y - 1080 : root.x}px; --flip: {flipped ? '-1' : '1'}"
 >

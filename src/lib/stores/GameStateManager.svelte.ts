@@ -5,10 +5,13 @@ import images from '$lib/data/test_deck.json';
 import type { Pile, PileType } from "$lib/types/Pile";
 import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
+import type { ArchidektDeck } from "$lib/types/ScryfallApi";
 
 
 export class GameStateManager {
+
     passive: boolean;
+    ready = $state(false);
 
     hand = $state<CardData[]>([]);
     board = $state<CardData[]>([]);
@@ -18,6 +21,7 @@ export class GameStateManager {
 
     root: Vector2 = $state(new Vector2(0, 0));
     flipped: boolean = $state(false);
+    playmat_url: string = $state('');
 
     // UI state
     zoom = $state(1);
@@ -36,34 +40,37 @@ export class GameStateManager {
 
     constructor(is_passive: boolean = false) {
         this.passive = $state(is_passive);
+        if (is_passive) {
+            this.ready = false;
+        } else {
+            this.ready = false;
+        }
         this.piles = $state({
             library: {
                 cards: [],
-                position: new Vector2(30+2160, 0),
+                position: new Vector2(30 + 2160, 0),
                 revealed: false,
                 id: Math.random()
             },
             graveyard: {
                 cards: [],
-                position: new Vector2(30+2160, 400),
+                position: new Vector2(30 + 2160, 400),
                 revealed: true,
                 id: Math.random()
             },
             exile: {
                 cards: [],
-                position: new Vector2(30+2160+300, 0),
+                position: new Vector2(30 + 2160 + 300, 0),
                 revealed: true,
                 id: Math.random()
             },
             commander: {
                 cards: [],
-                position: new Vector2(30+2160+300, 400),
+                position: new Vector2(30 + 2160 + 300, 400),
                 revealed: true,
                 id: Math.random()
             }
         });
-
-        this.loadTestData();
     }
 
     // State manipulation methods
@@ -81,7 +88,7 @@ export class GameStateManager {
         if (index !== -1) {
             this.board[index].position.set(x, y);
         }
-        
+
         // TODO: granular updates
         connectionManager.send_board_update();
     }
@@ -222,6 +229,69 @@ export class GameStateManager {
     //     }
     // }
 
+    setPlaymat(playmat_url: string) {
+        this.playmat_url = playmat_url;
+    }
+    loadDeck(active_deck: ArchidektDeck) {
+
+        // this.active_deck = active_deck;
+        // this.piles["library"].cards = active_deck.cards;
+
+        const excluded_categories = new Set(["sideboard", "maybeboard"]);
+        for (const cat of active_deck.categories) {
+            if (!cat.includedInDeck) {
+                excluded_categories.add(cat.name.toLowerCase());
+            }
+        }
+        for (const card of active_deck.cards) {
+            loop: {
+                const url = `https://api.scryfall.com/cards/${card.card.edition.editioncode}/${card.card.collectorNumber}?format=image`;
+
+                for (const cat of card.categories) {
+                    if (excluded_categories.has(cat.toLowerCase())) {
+                        break loop;
+                    }
+                }
+
+                for (let index = 0; index < card.quantity; index++) {
+                    const cardData: CardData = {
+                        img: url,
+                        id: Math.random() + index,
+                        order: 0,
+                        equipped_to: undefined,
+                        position: Vector2.zero,
+                        tapped: false
+                    }
+
+                    if (card.categories.includes("Commander")) {
+                        this.piles["commander"].cards.push(cardData);
+                    } else {
+                        this.piles["library"].cards.push(cardData);
+                    }
+                }
+            }
+        }
+
+        console.log(this.piles);
+    }
+
+    shuffle(pile: PileType) {
+        const temp_pile = this.piles[pile].cards;
+        this.piles[pile].cards = [];
+
+        while (temp_pile.length > 0) {
+            const index = Math.floor(Math.random() * temp_pile.length);
+            this.piles[pile].cards.push(temp_pile[index]);
+            temp_pile.splice(index, 1);
+        }
+    }
+    draw(amount: number) {
+        for (let i = 0; i < amount; i++) {
+            const card = this.piles["library"].cards.pop();
+            if (card)
+                this.hand.push(card);
+        }
+    }
 
     loadTestData() {
         const cards: CardData[] =

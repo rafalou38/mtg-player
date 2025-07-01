@@ -12,24 +12,12 @@
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
 
-	
-	
-
 	onMount(() => {
 		if (!connectionManager.connected)
 			return goto('/').then(() => {
 				// refresh the page
 				location.reload();
 			});
-
-		gameManager.loadTestData();
-
-		connectionManager.send_pile_update('library');
-		connectionManager.send_pile_update('graveyard');
-		connectionManager.send_pile_update('exile');
-		connectionManager.send_pile_update('commander');
-
-		connectionManager.send_board_update();
 	});
 
 	let force_drag: CardData | undefined = $state(undefined);
@@ -65,15 +53,10 @@
 >
 	<div class="bg"></div>
 
-	<Playmat
-		playmat="/bg/01.jpg"
-		{gameManager}
-		peer_id={undefined}
-	/>
+	<Playmat {gameManager} peer_id={undefined} />
 
 	{#each Object.keys(connectionManager.game_managers) as peer_id}
 		<Playmat
-			playmat="/bg/02.jpg"
 			gameManager={connectionManager.game_managers[peer_id]}
 			{peer_id}
 		/>

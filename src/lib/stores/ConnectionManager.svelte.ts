@@ -20,6 +20,10 @@ type BoardUpdate = {
     })[]
 }
 
+type Ready = {
+    playmat: string
+}
+
 const playmat_gap = 200;
 const roots: [Vector2, boolean][] = [
     [new Vector2(0, 0), false],
@@ -39,9 +43,11 @@ export class ConnectionManager {
     peers: Record<string, RTCPeerConnection> = $state({});
     connected: boolean = $state(false);
     game_managers: Record<string, GameStateManager> = $state({});
+    ready_cnt = $state(0);
 
     private _dispatch_pile_update: ActionSender<PileUpdate> | null = null;
     private _dispatch_board_update: ActionSender<BoardUpdate> | null = null;
+    private _dispatch_ready: ActionSender<Ready> | null = null;
 
     constructor() {
 
@@ -92,6 +98,10 @@ export class ConnectionManager {
         const [send_board_update, connect_board_update] = this.room.makeAction<BoardUpdate>('board_update');
         this._dispatch_board_update = send_board_update;
         connect_board_update(this.on_board_update.bind(this));
+
+        const [send_ready, connect_ready] = this.room.makeAction<Ready>('ready');
+        this._dispatch_ready = send_ready;
+        connect_ready(this.on_ready.bind(this));
     }
 
     private on_pile_update(data: PileUpdate, peer_id: string) {
@@ -153,6 +163,21 @@ export class ConnectionManager {
             }
         });
         this.game_managers[peer_id].board = cards;
+    }
+    private on_ready(data: Ready, peer_id: string) {
+        this.game_managers[peer_id].ready = true;
+        this.game_managers[peer_id].playmat_url = data.playmat;
+        this.ready_cnt++;
+    }
+
+    send_ready() {
+        assert(this.room);
+        assert(this._dispatch_ready);
+        this._dispatch_ready({
+            playmat: gameManager.playmat_url
+        });
+        gameManager.ready = true;
+        this.ready_cnt++;
     }
 
     send_board_update() {

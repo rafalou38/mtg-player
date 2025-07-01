@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 @import 'tailwindcss';
 
 body {
-    @apply h-screen w-screen overflow-hidden;
-        background-image: url('/texture/45-degree-fabric-light.png');
-    background-size: 100px;
-    background-color: black;
+	@apply h-screen w-screen overflow-hidden;
+	background-image: url('/texture/45-degree-fabric-light.png');
+	/* background-size: 100px; */
+	background-color: black;
+	font-style: normal;
+	font-family: 'Inter', sans-serif;
+	font-optical-sizing: auto;
 }
