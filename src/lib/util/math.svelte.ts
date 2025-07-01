@@ -9,21 +9,25 @@ export class Vector2 {
     set(x: number, y: number) {
         this.x = x;
         this.y = y;
+        return this;
     }
 
     add(v: Vector2) {
         this.x += v.x;
         this.y += v.y;
+        return this;
     }
 
     sub(v: Vector2) {
         this.x -= v.x;
         this.y -= v.y;
+        return this;
     }
 
     scale(k: number) {
         this.x *= k;
         this.y *= k;
+        return this;
     }
 
     clone() {

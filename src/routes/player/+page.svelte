@@ -3,12 +3,17 @@
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
 	import Hand from '$lib/components/Hand.svelte';
+	import Playmat from '$lib/components/Playmat.svelte';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { assert } from '$lib/util/assert';
+	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
+
+	
+	
 
 	onMount(() => {
 		if (!connectionManager.connected)
@@ -59,48 +64,19 @@
 		.x}px; --scroll-y: {gameManager.translate.y}px"
 >
 	<div class="bg"></div>
-	<div class="playmat playmat--1">
-		<div class="texture"></div>
-	</div>
-	<div class="playmat playmat--2">
-		<div class="texture"></div>
-	</div>
-	{#each gameManager.board as card, i}
-		<Card
-			data={gameManager.board[i]}
-			start_drag={() => {
-				gameManager.setDragging(card);
-			}}
-			end_drag={() => {
-				gameManager.stopDragging();
-			}}
-			can_tap
-		/>
-	{/each}
 
-	<CardPile label="library" />
-	<CardPile label="graveyard" />
-	<CardPile label="exile" />
-	<CardPile label="commander" />
+	<Playmat
+		playmat="/bg/01.jpg"
+		{gameManager}
+		peer_id={undefined}
+	/>
 
 	{#each Object.keys(connectionManager.game_managers) as peer_id}
-
-		{#each connectionManager.game_managers[peer_id].board as card, i}
-			<Card
-				data={connectionManager.game_managers[peer_id].board[i]}
-				start_drag={() => {
-					return true;
-				}}
-				end_drag={() => {
-				}}
-				can_tap
-			/>
-		{/each}
-
-		<CardPile label="library" {peer_id} />
-		<CardPile label="graveyard" {peer_id} />
-		<CardPile label="exile" {peer_id} />
-		<CardPile label="commander" {peer_id} />
+		<Playmat
+			playmat="/bg/02.jpg"
+			gameManager={connectionManager.game_managers[peer_id]}
+			{peer_id}
+		/>
 	{/each}
 </div>
 
@@ -130,45 +106,5 @@
 
 		/* transition:
 			scale 600ms cubic-bezier(0.16, 1, 0.3, 1); */
-	}
-	.playmat {
-		position: absolute;
-		width: 2160px;
-		height: 1080px;
-		flex-grow: 1;
-		/* height: max-content; */
-		/* margin: 100px; */
-
-		background-repeat: no-repeat;
-		background-size: cover;
-
-		border-radius: 20px;
-		overflow: hidden;
-
-		/* border: solid #171717 4px; */
-		box-shadow: 0px 0px 0px 8px black;
-
-		translate: -1080px -1080px;
-	}
-	.playmat--1 {
-		background-image: url('/bg/01.jpg');
-
-		/* flip bg */
-		transform: scaleY(-1);
-	}
-	.playmat--2 {
-		top: 1200px;
-		background-image: url('/bg/02.jpg');
-	}
-
-	.texture {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		/* background-image: url('/texture/cloth-alike.png'); */
-		background-image: url('/texture/classy-fabric.png');
-		/* background-image: url('/texture/45-degree-fabric-light.png'); */
-		background-size: 400px;
-		opacity: 0.2;
 	}
 </style>

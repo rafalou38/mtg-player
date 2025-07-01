@@ -16,6 +16,9 @@ export class GameStateManager {
     piles: { [key in PileType]: Pile };
 
 
+    root: Vector2 = $state(new Vector2(0, 0));
+    flipped: boolean = $state(false);
+
     // UI state
     zoom = $state(1);
     translate = $state<Vector2>(Vector2.zero)
@@ -36,25 +39,25 @@ export class GameStateManager {
         this.piles = $state({
             library: {
                 cards: [],
-                position: new Vector2(1000, 100),
+                position: new Vector2(30+2160, 0),
                 revealed: false,
                 id: Math.random()
             },
             graveyard: {
                 cards: [],
-                position: new Vector2(1000, 500),
+                position: new Vector2(30+2160, 400),
                 revealed: true,
                 id: Math.random()
             },
             exile: {
                 cards: [],
-                position: new Vector2(1300, 500),
+                position: new Vector2(30+2160+300, 0),
                 revealed: true,
                 id: Math.random()
             },
             commander: {
                 cards: [],
-                position: new Vector2(1300, 100),
+                position: new Vector2(30+2160+300, 400),
                 revealed: true,
                 id: Math.random()
             }

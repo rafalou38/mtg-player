@@ -19,6 +19,15 @@ type BoardUpdate = {
         position: [number, number]
     })[]
 }
+
+const playmat_gap = 200;
+const roots: [Vector2, boolean][] = [
+    [new Vector2(0, 0), false],
+    [new Vector2(2160, -playmat_gap), true],
+    [new Vector2(2160 + playmat_gap, 0), false],
+    [new Vector2(2160 * 2 + playmat_gap, -playmat_gap), true]
+];
+
 export class ConnectionManager {
     config: BaseRoomConfig & RelayConfig & TurnConfig = {
         appId: "mtg-player-fae55",
@@ -26,6 +35,7 @@ export class ConnectionManager {
     };
     private room: Room | null = null;
 
+    peer_cnt = $state(0);
     peers: Record<string, RTCPeerConnection> = $state({});
     connected: boolean = $state(false);
     game_managers: Record<string, GameStateManager> = $state({});
@@ -61,6 +71,9 @@ export class ConnectionManager {
         this.peers = this.room.getPeers();
 
         this.game_managers[peerId] = new GameStateManager(true);
+        this.game_managers[peerId].root = roots[this.peer_cnt + 1][0];
+        this.game_managers[peerId].flipped = roots[this.peer_cnt + 1][1];
+        this.peer_cnt++;
     }
     private onPeerLeave(peerId: string) {
         console.log("Peer left", peerId);
@@ -83,18 +96,21 @@ export class ConnectionManager {
 
     private on_pile_update(data: PileUpdate, peer_id: string) {
         const pile_name = data["label"];
+        const gm = this.game_managers[peer_id];
+        const pile = gm.piles[pile_name];
 
-        const pile = this.game_managers[peer_id].piles[pile_name];
+        const sgn = gm.flipped ? -1 : 1;
+        const pos = new Vector2(data.position[0], data.position[1]).scale(sgn).add(gm.root);
 
         const cards = data["cards"].map((card) => {
             return {
                 ...card,
-                position: new Vector2(-card.position[0], -card.position[1])
+                position: pos.clone(),
             }
         });
 
         pile.cards = cards;
-        pile.position = new Vector2(-data.position[0], -data.position[1]);
+        pile.position = pos;
         pile.revealed = data.revealed;
         pile.id = data.id;
 
@@ -124,10 +140,16 @@ export class ConnectionManager {
     }
 
     private on_board_update(data: BoardUpdate, peer_id: string) {
+
+        const gm = this.game_managers[peer_id];
+
+        const sgn = gm.flipped ? -1 : 1;
+
         const cards = data["cards"].map((card) => {
+            const pos = new Vector2(card.position[0], card.position[1]).scale(sgn).add(gm.root);
             return {
                 ...card,
-                position: new Vector2(-card.position[0], -card.position[1])
+                position: pos
             }
         });
         this.game_managers[peer_id].board = cards;

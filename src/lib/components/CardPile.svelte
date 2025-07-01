@@ -7,13 +7,16 @@
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { assert } from '$lib/util/assert';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
+	import { flip } from 'svelte/animate';
 
 	const {
 		label,
-		peer_id
+		peer_id,
+		flipped
 	}: {
 		label: PileType;
 		peer_id: string | undefined;
+		flipped: boolean;
 	} = $props();
 
 	const gameManager = $derived(peer_id ? connectionManager.game_managers[peer_id] : GMRoot);
@@ -104,7 +107,9 @@
 <div
 	class="card-pile"
 	class:dragging_pile
-	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
+	style="--x: {flipped ? pile.position.x - 220 : pile.position.x}px; --y: {flipped
+		? pile.position.y - 300
+		: pile.position.y}px"
 	{onmouseenter}
 	{onmouseleave}
 >
@@ -118,11 +123,14 @@
 <div
 	class="card-pile card-pile--container"
 	class:dragging_pile
-	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
+	style="--x: {flipped ? pile.position.x - 20 : pile.position.x}px; --y: {flipped
+		? pile.position.y - 20
+		: pile.position.y}px"
 	class:dropping_card={gameManager.dragging}
 >
 	{#if shown_card}
 		<Card
+			{flipped}
 			data={shown_card}
 			start_drag={() => {
 				if (gameManager.passive) return true;

@@ -11,13 +11,15 @@
 		start_drag,
 		end_drag,
 		can_tap,
-		in_hand
+		in_hand,
+		flipped
 	}: {
 		data: CardData;
 		start_drag: () => void | true;
 		end_drag: () => void;
 		can_tap?: boolean;
 		in_hand?: boolean; // for appearance
+		flipped?: boolean;
 	} = $props();
 
 	let dragStart = Vector2.zero;
@@ -104,7 +106,7 @@
 	class:hand={in_hand}
 	class:tapped={data.tapped}
 	class:dragging
-	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
+	style="--x: {flipped ? data.position.x - 200 : data.position.x}px; --y: {flipped ? data.position.y - 280 : data.position.y}px; z-index: {data.order}"
 	hidden={dragging && !in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
 	{onmousedown}
