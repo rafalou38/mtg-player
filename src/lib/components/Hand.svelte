@@ -108,6 +108,7 @@
 					in_hand
 					start_drag={() => {
 						dragging_out = true;
+						gameManager.dragging_card_origin = "hand";
 						gameManager.addToBoardDragging(card);
 						pending_removal = card;
 						return true;

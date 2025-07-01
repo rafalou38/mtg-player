@@ -31,6 +31,8 @@
 		start_drag={() => {
 			if (gameManager.passive) return true;
 
+			gameManager.dragging_card_origin = "board";
+
 			gameManager.setDragging(card);
 		}}
 		end_drag={() => {

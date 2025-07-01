@@ -29,6 +29,7 @@ export class GameStateManager {
 
     dragging = $state(false);
     dragging_card = $state<CardData | undefined>(undefined);
+    dragging_card_origin = $state<PileType | "hand" | "board" | undefined>(undefined);
     prev_dragging_card = $state<CardData | undefined>(undefined);
 
     dragging_pile: PileType | undefined = $state(undefined);
@@ -114,6 +115,8 @@ export class GameStateManager {
         if (index !== -1) {
             this.board.splice(index, 1);
         }
+
+        connectionManager.send_board_update();
     }
 
     addToBoardDragging(card: CardData) {
@@ -164,6 +167,8 @@ export class GameStateManager {
     stopDragging() {
         this.dragging = false;
         this.dragging_card = undefined;
+
+        connectionManager.send_board_update();
     }
 
     getOutOfPile(pile: PileType, index?: number) {

@@ -134,6 +134,7 @@
 			data={shown_card}
 			start_drag={() => {
 				if (gameManager.passive) return true;
+				gameManager.dragging_card_origin = label;
 				gameManager.getOutOfPile(label);
 				return true;
 			}}

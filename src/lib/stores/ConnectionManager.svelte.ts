@@ -183,17 +183,27 @@ export class ConnectionManager {
     send_board_update() {
         assert(this.room);
         assert(this._dispatch_board_update);
-        this._dispatch_board_update({
-            cards: gameManager.board.map((card) => {
-                return {
-                    id: card.id,
-                    img: card.img,
-                    tapped: card.tapped,
-                    equipped_to: card.equipped_to,
-                    order: card.order,
-                    position: card.position.serialize(),
+        let cards: (CardData & { position: [number, number] })[] = gameManager.board.map((card) => {
+            return {
+                id: card.id,
+                img: card.img,
+                tapped: card.tapped,
+                equipped_to: card.equipped_to,
+                order: card.order,
+                position: card.position.serialize(),
+            }
+        });
+        if (gameManager.dragging && gameManager.dragging_card && gameManager.dragging_card_origin != "board") {
+            cards = cards.map((card) => {
+                if (card.id == gameManager.dragging_card?.id) {
+                    card.img = "/card_bg.jpg"
                 }
-            })
+
+                return card;
+            });
+        }
+        this._dispatch_board_update({
+            cards: cards
         });
     }
 }
