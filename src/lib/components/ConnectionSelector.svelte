@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ArchidektDeck } from '$lib/types/ScryfallApi';
+	import type { ArchidektDeck } from '$lib/types/ArchidektApi';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 

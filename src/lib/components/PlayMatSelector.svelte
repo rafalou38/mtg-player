@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { playmats } from '$lib/data/playmats';
-	import type { ArchidektDeck } from '$lib/types/ScryfallApi';
+	import type { ArchidektDeck } from '$lib/types/ArchidektApi';
 	import Icon from '@iconify/svelte';
 	import { onMount } from 'svelte';
 

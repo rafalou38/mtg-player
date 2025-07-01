@@ -5,7 +5,7 @@ import images from '$lib/data/test_deck.json';
 import type { Pile, PileType } from "$lib/types/Pile";
 import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
-import type { ArchidektDeck } from "$lib/types/ScryfallApi";
+import type { ArchidektDeck } from "$lib/types/ArchidektApi";
 
 
 export class GameStateManager {
@@ -38,6 +38,8 @@ export class GameStateManager {
     pile_dropping = $state<string | undefined>(undefined);
 
     cursor_position = $state<Vector2>(Vector2.zero);
+
+    blocked = $state(false);
 
     constructor(is_passive: boolean = false) {
         this.passive = $state(is_passive);
@@ -124,8 +126,8 @@ export class GameStateManager {
         this.dragging_card = card;
         this.prev_dragging_card = card;
 
-        card.position.x = this.cursor_position.x;
-        card.position.x = this.cursor_position.y;
+        // card.position.x = this.cursor_position.x;
+        // card.position.x = this.cursor_position.y;
 
         this.removeCardFromBoard(card.id);
         this.board.push(card);

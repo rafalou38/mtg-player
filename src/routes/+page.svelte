@@ -5,7 +5,7 @@
 	import PlayMatSelector from '$lib/components/PlayMatSelector.svelte';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
-	import type { ArchidektDeck } from '$lib/types/ScryfallApi';
+	import type { ArchidektDeck } from '$lib/types/ArchidektApi';
 	import { assert } from '$lib/util/assert';
 	import { onMount } from 'svelte';
 

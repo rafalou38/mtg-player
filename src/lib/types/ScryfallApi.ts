@@ -1,245 +1,204 @@
-export interface ArchidektDeck {
-    id:               number;
-    name:             string;
-    createdAt:        Date;
-    updatedAt:        Date;
-    deckFormat:       number;
-    edhBracket:       null;
-    game:             null;
-    description:      string;
-    viewCount:        number;
-    featured:         string;
-    customFeatured:   string;
-    private:          boolean;
-    unlisted:         boolean;
-    theorycrafted:    boolean;
-    points:           number;
-    userInput:        number;
-    owner:            Owner;
-    commentRoot:      number;
-    editors:          null;
-    parentFolder:     number;
-    bookmarked:       boolean;
-    categories:       Category[];
-    deckTags:         any[];
-    playgroupDeckUrl: null;
-    cardPackage:      null;
-    cards:            CardElement[];
+export interface CardSearchResults {
+    object:      string;
+    total_cards: number;
+    has_more:    boolean;
+    data:        Datum[];
 }
 
-interface CardElement {
-    id:                number;
-    categories:        string[];
-    companion:         boolean;
-    flippedDefault:    boolean;
-    label:             Label;
-    modifier:          Modifier;
-    quantity:          number;
-    customCmc:         null;
-    removedCategories: null;
-    createdAt:         Date;
-    updatedAt:         Date;
-    deletedAt:         null;
-    card:              CardCard;
-}
-
-interface CardCard {
-    id:                number;
-    artist:            string;
-    tcgProductId:      number;
-    ckFoilId:          number | null;
-    ckNormalId:        number | null;
-    cmEd:              null | string;
-    scgSku:            null | string;
-    scgFoilSku:        null | string;
-    collectorNumber:   string;
-    multiverseid:      number;
-    mtgoFoilId:        number;
-    mtgoNormalId:      number;
-    uid:               string;
-    displayName:       null | string;
-    edition:           Edition;
-    flavor:            string;
-    games:             any[];
-    options:           Modifier[];
-    scryfallImageHash: null | string;
-    oracleCard:        OracleCard;
-    owned:             number;
-    prices:            { [key: string]: number };
+export interface Datum {
+    object:            DatumObject;
+    id:                string;
+    oracle_id:         string;
+    multiverse_ids:    any[];
+    name:              string;
+    lang:              Lang;
+    released_at:       Date;
+    uri:               string;
+    scryfall_uri:      string;
+    layout:            Layout;
+    highres_image:     boolean;
+    image_status:      ImageStatus;
+    image_uris?:       ImageUris;
+    mana_cost?:        string;
+    cmc:               number;
+    type_line:         string;
+    oracle_text?:      string;
+    power?:            string;
+    toughness?:        string;
+    colors?:           Color[];
+    color_identity:    Color[];
+    keywords:          string[];
+    legalities:        Legalities;
+    games:             Game[];
+    reserved:          boolean;
+    game_changer:      boolean;
+    foil:              boolean;
+    nonfoil:           boolean;
+    finishes:          Finish[];
+    oversized:         boolean;
+    promo:             boolean;
+    reprint:           boolean;
+    variation:         boolean;
+    set_id:            string;
+    set:               string;
+    set_name:          string;
+    set_type:          SetType;
+    set_uri:           string;
+    set_search_uri:    string;
+    scryfall_set_uri:  string;
+    rulings_uri:       string;
+    prints_search_uri: string;
+    collector_number:  string;
+    digital:           boolean;
     rarity:            Rarity;
-    globalCategories:  any[];
+    card_back_id?:     string;
+    artist:            string;
+    artist_ids:        string[];
+    illustration_id?:  string;
+    border_color:      BorderColor;
+    frame:             string;
+    frame_effects?:    string[];
+    full_art:          boolean;
+    textless:          boolean;
+    booster:           boolean;
+    story_spotlight:   boolean;
+    promo_types?:      string[];
+    prices:            { [key: string]: null | string };
+    related_uris:      RelatedUris;
+    purchase_uris:     PurchaseUris;
+    card_faces?:       CardFace[];
+    all_parts?:        AllPart[];
+    tcgplayer_id?:     number;
+    security_stamp?:   string;
 }
 
-interface Edition {
-    editioncode: string;
-    editionname: string;
-    editiondate: Date;
-    editiontype: Editiontype;
-    mtgoCode:    null | string;
+export interface AllPart {
+    object:    AllPartObject;
+    id:        string;
+    component: Component;
+    name:      string;
+    type_line: string;
+    uri:       string;
 }
 
-enum Editiontype {
-    Box = "box",
-    Commander = "commander",
-    Core = "core",
-    DraftInnovation = "draft_innovation",
-    DuelDeck = "duel_deck",
-    Expansion = "expansion",
-    Masterpiece = "masterpiece",
-    Masters = "masters",
-    Promo = "promo",
+export enum Component {
+    ComboPiece = "combo_piece",
+    Token = "token",
 }
 
-enum Modifier {
-    Etched = "Etched",
-    Foil = "Foil",
-    Normal = "Normal",
+export enum AllPartObject {
+    RelatedCard = "related_card",
 }
 
-interface OracleCard {
-    id:                    number;
-    cmc:                   number;
-    colorIdentity:         Color[];
-    colors:                Color[];
-    edhrecRank:            number | null;
-    faces:                 Face[];
-    layout:                Layout;
-    uid:                   string;
-    legalities:            Legalities;
-    manaCost:              string;
-    manaProduction:        ManaProduction;
-    name:                  string;
-    power:                 string;
-    salt:                  number | null;
-    subTypes:              string[];
-    superTypes:            SuperType[];
-    text:                  string;
-    tokens:                string[];
-    toughness:             string;
-    types:                 Type[];
-    loyalty:               null | string;
-    canlanderPoints:       null;
-    isPDHCommander:        boolean;
-    defaultCategory:       null | string;
-    gameChanger:           boolean;
-    extraTurns:            boolean;
-    tutor:                 boolean;
-    massLandDenial:        boolean;
-    twoCardComboSingelton: boolean;
-    twoCardComboIds:       string[];
-    atomicCombos:          string[];
-    potentialCombos:       string[];
+export enum BorderColor {
+    Black = "black",
 }
 
-enum Color {
-    Black = "Black",
+export interface CardFace {
+    object:          string;
+    name:            string;
+    mana_cost:       string;
+    type_line:       string;
+    oracle_text:     string;
+    colors:          Color[];
+    power?:          string;
+    toughness?:      string;
+    artist:          string;
+    artist_id:       string;
+    illustration_id: string;
+    image_uris:      ImageUris;
 }
 
-interface Face {
-    colors:     Color[];
-    flavor:     string;
-    manaCost:   string;
-    name:       string;
-    power:      string;
-    subTypes:   string[];
-    superTypes: SuperType[];
-    text:       string;
-    toughness:  string;
-    types:      Type[];
-    loyalty:    null;
+export enum Color {
+    B = "B",
+    U = "U",
+    W = "W",
 }
 
-enum SuperType {
-    Basic = "Basic",
-    Legendary = "Legendary",
+export interface ImageUris {
+    small:       string;
+    normal:      string;
+    large:       string;
+    png:         string;
+    art_crop:    string;
+    border_crop: string;
 }
 
-enum Type {
-    Artifact = "Artifact",
-    Creature = "Creature",
-    Enchantment = "Enchantment",
-    Instant = "Instant",
-    Kindred = "Kindred",
-    Land = "Land",
-    Planeswalker = "Planeswalker",
-    Sorcery = "Sorcery",
+export enum Finish {
+    Foil = "foil",
+    Nonfoil = "nonfoil",
 }
 
-enum Layout {
-    Normal = "normal",
-    Transform = "transform",
+export enum Game {
+    Arena = "arena",
+    Mtgo = "mtgo",
+    Paper = "paper",
 }
 
-interface Legalities {
-    alchemy:         The1_V1;
-    legacy:          The1_V1;
-    oldschool:       The1_V1;
-    modern:          The1_V1;
-    vintage:         The1_V1;
-    oathbreaker:     The1_V1;
-    "1v1":           The1_V1;
-    historicbrawl:   The1_V1;
-    premodern:       The1_V1;
-    historic:        The1_V1;
-    commander:       The1_V1;
-    paupercommander: The1_V1;
-    gladiator:       The1_V1;
-    explorer:        null;
-    brawl:           The1_V1;
-    penny:           The1_V1;
-    pioneer:         The1_V1;
-    duel:            The1_V1;
-    pauper:          The1_V1;
-    standard:        The1_V1;
-    future:          The1_V1;
-    predh:           The1_V1;
-    timeless:        The1_V1;
-    canlander:       The1_V1;
+export enum ImageStatus {
+    HighresScan = "highres_scan",
+    Lowres = "lowres",
 }
 
-enum The1_V1 {
-    Banned = "banned",
-    Legal = "legal",
+export enum Lang {
+    En = "en",
+}
+
+export enum Layout {
+    DoubleFacedToken = "double_faced_token",
+    Token = "token",
+}
+
+export interface Legalities {
+    standard:        Alchemy;
+    future:          Alchemy;
+    historic:        Alchemy;
+    timeless:        Alchemy;
+    gladiator:       Alchemy;
+    pioneer:         Alchemy;
+    modern:          Alchemy;
+    legacy:          Alchemy;
+    pauper:          Alchemy;
+    vintage:         Alchemy;
+    penny:           Alchemy;
+    commander:       Alchemy;
+    oathbreaker:     Alchemy;
+    standardbrawl:   Alchemy;
+    brawl:           Alchemy;
+    alchemy:         Alchemy;
+    paupercommander: Alchemy;
+    duel:            Alchemy;
+    oldschool:       Alchemy;
+    premodern:       Alchemy;
+    predh:           Alchemy;
+}
+
+export enum Alchemy {
     NotLegal = "not_legal",
 }
 
-interface ManaProduction {
-    W: number | null;
-    U: number | null;
-    B: number | null;
-    R: number | null;
-    G: number | null;
-    C: number | null;
+export enum DatumObject {
+    Card = "card",
 }
 
-enum Rarity {
+export interface PurchaseUris {
+    tcgplayer:   string;
+    cardmarket:  string;
+    cardhoarder: string;
+}
+
+export enum Rarity {
     Common = "common",
-    Mythic = "mythic",
-    Rare = "rare",
-    Uncommon = "uncommon",
 }
 
-enum Label {
-    DonTHaveF47373 = "Don't Have,#f47373",
-    Getting2Ccce4 = "Getting,#2ccce4",
-    Have37D67A = "Have,#37d67a",
-    The656565 = ",#656565",
+export interface RelatedUris {
+    tcgplayer_infinite_articles: string;
+    tcgplayer_infinite_decks:    string;
+    edhrec:                      string;
 }
 
-interface Category {
-    id:              number;
-    name:            string;
-    isPremier:       boolean;
-    includedInDeck:  boolean;
-    includedInPrice: boolean;
-}
-
-interface Owner {
-    id:           number;
-    username:     string;
-    avatar:       string;
-    frame:        null;
-    ckAffiliate:  string;
-    tcgAffiliate: string;
-    referrerEnum: null;
+export enum SetType {
+    Arsenal = "arsenal",
+    Promo = "promo",
+    Token = "token",
 }

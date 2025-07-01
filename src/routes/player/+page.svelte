@@ -4,6 +4,7 @@
 	import CardPile from '$lib/components/CardPile.svelte';
 	import Hand from '$lib/components/Hand.svelte';
 	import Playmat from '$lib/components/Playmat.svelte';
+	import QuickActions from '$lib/components/QuickActions.svelte';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
@@ -13,16 +14,20 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		if (!connectionManager.connected)
-			return goto('/').then(() => {
-				// refresh the page
-				location.reload();
-			});
+		// if (!connectionManager.connected)
+		// 	return goto('/').then(() => {
+		// 		// refresh the page
+		// 		location.reload();
+		// 	});
+
+		connectionManager.connect('1p');
+		gameManager.loadTestData();
 	});
 
 	let force_drag: CardData | undefined = $state(undefined);
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
+		if (gameManager.blocked) return;
 		e.preventDefault();
 		if (e.deltaY > 0) {
 			gameManager.zoom *= 0.9;
@@ -35,6 +40,7 @@
 	}
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
+		if (gameManager.blocked) return;
 		if (e.buttons == 1 && !gameManager.dragging && !gameManager.dragging_pile) {
 			gameManager.translate.x += e.movementX;
 			gameManager.translate.y += e.movementY;
@@ -56,12 +62,11 @@
 	<Playmat {gameManager} peer_id={undefined} />
 
 	{#each Object.keys(connectionManager.game_managers) as peer_id}
-		<Playmat
-			gameManager={connectionManager.game_managers[peer_id]}
-			{peer_id}
-		/>
+		<Playmat gameManager={connectionManager.game_managers[peer_id]} {peer_id} />
 	{/each}
 </div>
+
+<QuickActions />
 
 <Hand />
 
