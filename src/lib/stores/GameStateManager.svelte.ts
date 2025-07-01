@@ -94,6 +94,8 @@ export class GameStateManager {
     }
 
     addCardToHand(card: CardData, index?: number) {
+        this.removeCardFromHand(card.id);
+
         if (index !== undefined) {
             this.hand.splice(index, 0, card);
             return;
@@ -107,6 +109,12 @@ export class GameStateManager {
             this.hand.splice(index, 1);
         }
     }
+    removeCardFromBoard(cardId: CardId) {
+        const index = this.board.findIndex(c => c.id === cardId);
+        if (index !== -1) {
+            this.board.splice(index, 1);
+        }
+    }
 
     addToBoardDragging(card: CardData) {
         this.dragging = true;
@@ -116,6 +124,7 @@ export class GameStateManager {
         card.position.x = this.cursor_position.x;
         card.position.x = this.cursor_position.y;
 
+        this.removeCardFromBoard(card.id);
         this.board.push(card);
     }
     moveCardFromHandToBoard(cardId: CardId, position: Vector2) {
@@ -123,10 +132,13 @@ export class GameStateManager {
         if (cardIndex !== -1) {
             const [card] = this.hand.splice(cardIndex, 1);
             card.position = position;
+            this.removeCardFromBoard(cardId);
             this.board.push(card);
         }
     }
     moveCardFromBoardToHand(cardId: CardId, position?: number) {
+        this.removeCardFromHand(cardId);
+
         const cardIndex = this.board.findIndex(c => c.id === cardId);
         if (cardIndex !== -1) {
             const [card] = this.board.splice(cardIndex, 1);
@@ -138,6 +150,9 @@ export class GameStateManager {
 
             connectionManager.send_board_update();
         }
+
+        this.dragging = false;
+        this.dragging_card = undefined;
     }
 
 

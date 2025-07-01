@@ -43,8 +43,10 @@
 	}
 
 	function onmouseup() {
-		if (dragging_out) {
-			if (activeCardIndex != -1 && pending_removal) {
+		if (dragging_out && pending_removal) {
+			gameManager.removeCardFromHand(pending_removal.id);
+
+			if (activeCardIndex != -1) {
 				gameManager.moveCardFromBoardToHand(pending_removal.id, activeCardIndex);
 			}
 
@@ -52,7 +54,6 @@
 			dragging_out = false;
 			assert(pending_removal, 'Pending removal is undefined');
 
-			gameManager.removeCardFromHand(pending_removal.id);
 			return;
 		}
 	}
