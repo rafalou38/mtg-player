@@ -33,6 +33,10 @@ type TrinketsUpdate = {
     partial: boolean
 }
 
+type HandUpdate = {
+    cards: string[],
+}
+
 
 const playmat_gap = 200;
 const roots: [Vector2, boolean][] = [
@@ -59,6 +63,7 @@ export class ConnectionManager {
     private _dispatch_board_update: ActionSender<BoardUpdate> | null = null;
     private _dispatch_ready: ActionSender<Ready> | null = null;
     private _dispatch_trinkets: ActionSender<TrinketsUpdate> | null = null;
+    private _dispatch_hand_update: ActionSender<HandUpdate> | null = null;
 
     constructor() {
 
@@ -118,6 +123,10 @@ export class ConnectionManager {
         const [send_trinkets, connect_trinkets] = this.room.makeAction<TrinketsUpdate>('trinkets');
         this._dispatch_trinkets = send_trinkets;
         connect_trinkets(this.on_trinket_update.bind(this));
+
+        const [send_hand_update, connect_hand_update] = this.room.makeAction<HandUpdate>('hand_update');
+        this._dispatch_hand_update = send_hand_update;
+        connect_hand_update(this.on_hand_update.bind(this));
     }
 
     private on_pile_update(data: PileUpdate, peer_id: string) {
@@ -295,6 +304,20 @@ export class ConnectionManager {
         } else {
             this.game_managers[peer_id].trinkets = trinkets;
         }
+    }
+    send_hand_update() {
+        assert(this.room);
+        assert(this._dispatch_hand_update);
+        this._dispatch_hand_update({
+            cards: gameManager.hand.map(() => {
+                return "/card_bg.jpg"
+            })
+        });
+    }
+
+    private on_hand_update(data: HandUpdate, peer_id: string) {
+        const cards = data["cards"];
+        this.game_managers[peer_id].partial_hand = cards;
     }
 }
 

@@ -2,7 +2,7 @@
   - [x] granular updates (cards)
 # ui
   - [x] fix ordering
-  - [ ] show hand
+  - [x] show hand
 #  Functionality, needed
   - [x] tokens --
   - [x] markers + life --

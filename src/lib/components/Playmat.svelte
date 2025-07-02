@@ -8,6 +8,7 @@
 	import ContextMenu from './ContextMenu.svelte';
 	import Counter from './Counter.svelte';
 	import Marker from './Marker.svelte';
+	import OtherHand from './OtherHand.svelte';
 
 	const {
 		gameManager,
@@ -67,6 +68,10 @@
 <CardPile {flipped} label="graveyard" {peer_id} />
 <CardPile {flipped} label="exile" {peer_id} />
 <CardPile {flipped} label="commander" {peer_id} />
+
+{#if gameManager.passive}
+	<OtherHand {gameManager} {flipped} />
+{/if}
 
 <style>
 	.playmat {

@@ -14,6 +14,7 @@ export class GameStateManager {
     ready = $state(false);
 
     hand = $state<CardData[]>([]);
+    partial_hand = $state<string[]>([]);
     board = $state<CardData[]>([]);
 
     piles: { [key in PileType]: Pile };
@@ -105,6 +106,8 @@ export class GameStateManager {
             return;
         }
         this.hand.push(card);
+
+        connectionManager.send_hand_update();
     }
 
     removeCardFromHand(cardId: CardId) {
@@ -112,6 +115,8 @@ export class GameStateManager {
         if (index !== -1) {
             this.hand.splice(index, 1);
         }
+
+        connectionManager.send_hand_update();
     }
     removeCardFromBoard(cardId: CardId, send = true) {
         const index = this.board.findIndex(c => c.id === cardId);
@@ -143,6 +148,8 @@ export class GameStateManager {
             this.board.push(card);
             connectionManager.send_board_update(card, true);
         }
+
+        connectionManager.send_hand_update();
 
     }
     moveCardFromBoardToHand(cardId: CardId, position?: number) {
@@ -254,6 +261,8 @@ export class GameStateManager {
             const [card] = this.hand.splice(cardIndex, 1);
             this.hand.splice(index, 0, card);
         }
+
+        connectionManager.send_hand_update();
     }
 
     // getOutOfHand(cardId: CardId) {
@@ -327,6 +336,8 @@ export class GameStateManager {
             if (card)
                 this.hand.push(card);
         }
+        connectionManager.send_pile_update("library");
+        connectionManager.send_hand_update();
     }
 
     mulligan() {
@@ -336,6 +347,7 @@ export class GameStateManager {
         this.draw(7);
 
         connectionManager.send_pile_update("library");
+        connectionManager.send_hand_update();
     }
 
     setTrinketPosition(trinketID: CardId, x: number, y: number) {
@@ -382,6 +394,7 @@ export class GameStateManager {
         this.piles[pile].cards.unshift(card);
 
         connectionManager.send_pile_update(pile);
+        connectionManager.send_hand_update();
     }
     boardToBottom(card: CardData, pile: PileType) {
         this.removeCardFromBoard(card.id);

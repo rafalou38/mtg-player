@@ -7,6 +7,7 @@
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { assert } from '$lib/util/assert';
 	import ContextMenu from './ContextMenu.svelte';
+	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	let handElement: HTMLDivElement;
 
@@ -50,6 +51,8 @@
 			if (activeCardIndex != -1) {
 				gameManager.moveCardFromBoardToHand(pending_removal.id, activeCardIndex);
 			}
+
+			connectionManager.send_hand_update();
 
 			activeCardIndex = -1;
 			dragging_out = false;
