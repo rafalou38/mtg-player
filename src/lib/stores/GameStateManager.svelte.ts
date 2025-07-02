@@ -228,7 +228,7 @@ export class GameStateManager {
                 });
                 card.order = max_order+1;
             } else {
-                let max_order = 0;
+                let max_order = 10;
                 this.board.forEach((c) => {
                     if (c.id === card.id) return;
 
