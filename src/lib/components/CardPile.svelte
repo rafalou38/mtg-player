@@ -8,6 +8,7 @@
 	import { assert } from '$lib/util/assert';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 	import { flip } from 'svelte/animate';
+	import { pile_context } from '$lib/stores/GlobalContext.svelte';
 
 	const {
 		label,
@@ -139,6 +140,11 @@
 				return true;
 			}}
 			end_drag={() => {}}
+			trigger_context={(x, y) => {				
+				if (gameManager.passive) return;
+				pile_context.pile = label;
+				pile_context.position = new Vector2(x, y);
+			}}
 		/>
 	{/if}
 </div>

@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
+	import CardSearch from '$lib/components/CardSearch.svelte';
 	import ContextMenu from '$lib/components/ContextMenu.svelte';
 	import Counter from '$lib/components/Counter.svelte';
 	import Hand from '$lib/components/Hand.svelte';
@@ -10,8 +11,9 @@
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
-	import { board_context } from '$lib/stores/GlobalContext.svelte';
+	import { board_context, pile_context } from '$lib/stores/GlobalContext.svelte';
 	import type { CardData } from '$lib/types/Card';
+	import type { PileType } from '$lib/types/Pile';
 	import { assert } from '$lib/util/assert';
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
@@ -28,7 +30,7 @@
 		}
 	});
 
-	let force_drag: CardData | undefined = $state(undefined);
+	let searching_pile = $state<PileType | undefined>(undefined);
 
 	function onwheel(e: WheelEvent & { currentTarget: HTMLElement }) {
 		if (gameManager.blocked) return;
@@ -76,6 +78,29 @@
 	]}
 	onclose={() => (board_context.card = undefined)}
 />
+<ContextMenu
+	open={pile_context.pile != undefined}
+	position={pile_context.position}
+	options={[
+		{
+			name: 'Shuffle',
+			action: () => {
+				if (!pile_context.pile) return;
+				gameManager.shuffle(pile_context.pile);
+			}
+		},
+		{
+			name: 'search for a card',
+			action: () => {
+				if (!pile_context.pile) return;
+				searching_pile = pile_context.pile;
+			}
+		}
+	]}
+	onclose={() => (pile_context.pile = undefined)}
+/>
+
+<CardSearch bind:pile={searching_pile}  />
 
 <div
 	class="board"

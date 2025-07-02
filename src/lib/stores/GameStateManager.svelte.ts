@@ -7,8 +7,6 @@ import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
 import type { ArchidektDeck } from "$lib/types/ArchidektApi";
 import type { Trinket } from "$lib/types/Trinkets";
-import type Card from "$lib/components/Card.svelte";
-
 
 export class GameStateManager {
 
@@ -285,6 +283,7 @@ export class GameStateManager {
                     const cardData: CardData = {
                         img: url,
                         id: Math.random() + index,
+                        name: card.card.oracleCard.name,
                         order: 0,
                         equipped_to: undefined,
                         position: Vector2.zero,
@@ -360,7 +359,8 @@ export class GameStateManager {
                 order: i,
                 equipped_to: undefined,
                 position: Vector2.zero,
-                tapped: false
+                tapped: false,
+                name: "test card"
             }))
                 .sort(() => Math.random() - 0.5);
         this.hand = cards.splice(0, 7);
@@ -371,10 +371,20 @@ export class GameStateManager {
     handToBottom(card:CardData, pile: PileType) {
         this.removeCardFromHand(card.id);
         this.piles[pile].cards.unshift(card);
+
+        connectionManager.send_pile_update(pile);
     }
     boardToBottom(card:CardData, pile: PileType) {
         this.removeCardFromBoard(card.id);
         this.piles[pile].cards.unshift(card);
+
+        connectionManager.send_pile_update(pile);
+    }
+
+    removeCardFromPile(card:CardData, pile: PileType) {
+        this.piles[pile].cards = this.piles[pile].cards.filter(c => c.id !== card.id);
+
+        connectionManager.send_pile_update(pile);
     }
 }
 

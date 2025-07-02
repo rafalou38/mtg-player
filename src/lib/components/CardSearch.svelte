@@ -4,78 +4,50 @@
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
 	import Window from './Window.svelte';
+	import type { PileType } from '$lib/types/Pile';
 
-	let { active = $bindable(false) } = $props();
+	let { pile = $bindable() }: { pile: PileType | undefined } = $props();
+
 	let search = $state('');
-	let results: CardSearchResults | null = $state(null);
-	let images: string[] = $state([]);
-	let recent = $state<string[]>([]);
 
-	async function submit() {
-		const url = 'https://api.scryfall.com/cards/search?q=is:token+' + encodeURIComponent(search);
-		const r = await fetch(url);
+	function submit() {}
 
-		if (r.ok) {
-			results = await r.json();
-
-			images = results!.data.map(
-				(c) => c.image_uris?.normal || c.card_faces?.[0].image_uris?.normal || ''
-			);
-		}
-	}
-
-	function addToken(card: string, x: number, y: number) {
-		console.log('add');
-
+	function addC(card: string, x: number, y: number) {
 		if (card) {
-			gameManager.addToBoardDragging({
-				id: Math.random(),
-				name: "", // TODO
-				img: card,
-				order: 0,
-				position: new Vector2(x, y),
-
-				tapped: false,
-
-				equipped_to: undefined
-			});
-
-			recent = [card, ...recent.filter((c) => c != card)];
-			localStorage.setItem('recent_tokens', JSON.stringify(recent));
 		}
 
 		gameManager.blocked = false;
-		active = false;
+		pile = undefined;
 	}
-
-	onMount(() => {
-		recent = JSON.parse(localStorage.getItem('recent_tokens') || '[]');
-	});
 </script>
 
 <Window
-	bind:active
+	active={pile != undefined}
 	on_close={() => {
-		active = false;
+		pile = undefined;
 		gameManager.blocked = false;
 	}}
 >
 	<div class="wrapper">
-		<form class="window-body" onsubmit={submit}>
-			<input type="text" placeholder="search" bind:value={search} />
-		</form>
-		<div class="recent mb-4">
-			{#each recent as img}
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<img src={img} alt="" onmousedown={(e) => addToken(img, e.clientX, e.clientY)} />
-			{/each}
-		</div>
-		<div class="results">
-			{#each images as img}
-				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-				<img src={img} alt="" onmousedown={(e) => addToken(img, e.clientX, e.clientY)} />
-			{/each}
-		</div>
+		{#if pile}
+			<form class="window-body" onsubmit={submit}>
+				<input type="text" placeholder="search" bind:value={search} />
+			</form>
+			<div class="results">
+				{#each gameManager.piles[pile].cards.filter((c) => c.name.includes(search)) as card}
+					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+					<img
+						src={card.img}
+						alt=""
+						onmousedown={(e) => {
+							if(!pile) return;
+                            gameManager.removeCardFromPile(card, pile);
+							gameManager.addCardToHand(card, 0);
+						}}
+					/>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </Window>
 

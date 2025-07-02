@@ -8,5 +8,6 @@ export type CardData = {
     order: number,
     equipped_to?: CardId,
     position: Vector2,
-    tapped: boolean
+    tapped: boolean,
+    name: string
 }
