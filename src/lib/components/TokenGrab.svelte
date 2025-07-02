@@ -25,8 +25,6 @@
 	}
 
 	function addToken(card: string, x: number, y: number) {
-		console.log('add');
-
 		if (card) {
 			gameManager.addToBoardDragging({
 				id: Math.random(),

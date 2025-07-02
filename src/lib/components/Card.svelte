@@ -44,8 +44,6 @@
 		if (e.buttons == 1) {
 			if (start_drag()) return;
 
-			console.log('passed drag');
-
 			dragStart.x = e.clientX;
 			dragStart.y = e.clientY;
 
@@ -89,7 +87,11 @@
 		}
 	}
 	function onmouseleave(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
-		card_preview.card = undefined;
+		if (gameManager.dragging && card_preview.force_enable) {
+			card_preview.card = gameManager.dragging_card;
+		} else {
+			card_preview.card = undefined;
+		}
 	}
 	let ECard: HTMLElement;
 	onMount(() => {

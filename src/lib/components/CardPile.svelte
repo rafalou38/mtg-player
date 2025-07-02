@@ -31,7 +31,8 @@
 				id: pile.id,
 				order: 0,
 				position: Vector2.zero,
-				tapped: false
+				tapped: false,
+				name: ""
 			};
 		}
 
@@ -42,7 +43,8 @@
 				id: pile.id,
 				order: 0,
 				position: Vector2.zero,
-				tapped: false
+				tapped: false,
+				name: ""
 			};
 	});
 
@@ -137,7 +139,6 @@
 				if (gameManager.passive) return true;
 				gameManager.dragging_card_origin = label;
 				gameManager.getOutOfPile(label);
-				card_preview.card = shown_card;
 				return true;
 			}}
 			end_drag={() => {}}

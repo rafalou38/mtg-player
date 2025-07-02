@@ -18,7 +18,6 @@
 		let n_gap = rect.width / gameManager.hand.length - 150;
 		if (n_gap > -20) n_gap = -20;
 
-		// console.log(n_gap);
 		gap = n_gap;
 	});
 
@@ -70,7 +69,6 @@
 			dragging_out = true;
 			gameManager.addCardToHand(gameManager.dragging_card, activeCardIndex);
 			pending_removal = gameManager.dragging_card;
-			console.log(activeCardIndex);
 		}
 	}
 
