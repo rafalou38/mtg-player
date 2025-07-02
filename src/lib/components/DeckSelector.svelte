@@ -6,13 +6,11 @@
 	const PROXY_URL = 'https://corsproxy.io/?url=';
 	const API_URL = 'https://archidekt.com/api/decks/';
 
-
 	let {
 		deck = $bindable()
 	}: {
 		deck: ArchidektDeck | null;
 	} = $props();
-
 
 	let deck_url = $state('');
 
@@ -24,7 +22,6 @@
 			url: string;
 		}[]
 	>([]);
-
 
 	async function handle_data(r: Response) {
 		if (!r.ok) {
@@ -40,6 +37,7 @@
 			name: deck.name,
 			url: deck_url
 		});
+		localStorage.setItem('recent_decks', JSON.stringify(recent_decks));
 		deck_url = '';
 	}
 
@@ -55,8 +53,6 @@
 					status = 'invalid';
 				});
 		}
-
-		localStorage.setItem('recent_decks', JSON.stringify(recent_decks));
 	}
 
 	onMount(() => {

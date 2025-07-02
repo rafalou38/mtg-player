@@ -34,7 +34,7 @@
 				<input type="text" placeholder="search" bind:value={search} />
 			</form>
 			<div class="results">
-				{#each gameManager.piles[pile].cards.filter((c) => c.name.includes(search)) as card}
+				{#each gameManager.piles[pile].cards.filter((c) => c.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) as card}
 					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 					<img
 						src={card.img}
