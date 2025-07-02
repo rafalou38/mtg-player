@@ -1,18 +1,17 @@
 # performance
-  - [ ] granular updates
+  - [x] granular updates (cards)
 # ui
-  - [ ] fix ordering
+  - [x] fix ordering
   - [ ] show hand
 #  Functionality, needed
   - [x] tokens --
   - [x] markers + life --
   - [x] Send to bottom
-  - [ ] search library --
-  - [ ] shuffle
+  - [x] search library --
+  - [x] shuffle
 # QoL
   - [ ] équipement (equipement et marqueurs)
   - [x] mulligan --
-  - [ ] zoom in card
+  - [x] zoom in card
   - [ ] quick focus
   - [ ] multi-select
-  - [ ] 

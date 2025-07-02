@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
+	import CardPreview from '$lib/components/CardPreview.svelte';
 	import CardSearch from '$lib/components/CardSearch.svelte';
 	import ContextMenu from '$lib/components/ContextMenu.svelte';
 	import Counter from '$lib/components/Counter.svelte';
@@ -119,6 +120,7 @@
 <QuickActions />
 
 <Hand />
+<CardPreview />
 
 <style>
 	.bg {

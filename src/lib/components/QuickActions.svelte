@@ -4,6 +4,7 @@
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import Mulligan from './Mulligan.svelte';
 	import MarkerWindow from './MarkerWindow.svelte';
+	import { card_preview } from '$lib/stores/GlobalContext.svelte';
 
 	let token_active = $state(false);
     let mulligan_active = $state(false);
@@ -21,6 +22,10 @@
         marker_active = true;
         gameManager.blocked = true;
     }
+
+    function togglePreview() {
+        card_preview.force_enable = !card_preview.force_enable;
+    }
 </script>
 
 <div class="quick-actions">
@@ -34,6 +39,9 @@
 	</button>
 	<button onclick={addMarker}>
 		<Icon icon="mingcute:coin-line" />
+	</button>
+	<button onclick={togglePreview} class:active={card_preview.force_enable}>
+		<Icon icon="mdi:magnify" />
 	</button>
 </div>
 
@@ -54,7 +62,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 16px;
+        gap: 8px;
     }
 
     button {
@@ -62,10 +70,20 @@
         height: 40px;
         font-size: 20px;
         /* border-radius: 100%; */
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.5);
         border: none;
         cursor: pointer;
         display: grid;
         place-items: center;
+
+        transition: all 200ms ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+        &.active {
+            background: rgba(255, 255, 255, 1);
+        }
+
     }
 </style>

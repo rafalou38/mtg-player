@@ -5,6 +5,7 @@
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import { card_preview } from '$lib/stores/GlobalContext.svelte';
 
 	let {
 		data,
@@ -82,6 +83,14 @@
 
 		end_drag();
 	}
+	function onmouseenter(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		if (e.ctrlKey || card_preview.force_enable) {
+			card_preview.card = data;
+		}
+	}
+	function onmouseleave(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
+		card_preview.card = undefined;
+	}
 	let ECard: HTMLElement;
 	onMount(() => {
 		if (gameManager.dragging && gameManager.dragging_card?.id == data.id) {
@@ -120,6 +129,8 @@
 		!in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
 	{onmousedown}
+	{onmouseenter}
+	{onmouseleave}
 	bind:this={ECard}
 >
 	<img src={data.img.replace('normal', 'large')} alt="" draggable="false" />
