@@ -7,7 +7,7 @@ import { Vector2 } from '$lib/util/math.svelte';
 import type { Trinket } from '$lib/types/Trinkets';
 type PileUpdate = {
     label: PileType;
-    cards: (CardData & {
+    cards: (Omit<CardData, "position"> & {
         position: [number, number]
     })[],
     position: [number, number],
@@ -16,9 +16,10 @@ type PileUpdate = {
 }
 
 type BoardUpdate = {
-    cards: (CardData & {
+    cards: (Omit<CardData, "position"> & {
         position: [number, number]
-    })[]
+    })[],
+    type: "board" | "add" | "edit"
 }
 
 type Ready = {
@@ -26,7 +27,7 @@ type Ready = {
 }
 
 type TrinketsUpdate = {
-    trinkets: (Trinket & {
+    trinkets: (Omit<Trinket, "position"> & {
         position: [number, number]
     })[],
     partial: boolean
@@ -152,6 +153,7 @@ export class ConnectionManager {
                 return {
                     id: card.id,
                     img: card.img,
+                    name: card.name,
                     tapped: card.tapped,
                     equipped_to: card.equipped_to,
                     order: card.order,
@@ -165,7 +167,6 @@ export class ConnectionManager {
     }
 
     private on_board_update(data: BoardUpdate, peer_id: string) {
-
         const gm = this.game_managers[peer_id];
 
         const sgn = gm.flipped ? -1 : 1;
@@ -177,7 +178,20 @@ export class ConnectionManager {
                 position: pos
             }
         });
-        this.game_managers[peer_id].board = cards;
+
+        if (data.type == "board")
+            this.game_managers[peer_id].board = cards;
+        else if (data.type == "add") {
+            this.game_managers[peer_id].board = this.game_managers[peer_id].board.concat(cards);
+        } else if (data.type == "edit") {
+            this.game_managers[peer_id].board = this.game_managers[peer_id].board.map((card) => {
+                if (card.id == cards[0].id) {
+                    return cards[0];
+                } else {
+                    return card;
+                }
+            });
+        }
     }
     private on_ready(data: Ready, peer_id: string) {
         this.game_managers[peer_id].ready = true;
@@ -195,31 +209,52 @@ export class ConnectionManager {
         this.ready_cnt++;
     }
 
-    send_board_update() {
+    send_board_update(card?: CardData, new_card = false) {
         assert(this.room);
         assert(this._dispatch_board_update);
-        let cards: (CardData & { position: [number, number] })[] = gameManager.board.map((card) => {
-            return {
-                id: card.id,
-                img: card.img,
-                tapped: card.tapped,
-                equipped_to: card.equipped_to,
-                order: card.order,
-                position: card.position.serialize(),
-            }
-        });
-        if (gameManager.dragging && gameManager.dragging_card && gameManager.dragging_card_origin != "board") {
-            cards = cards.map((card) => {
-                if (card.id == gameManager.dragging_card?.id) {
-                    card.img = "/card_bg.jpg"
-                }
+        if (card) {
+            const hidden = gameManager.dragging && gameManager.dragging_card && gameManager.dragging_card_origin != "board" && card.id == gameManager.dragging_card?.id;
+            this._dispatch_board_update({
+                cards: [
+                    {
+                        id: card.id,
+                        img: hidden ? "/card_bg.jpg" : card.img,
+                        tapped: card.tapped,
+                        name: card.name,
+                        equipped_to: card.equipped_to,
+                        order: card.order,
+                        position: card.position.serialize(),
+                    }
+                ],
+                type: new_card ? "add" : "edit"
+            })
 
-                return card;
+        } else {
+            let cards = gameManager.board.map((card) => {
+                return {
+                    id: card.id,
+                    img: card.img,
+                    tapped: card.tapped,
+                    equipped_to: card.equipped_to,
+                    order: card.order,
+                    name: card.name,
+                    position: card.position.serialize(),
+                }
+            });
+            if (gameManager.dragging && gameManager.dragging_card && gameManager.dragging_card_origin != "board") {
+                cards = cards.map((card) => {
+                    if (card.id == gameManager.dragging_card?.id) {
+                        card.img = "/card_bg.jpg"
+                    }
+
+                    return card;
+                });
+            }
+            this._dispatch_board_update({
+                cards: cards,
+                type: "board"
             });
         }
-        this._dispatch_board_update({
-            cards: cards
-        });
     }
 
     sendTrinketsUpdate(trinkets?: Trinket[]) {

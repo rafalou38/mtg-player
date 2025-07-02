@@ -86,8 +86,7 @@ export class GameStateManager {
         if (index !== -1) {
             this.board[index].tapped = !this.board[index].tapped;
         }
-        // TODO: granular updates
-        connectionManager.send_board_update();
+        connectionManager.send_board_update(this.board[index], false);
     }
 
     setCardPosition(cardId: CardId, x: number, y: number) {
@@ -95,9 +94,7 @@ export class GameStateManager {
         if (index !== -1) {
             this.board[index].position.set(x, y);
         }
-
-        // TODO: granular updates
-        connectionManager.send_board_update();
+        connectionManager.send_board_update(this.board[index], false);
     }
 
     addCardToHand(card: CardData, index?: number) {
@@ -116,13 +113,13 @@ export class GameStateManager {
             this.hand.splice(index, 1);
         }
     }
-    removeCardFromBoard(cardId: CardId) {
+    removeCardFromBoard(cardId: CardId, send = true) {
         const index = this.board.findIndex(c => c.id === cardId);
         if (index !== -1) {
             this.board.splice(index, 1);
         }
 
-        connectionManager.send_board_update();
+        if (send) connectionManager.send_board_update();
     }
 
     addToBoardDragging(card: CardData) {
@@ -130,11 +127,12 @@ export class GameStateManager {
         this.dragging_card = card;
         this.prev_dragging_card = card;
 
-        // card.position.x = this.cursor_position.x;
-        // card.position.x = this.cursor_position.y;
-
         this.removeCardFromBoard(card.id);
         this.board.push(card);
+
+        if (card) this.putCardOnTop(card.id, false);
+
+        connectionManager.send_board_update(card, true);
     }
     moveCardFromHandToBoard(cardId: CardId, position: Vector2) {
         const cardIndex = this.hand.findIndex(c => c.id === cardId);
@@ -143,7 +141,9 @@ export class GameStateManager {
             card.position = position;
             this.removeCardFromBoard(cardId);
             this.board.push(card);
+            connectionManager.send_board_update(card, true);
         }
+
     }
     moveCardFromBoardToHand(cardId: CardId, position?: number) {
         this.removeCardFromHand(cardId);
@@ -169,6 +169,7 @@ export class GameStateManager {
         this.dragging = true;
         this.dragging_card = card;
         this.prev_dragging_card = card;
+        if (card) this.putCardOnTop(card.id);
     }
     stopDragging() {
         this.dragging = false;
@@ -204,26 +205,34 @@ export class GameStateManager {
         connectionManager.send_board_update();
     }
 
-    putCardOnTop(cardId: CardId) {
+    putCardOnTop(cardId: CardId, send = true) {
         const cardIndex = this.board.findIndex(c => c.id === cardId);
         if (cardIndex !== -1) {
-            const [card] = this.board.splice(cardIndex, 1);
-            this.board.push(card);
+            const card = this.board[cardIndex];
+
+            const base_order = card.order;
+            const duplicate = this.board.filter(c => c.order === base_order).length > 1;
+
+            if (duplicate) {
+                let max_order = 0;
+                this.board.forEach((c) => {
+                    if (c.id === card.id) return;
+                    if (c.order > max_order) max_order = c.order;
+                });
+                card.order = max_order+1;
+            } else {
+                let max_order = 0;
+                this.board.forEach((c) => {
+                    if (c.id === card.id) return;
+
+                    if (c.order > max_order) max_order = c.order;
+                    if (c.order > base_order) c.order--;
+                });
+                card.order = max_order;
+            }
         }
 
-        connectionManager.send_board_update();
-
-        /*
-        let base_order = data.order;
-        let max_order = 0;
-        board_self.forEach((c) => {
-            if (c.order > max_order) max_order = c.order;
-
-            if (c.order > base_order) c.order--;
-        });
-
-        data.order = max_order;
-         */
+        if (send) connectionManager.send_board_update();
     }
 
     setPilePosition(pile: PileType, x: number, y: number) {
@@ -368,20 +377,20 @@ export class GameStateManager {
         this.piles["library"].cards = cards.splice(0, 10);
     }
 
-    handToBottom(card:CardData, pile: PileType) {
+    handToBottom(card: CardData, pile: PileType) {
         this.removeCardFromHand(card.id);
         this.piles[pile].cards.unshift(card);
 
         connectionManager.send_pile_update(pile);
     }
-    boardToBottom(card:CardData, pile: PileType) {
+    boardToBottom(card: CardData, pile: PileType) {
         this.removeCardFromBoard(card.id);
         this.piles[pile].cards.unshift(card);
 
         connectionManager.send_pile_update(pile);
     }
 
-    removeCardFromPile(card:CardData, pile: PileType) {
+    removeCardFromPile(card: CardData, pile: PileType) {
         this.piles[pile].cards = this.piles[pile].cards.filter(c => c.id !== card.id);
 
         connectionManager.send_pile_update(pile);

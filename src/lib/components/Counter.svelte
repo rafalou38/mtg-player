@@ -3,7 +3,7 @@
 	import type { Trinket } from '$lib/types/Trinkets';
 	import { Vector2 } from '$lib/util/math.svelte';
 
-	export const { trinket, flipped }: { trinket: Trinket; flipped?: boolean } = $props();
+	let { trinket, flipped }: { trinket: Trinket; flipped?: boolean } = $props();
 
 	let dragStart = Vector2.zero;
 	let initialPosition = Vector2.zero;
