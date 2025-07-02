@@ -3,15 +3,22 @@
 	import TokenGrab from './TokenGrab.svelte';
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import Mulligan from './Mulligan.svelte';
+	import MarkerWindow from './MarkerWindow.svelte';
 
 	let token_active = $state(false);
     let mulligan_active = $state(false);
+    let marker_active = $state(false);
 	function addToken() {
         token_active = true;
         gameManager.blocked = true;
     }
 	function mulligan() {
         mulligan_active = true;
+        gameManager.blocked = true;
+    }
+
+    function addMarker(){
+        marker_active = true;
         gameManager.blocked = true;
     }
 </script>
@@ -25,10 +32,14 @@
 		<!-- <Icon icon="streamline:interface-id-user-identification-angle-secure-human-id-person-face-silhouette-security-brackets" /> -->
 		<Icon icon="mdi:shuffle" />
 	</button>
+	<button onclick={addMarker}>
+		<Icon icon="mingcute:coin-line" />
+	</button>
 </div>
 
 <TokenGrab bind:active={token_active} />
 <Mulligan bind:active={mulligan_active} />
+<MarkerWindow bind:active={marker_active} />
 
 
 <style>

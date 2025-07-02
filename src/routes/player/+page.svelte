@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
+	import Counter from '$lib/components/Counter.svelte';
 	import Hand from '$lib/components/Hand.svelte';
 	import Playmat from '$lib/components/Playmat.svelte';
 	import QuickActions from '$lib/components/QuickActions.svelte';
@@ -14,14 +15,15 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		// if (!connectionManager.connected)
-		// 	return goto('/').then(() => {
-		// 		// refresh the page
-		// 		location.reload();
-		// 	});
-
-		connectionManager.connect('1p');
-		gameManager.loadTestData();
+		if (!connectionManager.connected) {
+			return goto('/').then(() => {
+				// refresh the page
+				location.reload();
+			});
+		
+			connectionManager.connect('1p');
+			gameManager.loadTestData();
+		}
 	});
 
 	let force_drag: CardData | undefined = $state(undefined);
@@ -41,7 +43,12 @@
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
 		if (gameManager.blocked) return;
-		if (e.buttons == 1 && !gameManager.dragging && !gameManager.dragging_pile) {
+		if (
+			e.buttons == 1 &&
+			!gameManager.dragging &&
+			!gameManager.dragging_pile &&
+			!gameManager.dragging_trinket
+		) {
 			gameManager.translate.x += e.movementX;
 			gameManager.translate.y += e.movementY;
 		}

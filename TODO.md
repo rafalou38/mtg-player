@@ -3,13 +3,15 @@
 # ui
   - [ ] fix ordering
   - [ ] show hand
-#  Functionality
+#  Functionality, needed
   - [x] tokens --
-  - [ ] markers + life --
-  - [ ] équipement
-# QoL
+  - [x] markers + life --
+  - [ ] Send to bottom
   - [ ] search library --
-  - [ ] mulligan --
+# QoL
+  - [ ] équipement (equipement et marqueurs)
+  - [x] mulligan --
   - [ ] zoom in card
   - [ ] quick focus
   - [ ] multi-select
+  - [ ] 

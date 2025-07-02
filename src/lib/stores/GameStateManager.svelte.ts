@@ -6,6 +6,7 @@ import type { Pile, PileType } from "$lib/types/Pile";
 import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
 import type { ArchidektDeck } from "$lib/types/ArchidektApi";
+import type { Trinket } from "$lib/types/Trinkets";
 
 
 export class GameStateManager {
@@ -17,6 +18,8 @@ export class GameStateManager {
     board = $state<CardData[]>([]);
 
     piles: { [key in PileType]: Pile };
+
+    trinkets = $state<Trinket[]>([]);
 
 
     root: Vector2 = $state(new Vector2(0, 0));
@@ -33,6 +36,8 @@ export class GameStateManager {
     prev_dragging_card = $state<CardData | undefined>(undefined);
 
     dragging_pile: PileType | undefined = $state(undefined);
+
+    dragging_trinket = $state(false);
 
     hand_dropping_index = $state<number | undefined>(undefined);
     pile_dropping = $state<string | undefined>(undefined);
@@ -322,6 +327,28 @@ export class GameStateManager {
         this.draw(7);
 
         connectionManager.send_pile_update("library");
+    }
+
+    setTrinketPosition(trinketID: CardId, x: number, y: number) {
+        const trinketIndex = this.trinkets.findIndex(c => c.id === trinketID);
+        if (trinketIndex !== -1) {
+            this.trinkets[trinketIndex].position.set(x, y);
+        }
+
+        connectionManager.sendTrinketsUpdate([this.trinkets[trinketIndex]]);
+    }
+
+    setTrinketValue(trinketID: CardId, value: number) {
+        const trinketIndex = this.trinkets.findIndex(c => c.id === trinketID);
+        if (trinketIndex !== -1) {
+            this.trinkets[trinketIndex].value = value;
+        }
+        connectionManager.sendTrinketsUpdate([this.trinkets[trinketIndex]]);
+    }
+
+    addTrinket(trinket: Trinket) {
+        this.trinkets.push(trinket);
+        connectionManager.sendTrinketsUpdate([trinket]);
     }
 
     loadTestData() {

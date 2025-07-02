@@ -4,6 +4,7 @@ import { gameManager, GameStateManager } from './GameStateManager.svelte';
 import type { CardData } from '$lib/types/Card';
 import type { PileType } from '$lib/types/Pile';
 import { Vector2 } from '$lib/util/math.svelte';
+import type { Trinket } from '$lib/types/Trinkets';
 type PileUpdate = {
     label: PileType;
     cards: (CardData & {
@@ -23,6 +24,14 @@ type BoardUpdate = {
 type Ready = {
     playmat: string
 }
+
+type TrinketsUpdate = {
+    trinkets: (Trinket & {
+        position: [number, number]
+    })[],
+    partial: boolean
+}
+
 
 const playmat_gap = 200;
 const roots: [Vector2, boolean][] = [
@@ -48,6 +57,7 @@ export class ConnectionManager {
     private _dispatch_pile_update: ActionSender<PileUpdate> | null = null;
     private _dispatch_board_update: ActionSender<BoardUpdate> | null = null;
     private _dispatch_ready: ActionSender<Ready> | null = null;
+    private _dispatch_trinkets: ActionSender<TrinketsUpdate> | null = null;
 
     constructor() {
 
@@ -102,6 +112,11 @@ export class ConnectionManager {
         const [send_ready, connect_ready] = this.room.makeAction<Ready>('ready');
         this._dispatch_ready = send_ready;
         connect_ready(this.on_ready.bind(this));
+
+
+        const [send_trinkets, connect_trinkets] = this.room.makeAction<TrinketsUpdate>('trinkets');
+        this._dispatch_trinkets = send_trinkets;
+        connect_trinkets(this.on_trinket_update.bind(this));
     }
 
     private on_pile_update(data: PileUpdate, peer_id: string) {
@@ -205,6 +220,46 @@ export class ConnectionManager {
         this._dispatch_board_update({
             cards: cards
         });
+    }
+
+    sendTrinketsUpdate(trinkets?: Trinket[]) {
+        assert(this.room);
+        assert(this._dispatch_trinkets);
+        if (trinkets) {
+            this._dispatch_trinkets({
+                trinkets: trinkets.map(t => ({ ...t, position: t.position.serialize() })),
+                partial: true
+            });
+        } else {
+            this._dispatch_trinkets({
+                trinkets: gameManager.trinkets.map(t => ({ ...t, position: t.position.serialize() })),
+                partial: false
+            });
+        }
+    }
+
+    private on_trinket_update(data: TrinketsUpdate, peer_id: string) {
+        const trinkets = data["trinkets"].map((trinket) => {
+            const sgn = this.game_managers[peer_id].flipped ? -1 : 1;
+            const pos = new Vector2(trinket.position[0], trinket.position[1]).scale(sgn).add(this.game_managers[peer_id].root);
+            return {
+                ...trinket,
+                position: pos
+            }
+        });
+        if (data.partial) {
+            for (const newTrinket of trinkets) {
+                const found = this.game_managers[peer_id].trinkets.find(t => t.id == newTrinket.id);
+                if (found) {
+                    found.position = newTrinket.position;
+                    found.value = newTrinket.value;
+                } else {
+                    this.game_managers[peer_id].trinkets.push(newTrinket);
+                }
+            }
+        } else {
+            this.game_managers[peer_id].trinkets = trinkets;
+        }
     }
 }
 

@@ -3,6 +3,8 @@
 	import type { Vector2 } from '$lib/util/math.svelte';
 	import Card from './Card.svelte';
 	import CardPile from './CardPile.svelte';
+	import Counter from './Counter.svelte';
+	import Marker from './Marker.svelte';
 
 	const {
 		gameManager,
@@ -31,7 +33,7 @@
 		start_drag={() => {
 			if (gameManager.passive) return true;
 
-			gameManager.dragging_card_origin = "board";
+			gameManager.dragging_card_origin = 'board';
 
 			gameManager.setDragging(card);
 		}}
@@ -45,11 +47,18 @@
 	/>
 {/each}
 
+{#each gameManager.trinkets as trinket}
+	{#if trinket.type == 'marker'}
+		<Marker {trinket} {flipped}/>
+	{:else if trinket.type == 'counter'}
+		<Counter {trinket} {flipped} />
+	{/if}
+{/each}
+
 <CardPile {flipped} label="library" {peer_id} />
 <CardPile {flipped} label="graveyard" {peer_id} />
 <CardPile {flipped} label="exile" {peer_id} />
 <CardPile {flipped} label="commander" {peer_id} />
-
 
 <style>
 	.playmat {
@@ -76,7 +85,7 @@
 
 		/* translate: -1080px -1080px; */
 
-		scale: 1 var(--flip);
+		scale: var(--flip) var(--flip);
 	}
 
 	.texture {
