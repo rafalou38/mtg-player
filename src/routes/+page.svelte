@@ -34,12 +34,14 @@
 		}
 
 		if (status == 'connected' && connectionManager.ready_cnt == capacity) {
-			goto("/player");
+			goto('/player');
 		}
 	});
 
 	function ready() {
-		gameManager.shuffle("library");
+		if (gameManager.ready) return;
+
+		gameManager.shuffle('library');
 		gameManager.draw(7);
 		connectionManager.send_pile_update('library');
 		connectionManager.send_pile_update('graveyard');
@@ -75,9 +77,7 @@
 			<button
 				onclick={ready}
 				class="cursor-pointer rounded-xl border-4 border-white px-10 py-4 text-xl font-bold text-white opacity-50 transition-all hover:bg-white hover:text-black active:scale-95"
-				class:ready={gameManager.ready}
-				
-				>READY</button
+				class:ready={gameManager.ready}>READY</button
 			>
 
 			<p>
