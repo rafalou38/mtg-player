@@ -1,5 +1,5 @@
 import { assert } from '$lib/util/assert';
-import { joinRoom, type ActionSender, type BaseRoomConfig, type RelayConfig, type Room, type TurnConfig } from 'trystero'
+import { joinRoom, type ActionSender, type BaseRoomConfig, type RelayConfig, type Room, type TurnConfig } from 'trystero/firebase';
 import { gameManager, GameStateManager } from './GameStateManager.svelte';
 import type { CardData } from '$lib/types/Card';
 import type { PileType } from '$lib/types/Pile';
@@ -48,8 +48,7 @@ const roots: [Vector2, boolean][] = [
 
 export class ConnectionManager {
     config: BaseRoomConfig & RelayConfig & TurnConfig = {
-        appId: "mtg-player-fae55",
-
+        appId: "https://mtg-player-default-rtdb.europe-west1.firebasedatabase.app",
     };
     private room: Room | null = null;
 
