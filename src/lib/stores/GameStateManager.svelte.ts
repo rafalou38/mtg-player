@@ -105,7 +105,9 @@ export class GameStateManager {
             this.hand.splice(index, 0, card);
             return;
         }
+        card.tapped = false;
         this.hand.push(card);
+
 
         connectionManager.send_hand_update();
     }
@@ -131,9 +133,11 @@ export class GameStateManager {
         this.dragging = true;
         this.dragging_card = card;
         this.prev_dragging_card = card;
+        card.tapped = false;
 
         this.removeCardFromBoard(card.id);
         this.board.push(card);
+
 
         if (card) this.putCardOnTop(card.id, false);
 
@@ -144,6 +148,7 @@ export class GameStateManager {
         if (cardIndex !== -1) {
             const [card] = this.hand.splice(cardIndex, 1);
             card.position = position;
+            card.tapped = false;
             this.removeCardFromBoard(cardId);
             this.board.push(card);
             connectionManager.send_board_update(card, true);
@@ -158,6 +163,7 @@ export class GameStateManager {
         const cardIndex = this.board.findIndex(c => c.id === cardId);
         if (cardIndex !== -1) {
             const [card] = this.board.splice(cardIndex, 1);
+            card.tapped = false;
             if (position !== undefined) {
                 this.hand.splice(position, 0, card);
             } else {
@@ -199,6 +205,7 @@ export class GameStateManager {
         assert(this.prev_dragging_card, 'No card is being dragged');
 
         const card = this.prev_dragging_card;
+        card.tapped = false;
         const cardIndex = this.board.findIndex(c => c.id === card.id);
         if (cardIndex !== -1) {
             const [card] = this.board.splice(cardIndex, 1);
@@ -226,7 +233,7 @@ export class GameStateManager {
                     if (c.id === card.id) return;
                     if (c.order > max_order) max_order = c.order;
                 });
-                card.order = max_order+1;
+                card.order = max_order + 1;
             } else {
                 let max_order = 10;
                 this.board.forEach((c) => {
@@ -401,6 +408,8 @@ export class GameStateManager {
         this.piles[pile].cards.unshift(card);
 
         connectionManager.send_pile_update(pile);
+
+        card.tapped = false;
     }
 
     removeCardFromPile(card: CardData, pile: PileType) {
