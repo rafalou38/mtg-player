@@ -95,6 +95,7 @@
 			action: () => {
 				if (!pile_context.pile) return;
 				searching_pile = pile_context.pile;
+				gameManager.blocked = true;
 			}
 		}
 	]}
