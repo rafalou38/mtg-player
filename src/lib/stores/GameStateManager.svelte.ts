@@ -7,6 +7,7 @@ import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
 import type { ArchidektDeck } from "$lib/types/ArchidektApi";
 import type { Trinket } from "$lib/types/Trinkets";
+import type Card from "$lib/components/Card.svelte";
 
 
 export class GameStateManager {
@@ -364,7 +365,16 @@ export class GameStateManager {
                 .sort(() => Math.random() - 0.5);
         this.hand = cards.splice(0, 7);
         this.board = cards.splice(0, 1);
-        this.piles["library"].cards = cards;
+        this.piles["library"].cards = cards.splice(0, 10);
+    }
+
+    handToBottom(card:CardData, pile: PileType) {
+        this.removeCardFromHand(card.id);
+        this.piles[pile].cards.unshift(card);
+    }
+    boardToBottom(card:CardData, pile: PileType) {
+        this.removeCardFromBoard(card.id);
+        this.piles[pile].cards.unshift(card);
     }
 }
 

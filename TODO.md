@@ -6,8 +6,9 @@
 #  Functionality, needed
   - [x] tokens --
   - [x] markers + life --
-  - [ ] Send to bottom
+  - [x] Send to bottom
   - [ ] search library --
+  - [ ] shuffle
 # QoL
   - [ ] équipement (equipement et marqueurs)
   - [x] mulligan --

@@ -6,6 +6,7 @@
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { assert } from '$lib/util/assert';
+	import ContextMenu from './ContextMenu.svelte';
 
 	let handElement: HTMLDivElement;
 
@@ -70,18 +71,24 @@
 		}
 	}
 
-	// function squish(
-	// 	node: HTMLElement,
-	// 	params: { delay?: number; duration?: number; easing?: (t: number) => number }
-	// ) {
-	// 	return {
-	// 		delay: params.delay || 0,
-	// 		duration: params.duration || 400,
-	// 		easing: params.easing || quadIn,
-	// 		css: (t: number, u: number) => `width: ${150 * t}px`
-	// 	};
-	// }
+	let context_card = $state<CardData | undefined>(undefined);
+	let context_position = $state<Vector2>(Vector2.zero);
 </script>
+
+<ContextMenu
+	open={context_card != undefined}
+	position={context_position}
+	options={[
+		{
+			name: 'send to bottom of library',
+			action: () => {
+				if (!context_card) return;
+				gameManager.handToBottom(context_card, 'library');
+			}
+		}
+	]}
+	onclose={() => (context_card = undefined)}
+/>
 
 <svelte:body {onmouseup} />
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -108,12 +115,16 @@
 					in_hand
 					start_drag={() => {
 						dragging_out = true;
-						gameManager.dragging_card_origin = "hand";
+						gameManager.dragging_card_origin = 'hand';
 						gameManager.addToBoardDragging(card);
 						pending_removal = card;
 						return true;
 					}}
 					end_drag={() => {}}
+					trigger_context={(x,y) => {
+						context_card = card;
+						context_position = new Vector2(x, y);
+					}}
 				/>
 			</div>
 		</div>

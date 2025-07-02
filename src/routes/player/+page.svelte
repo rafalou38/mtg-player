@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Card from '$lib/components/Card.svelte';
 	import CardPile from '$lib/components/CardPile.svelte';
+	import ContextMenu from '$lib/components/ContextMenu.svelte';
 	import Counter from '$lib/components/Counter.svelte';
 	import Hand from '$lib/components/Hand.svelte';
 	import Playmat from '$lib/components/Playmat.svelte';
@@ -9,6 +10,7 @@
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 
 	import { gameManager } from '$lib/stores/GameStateManager.svelte';
+	import { board_context } from '$lib/stores/GlobalContext.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { assert } from '$lib/util/assert';
 	import { Vector2 } from '$lib/util/math.svelte';
@@ -16,11 +18,11 @@
 
 	onMount(() => {
 		if (!connectionManager.connected) {
-			return goto('/').then(() => {
-				// refresh the page
-				location.reload();
-			});
-		
+			// return goto('/').then(() => {
+			// 	// refresh the page
+			// 	location.reload();
+			// });
+
 			connectionManager.connect('1p');
 			gameManager.loadTestData();
 		}
@@ -58,6 +60,22 @@
 </script>
 
 <svelte:body {onwheel} {onmousemove} />
+
+<!-- BOARD CONTEXT MENU -->
+<ContextMenu
+	open={board_context.card != undefined}
+	position={board_context.position}
+	options={[
+		{
+			name: 'send to bottom of library',
+			action: () => {
+				if (!board_context.card) return;
+				gameManager.boardToBottom(board_context.card, 'library');
+			}
+		}
+	]}
+	onclose={() => (board_context.card = undefined)}
+/>
 
 <div
 	class="board"

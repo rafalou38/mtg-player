@@ -1,8 +1,11 @@
 <script lang="ts">
 	import type { GameStateManager } from '$lib/stores/GameStateManager.svelte';
-	import type { Vector2 } from '$lib/util/math.svelte';
+	import { board_context } from '$lib/stores/GlobalContext.svelte';
+	import type { CardData } from '$lib/types/Card';
+	import { Vector2 } from '$lib/util/math.svelte';
 	import Card from './Card.svelte';
 	import CardPile from './CardPile.svelte';
+	import ContextMenu from './ContextMenu.svelte';
 	import Counter from './Counter.svelte';
 	import Marker from './Marker.svelte';
 
@@ -42,6 +45,11 @@
 
 			gameManager.stopDragging();
 		}}
+		trigger_context={(x, y) => {
+			if (gameManager.passive) return;
+			board_context.card = card;
+			board_context.position = new Vector2(x, y);
+		}}
 		can_tap
 		{flipped}
 	/>
@@ -49,7 +57,7 @@
 
 {#each gameManager.trinkets as trinket}
 	{#if trinket.type == 'marker'}
-		<Marker {trinket} {flipped}/>
+		<Marker {trinket} {flipped} />
 	{:else if trinket.type == 'counter'}
 		<Counter {trinket} {flipped} />
 	{/if}

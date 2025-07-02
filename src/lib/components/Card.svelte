@@ -12,10 +12,12 @@
 		end_drag,
 		can_tap,
 		in_hand,
-		flipped
+		flipped,
+		trigger_context
 	}: {
 		data: CardData;
 		start_drag: () => void | true;
+		trigger_context?: (x: number, y: number) => void;
 		end_drag: () => void;
 		can_tap?: boolean;
 		in_hand?: boolean; // for appearance
@@ -34,21 +36,24 @@
 		gameManager.cursor_position.x = e.clientX;
 		gameManager.cursor_position.y = e.clientY;
 
-		console.log('start drag', e.clientX, e.clientY);
+		if (e.buttons == 2) {
+			if (trigger_context) trigger_context(e.clientX, e.clientY);
+			return;
+		}
+		if (e.buttons == 1) {
+			if (start_drag()) return;
 
-		if (e.buttons != 1) return;
-		if (start_drag()) return;
+			console.log('passed drag');
 
-		console.log('passed drag');
+			dragStart.x = e.clientX;
+			dragStart.y = e.clientY;
 
-		dragStart.x = e.clientX;
-		dragStart.y = e.clientY;
+			initialPosition.x = data.position.x;
+			initialPosition.y = data.position.y;
 
-		initialPosition.x = data.position.x;
-		initialPosition.y = data.position.y;
-
-		dragging = true;
-		moved = false;
+			dragging = true;
+			moved = false;
+		}
 	}
 
 	function onmousemove(e: MouseEvent & { currentTarget: EventTarget & HTMLElement }) {
@@ -90,8 +95,10 @@
 			dragStart.x = gameManager.cursor_position.x;
 			dragStart.y = gameManager.cursor_position.y;
 
-			initialPosition.x = (gameManager.cursor_position.x - boardRect.left - rect.width / 2) / gameManager.zoom;
-			initialPosition.y = (gameManager.cursor_position.y - boardRect.top - rect.height / 2) / gameManager.zoom;
+			initialPosition.x =
+				(gameManager.cursor_position.x - boardRect.left - rect.width / 2) / gameManager.zoom;
+			initialPosition.y =
+				(gameManager.cursor_position.y - boardRect.top - rect.height / 2) / gameManager.zoom;
 
 			dragging = true;
 			moved = true;
@@ -106,8 +113,11 @@
 	class:hand={in_hand}
 	class:tapped={data.tapped}
 	class:dragging
-	style="--x: {flipped ? data.position.x - 200 : data.position.x}px; --y: {flipped ? data.position.y - 280 : data.position.y}px; z-index: {data.order}"
-	hidden={dragging && !in_hand &&
+	style="--x: {flipped ? data.position.x - 200 : data.position.x}px; --y: {flipped
+		? data.position.y - 280
+		: data.position.y}px; z-index: {data.order}"
+	hidden={dragging &&
+		!in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
 	{onmousedown}
 	bind:this={ECard}
