@@ -83,6 +83,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+	class:hp={trinket.image == "hp"}
 	class="counter"
 	onmousedown={start_drag}
 	style="--xp: {flipped ? trinket.position.x - 300 : trinket.position.x}px; --yp: {flipped
@@ -195,6 +196,9 @@
 			outline: none;
 		}
 	}
+	.hp{
+		scale: 1;
+	}
 
 	.m11 .label {
 		width: 100px;
@@ -208,6 +212,8 @@
 		display: grid;
 		place-items: center;
 		border-radius: 100px;
+
+		font-size: 35px;
 		&:hover {
 			background-color: #101010;
 		}

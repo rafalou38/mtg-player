@@ -41,9 +41,9 @@
 	<div class="wrapper">
 		<button onclick={(e) => create_counter(e, 'gp')}><i class="ms ms-counter-plus">-</i></button>
 		<div class="row">
-			<button onclick={(e) => create_counter(e, 'gp', 20)}>20</button>
-			<button onclick={(e) => create_counter(e, 'gp', 30)}>30</button>
-			<button onclick={(e) => create_counter(e, 'gp', 40)}>40</button>
+			<button onclick={(e) => create_counter(e, 'hp', 20)}>20</button>
+			<button onclick={(e) => create_counter(e, 'hp', 30)}>30</button>
+			<button onclick={(e) => create_counter(e, 'hp', 40)}>40</button>
 		</div>
 		<div class="row">
 			<button onclick={(e) => create_counter(e, '/', 1)}>+1/+1</button>
