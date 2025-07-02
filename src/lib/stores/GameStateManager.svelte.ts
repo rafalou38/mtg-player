@@ -408,6 +408,15 @@ export class GameStateManager {
 
         connectionManager.send_pile_update(pile);
     }
+
+    upkeep() {
+        this.draw(1);
+        this.board.forEach(c => (c.tapped = false));
+
+        connectionManager.send_pile_update("library");
+        connectionManager.send_board_update();
+        connectionManager.send_hand_update();
+    }
 }
 
 // Export singleton instance

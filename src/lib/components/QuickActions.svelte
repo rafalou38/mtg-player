@@ -26,6 +26,10 @@
     function togglePreview() {
         card_preview.force_enable = !card_preview.force_enable;
     }
+
+    function upkeep() {
+        gameManager.upkeep();
+    }
 </script>
 
 <div class="quick-actions">
@@ -42,6 +46,9 @@
 	</button>
 	<button onclick={togglePreview} class:active={card_preview.force_enable}>
 		<Icon icon="mdi:magnify" />
+	</button>
+	<button onclick={upkeep}>
+		<Icon icon="material-symbols:magic-button" />
 	</button>
 </div>
 

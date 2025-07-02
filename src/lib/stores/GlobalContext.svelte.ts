@@ -16,5 +16,5 @@ export const pile_context = $state({
 
 export const card_preview = $state({
     card: undefined as CardData | undefined,
-    force_enable: false
+    force_enable: true
 })
