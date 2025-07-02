@@ -126,7 +126,7 @@
 	class:dragging
 	style="--x: {flipped ? data.position.x - 200 : data.position.x}px; --y: {flipped
 		? data.position.y - 280
-		: data.position.y}px; z-index: {data.order}"
+		: data.position.y}px; z-index: {data.order}; --flip: {flipped ? '-1' : '1'};"
 	hidden={dragging &&
 		!in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
@@ -152,7 +152,7 @@
 		/* box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.24); */
 		transform-origin: center;
 
-		scale: 1;
+		scale: var(--flip);
 		translate: var(--x) var(--y);
 
 		transition:
@@ -179,11 +179,11 @@
 		}
 
 		&:hover {
-			scale: 1.025 !important;
+			scale: calc(1.025 * var(--flip)) !important;
 			box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, 0.24);
 		}
 		&.dragging {
-			scale: 1.025 !important;
+			scale: calc(1.025 * var(--flip)) !important;
 			z-index: 1000000;
 			pointer-events: none;
 		}
