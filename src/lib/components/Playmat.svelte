@@ -82,6 +82,8 @@
 		left: var(--root-x);
 		top: var(--root-y);
 
+		pointer-events: none;
+
 		flex-grow: 1;
 		/* height: max-content; */
 		/* margin: 100px; */

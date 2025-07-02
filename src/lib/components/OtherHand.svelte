@@ -41,6 +41,8 @@
 		display: flex;
 		align-items: center;
 
+		pointer-events: none;
+
 		.element {
 			margin-right: -20px;
 			width: 150px;
