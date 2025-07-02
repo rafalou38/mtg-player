@@ -20,13 +20,13 @@
 
 	onMount(() => {
 		if (!connectionManager.connected) {
-			// return goto('/').then(() => {
-			// 	// refresh the page
-			// 	location.reload();
-			// });
+			return goto('/').then(() => {
+				// refresh the page
+				location.reload();
+			});
 
-			connectionManager.connect('1p');
-			gameManager.loadTestData();
+			// connectionManager.connect('1p');
+			// gameManager.loadTestData();
 		}
 	});
 

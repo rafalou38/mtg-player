@@ -27,8 +27,8 @@
 <form class="input-wrapper" onsubmit={submit}>
 	<div class="players-select-row">
 		<button class:active={capacity == 2} onclick={() => (capacity = 2)}>2P</button>
-		<button class:active={capacity == 3} onclick={() => (capacity = 3)}>3P</button>
-		<button class:active={capacity == 4} onclick={() => (capacity = 4)}>4P</button>
+		<!-- <button class:active={capacity == 3} onclick={() => (capacity = 3)}>3P</button>
+		<button class:active={capacity == 4} onclick={() => (capacity = 4)}>4P</button> -->
 	</div>
 	<input type="text" name="" id="" placeholder="Room name" bind:value={code} />
 	<button class="search" type="submit">
