@@ -8,7 +8,7 @@
 	import { assert } from '$lib/util/assert';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
 	import { flip } from 'svelte/animate';
-	import { pile_context } from '$lib/stores/GlobalContext.svelte';
+	import { card_preview, pile_context } from '$lib/stores/GlobalContext.svelte';
 
 	const {
 		label,
@@ -137,10 +137,11 @@
 				if (gameManager.passive) return true;
 				gameManager.dragging_card_origin = label;
 				gameManager.getOutOfPile(label);
+				card_preview.card = shown_card;
 				return true;
 			}}
 			end_drag={() => {}}
-			trigger_context={(x, y) => {				
+			trigger_context={(x, y) => {
 				if (gameManager.passive) return;
 				pile_context.pile = label;
 				pile_context.position = new Vector2(x, y);
