@@ -13,6 +13,8 @@ export class GameStateManager {
     passive: boolean;
     ready = $state(false);
 
+    deck_image = $state('');
+
     hand = $state<CardData[]>([]);
     partial_hand = $state<string[]>([]);
     board = $state<CardData[]>([]);
@@ -22,8 +24,8 @@ export class GameStateManager {
     trinkets = $state<Trinket[]>([]);
 
 
-    root: Vector2 = $state(new Vector2(0, 0));
-    flipped: boolean = $state(false);
+    playmat_index = $state(0);
+    flipped = $state(false);
     playmat_url: string = $state('');
 
     // UI state
@@ -142,6 +144,16 @@ export class GameStateManager {
         if (card) this.putCardOnTop(card.id, false);
 
         connectionManager.send_board_update(card, true);
+    }
+
+    addToBoard(card: CardData) {
+        card.tapped = false;
+
+        this.removeCardFromBoard(card.id);
+        this.board.push(card);
+        if (card) this.putCardOnTop(card.id, false);
+        connectionManager.send_board_update(card, true);
+        
     }
     moveCardFromHandToBoard(cardId: CardId, position: Vector2) {
         const cardIndex = this.hand.findIndex(c => c.id === cardId);
@@ -287,6 +299,8 @@ export class GameStateManager {
 
         // this.active_deck = active_deck;
         // this.piles["library"].cards = active_deck.cards;
+
+        this.deck_image = active_deck.featured;
 
         const excluded_categories = new Set(["sideboard", "maybeboard"]);
         for (const cat of active_deck.categories) {

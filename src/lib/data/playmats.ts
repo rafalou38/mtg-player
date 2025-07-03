@@ -1,3 +1,5 @@
+import { Vector2 } from "$lib/util/math.svelte";
+
 export const playmats = [
     { name: '01', url: '/bg/01.jpg' },
     { name: '02', url: '/bg/02.jpg' },
@@ -14,4 +16,16 @@ export const playmats = [
     { name: '13', url: '/bg/13.jpg' },
     { name: '14', url: '/bg/14.jpg' },
     { name: '15', url: '/bg/15.jpg' }
+];
+
+export const playmat_gap = 200;
+export const playmat_positions: [Vector2, boolean][] = [
+    [new Vector2(0, 0), false],
+
+
+    [new Vector2(0, 0), false],
+    [new Vector2(0, -1080 - playmat_gap), true],
+
+    [new Vector2(2160 + playmat_gap + 500, -1080 - playmat_gap), true],
+    [new Vector2(2160 + playmat_gap + 500, 0), false],
 ];

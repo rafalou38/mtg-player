@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { playmat_positions } from '$lib/data/playmats';
 	import type { GameStateManager } from '$lib/stores/GameStateManager.svelte';
+	import { gameManager as GMRoot } from '$lib/stores/GameStateManager.svelte';
 	import { board_context } from '$lib/stores/GlobalContext.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { Vector2 } from '$lib/util/math.svelte';
@@ -18,69 +20,107 @@
 		peer_id: string | undefined;
 	} = $props();
 
-	const root: Vector2 = $derived(gameManager.root);
-	const flipped: boolean = $derived(gameManager.flipped);
+	let flip = $derived(gameManager.playmat_index == 2 || gameManager.playmat_index == 3);
+
+	let root = $derived(
+		new Vector2(
+			playmat_positions[gameManager.playmat_index][0].x,
+			playmat_positions[gameManager.playmat_index][0].y
+		)
+	);
+
+	// let flip = $derived(GMRoot.flipped);
 </script>
 
-<div
-	class="playmat"
-	style="--playmat: url('{gameManager.playmat_url}'); --root-x: {flipped
-		? root.x - 2160
-		: root.x}px; --root-y: {flipped ? root.y - 1080 : root.x}px; --flip: {flipped ? '-1' : '1'}"
->
-	<div class="texture"></div>
+<div class="wrapper pm" style="--flip: {flip ? -1 : 1}; --root-x: {root.x}px; --root-y: {root.y}px">
+	<div
+		class="playmat {gameManager.playmat_index}"
+		style="--playmat: url('{gameManager.playmat_url}')"
+	>
+		<div class="texture"></div>
+	</div>
 </div>
 
-{#each gameManager.board as card, i}
-	<Card
-		data={gameManager.board[i]}
-		start_drag={() => {
-			if (gameManager.passive) return true;
+<div class="wrapper" style="--flip: {flip ? -1 : 1}; --root-x: {root.x}px; --root-y: {root.y}px">
+	<CardPile {root} label="library" {peer_id} />
+	<CardPile {root} label="graveyard" {peer_id} />
+	<CardPile {root} label="exile" {peer_id} />
+	<CardPile {root} label="commander" {peer_id} />
 
-			gameManager.dragging_card_origin = 'board';
+	{#each gameManager.board as card, i}
+		<Card
+			{root}
+			data={gameManager.board[i]}
+			start_drag={() => {
+				if (gameManager.passive) return true;
 
-			gameManager.setDragging(card);
-		}}
-		end_drag={() => {
-			if (gameManager.passive) return;
+				gameManager.dragging_card_origin = 'board';
 
-			gameManager.stopDragging();
-		}}
-		trigger_context={(x, y) => {
-			if (gameManager.passive) return;
-			board_context.card = card;
-			board_context.position = new Vector2(x, y);
-		}}
-		can_tap
-		{flipped}
-	/>
-{/each}
+				gameManager.setDragging(card);
+			}}
+			end_drag={() => {
+				if (gameManager.passive) return;
 
-{#each gameManager.trinkets as trinket}
-	{#if trinket.type == 'marker'}
-		<Marker {trinket} {flipped} />
-	{:else if trinket.type == 'counter'}
-		<Counter {trinket} {flipped} />
-	{/if}
-{/each}
+				gameManager.stopDragging();
+			}}
+			trigger_context={(x, y) => {
+				if (gameManager.passive) return;
+				board_context.card = card;
+				board_context.position = new Vector2(x, y);
+			}}
+			can_tap
+		/>
+	{/each}
+</div>
 
-<CardPile {flipped} label="library" {peer_id} />
-<CardPile {flipped} label="graveyard" {peer_id} />
-<CardPile {flipped} label="exile" {peer_id} />
-<CardPile {flipped} label="commander" {peer_id} />
+<div
+	class="wrapper tr"
+	class:passive={gameManager.passive}
+	style="--flip: {flip ? -1 : 1}; --root-x: {root.x}px; --root-y: {root.y}px"
+>
+	{#each gameManager.trinkets as trinket}
+		{#if trinket.type == 'marker'}
+			<Marker {trinket} />
+		{:else if trinket.type == 'counter'}
+			<Counter {trinket} />
+		{/if}
+	{/each}
+</div>
 
-{#if gameManager.passive}
+<!-- {#if gameManager.passive}
 	<OtherHand {gameManager} {flipped} />
-{/if}
+{/if} -->
 
 <style>
-	.playmat {
+	.wrapper {
 		position: absolute;
-		width: 2160px;
+
+		width: 0px;
 		height: 1080px;
 
 		left: var(--root-x);
 		top: var(--root-y);
+
+		scale: 1 var(--flip);
+
+		z-index: 5;
+		&.pm {
+			z-index: 0;
+		}
+		&.tr {
+			z-index: 10;
+		}
+		&.passive {
+			z-index: 10;
+		}
+	}
+	.playmat {
+		position: absolute;
+		left: 0;
+		top: 0;
+
+		width: 2160px;
+		height: 1080px;
 
 		pointer-events: none;
 
@@ -100,7 +140,7 @@
 
 		/* translate: -1080px -1080px; */
 
-		scale: var(--flip) var(--flip);
+		/* scale: var(--flip) var(--flip); */
 	}
 
 	.texture {

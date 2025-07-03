@@ -5,14 +5,18 @@
 
 	let recent_rooms = $state<string[]>([]);
 
-	let { code = $bindable(), capacity= $bindable(), connect }: { code: string, capacity: number, connect: () => void } = $props();
+	let {
+		code = $bindable(),
+		capacity = $bindable(),
+		connect
+	}: { code: string; capacity: number; connect: () => void } = $props();
 
 	function submit() {
 		recent_rooms = recent_rooms.filter((r) => r != code);
 		recent_rooms.unshift(code);
 		localStorage.setItem('recent_rooms', JSON.stringify(recent_rooms));
 
-        connect();
+		connect();
 	}
 
 	onMount(() => {
@@ -26,9 +30,27 @@
 </h2>
 <form class="input-wrapper" onsubmit={submit}>
 	<div class="players-select-row">
-		<button class:active={capacity == 2} onclick={() => (capacity = 2)}>2P</button>
-		<button class:active={capacity == 3} onclick={() => (capacity = 3)}>3P</button>
-		<button class:active={capacity == 4} onclick={() => (capacity = 4)}>4P</button>
+		<button
+			class:active={capacity == 2}
+			onclick={(e) => {
+				e.preventDefault()
+				capacity = 2;
+			}}>2P</button
+		>
+		<button
+			class:active={capacity == 3}
+			onclick={(e) => {
+				e.preventDefault()
+				capacity = 3;
+			}}>3P</button
+		>
+		<button
+			class:active={capacity == 4}
+			onclick={(e) => {
+				e.preventDefault()
+				capacity = 4;
+			}}>4P</button
+		>
 	</div>
 	<input type="text" name="" id="" placeholder="Room name" bind:value={code} />
 	<button class="search" type="submit">
@@ -44,7 +66,7 @@
 					<li>
 						<button
 							onclick={() => {
-								code = r_code
+								code = r_code;
 								submit();
 							}}
 						>

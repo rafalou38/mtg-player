@@ -13,17 +13,16 @@
 	const {
 		label,
 		peer_id,
-		flipped
+		root
 	}: {
 		label: PileType;
 		peer_id: string | undefined;
-		flipped: boolean;
+		root: Vector2;
 	} = $props();
 
 	const gameManager = $derived(peer_id ? connectionManager.game_managers[peer_id] : GMRoot);
 
 	const pile = $derived(gameManager.piles[label]);
-	const last = $derived(pile.cards.at(-1));
 	const shown_card: CardData | null = $derived.by(() => {
 		if (gameManager.pile_dropping == label && gameManager.dragging_card) {
 			return {
@@ -32,7 +31,7 @@
 				order: 0,
 				position: Vector2.zero,
 				tapped: false,
-				name: ""
+				name: ''
 			};
 		}
 
@@ -44,7 +43,7 @@
 				order: 0,
 				position: Vector2.zero,
 				tapped: false,
-				name: ""
+				name: ''
 			};
 	});
 
@@ -68,11 +67,12 @@
 		pileDragStart.x = e.clientX;
 		pileDragStart.y = e.clientY;
 
-		pileInitialPosition.x = (e.clientX - boardRect.left) / gameManager.zoom;
-		pileInitialPosition.y = (e.clientY - boardRect.top) / gameManager.zoom;
+		pileInitialPosition.x = pile.position.x;
+		pileInitialPosition.y = pile.position.y;
 	}
 
 	function onmouseenter() {
+
 		if (gameManager.passive) return;
 		if (gameManager.dragging && gameManager.dragging_card) {
 			gameManager.pile_dropping = label;
@@ -110,9 +110,7 @@
 <div
 	class="card-pile"
 	class:dragging_pile
-	style="--x: {flipped ? pile.position.x - 220 : pile.position.x}px; --y: {flipped
-		? pile.position.y - 300
-		: pile.position.y}px"
+	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
 	{onmouseenter}
 	{onmouseleave}
 >
@@ -126,18 +124,17 @@
 <div
 	class="card-pile card-pile--container"
 	class:dragging_pile
-	style="--x: {flipped ? pile.position.x - 20 : pile.position.x}px; --y: {flipped
-		? pile.position.y - 20
-		: pile.position.y}px"
+	style="--x: {pile.position.x}px; --y: {pile.position.y}px"
 	class:dropping_card={gameManager.dragging}
 >
 	{#if shown_card}
 		<Card
-			{flipped}
+			{root}
 			data={shown_card}
 			start_drag={() => {
 				if (gameManager.passive) return true;
 				gameManager.dragging_card_origin = label;
+				pile.cards.at(-1)?.position.set(pile.position.x, pile.position.y);
 				gameManager.getOutOfPile(label);
 				return true;
 			}}

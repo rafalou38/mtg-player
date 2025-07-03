@@ -107,7 +107,7 @@
 <div
 	class="board"
 	style="--zoom: {gameManager.zoom}; --scroll-x: {gameManager.translate
-		.x}px; --scroll-y: {gameManager.translate.y}px"
+		.x}px; --scroll-y: {gameManager.translate.y}px; --flip: {gameManager.flipped ? -1 : 1};"
 >
 	<div class="bg"></div>
 
@@ -126,19 +126,19 @@
 <style>
 	.bg {
 		position: absolute;
-		transform: translate(-250vw, -250vh);
-		width: calc(2160px * 4);
-		height: calc(1080px * 4);
+		transform: translate(calc(2160px * -5), calc(2160px * -5));
+		width: calc(2160px * 10);
+		height: calc(2160px * 10);
 		background-color: black;
 		background-image: url('/texture/45-degree-fabric-light.png');
-		/* background-size: 300px; */
+		background-size: 800px;
 	}
 	.board {
 		position: absolute;
 		/* transform: perspective(200px) rotateX(2deg); */
 		width: 100px;
 		height: 100px;
-		scale: var(--zoom);
+		scale: var(--zoom) calc(var(--zoom) * var(--flip));
 		translate: var(--scroll-x) var(--scroll-y);
 
 		backface-visibility: hidden;

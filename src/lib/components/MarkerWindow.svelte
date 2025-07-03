@@ -3,8 +3,15 @@
 	import Icon from '@iconify/svelte';
 	import Window from './Window.svelte';
 	import { Vector2 } from '$lib/util/math.svelte';
+	import { playmat_positions } from '$lib/data/playmats';
 
 	let { active = $bindable(false) } = $props();
+	let root = $derived(
+		new Vector2(
+			playmat_positions[gameManager.playmat_index][0].x,
+			playmat_positions[gameManager.playmat_index][0].y
+		)
+	);
 
 	function create_counter(e: any, type = '', start_value = 0) {
 		active = false;
@@ -15,21 +22,21 @@
 			image: type,
 			value: start_value,
 			position: new Vector2(
-				(e.clientX - gameManager.translate.x - 40) / gameManager.zoom,
-				(e.clientY - gameManager.translate.y - 40) / gameManager.zoom
+				2160/2,
+				1080/2
 			)
 		});
 	}
 
-	function create_marker(e: any, icon = '') {
+	function create_marker(e: any, icon = '') {		
 		gameManager.addTrinket({
 			id: Math.random(),
 			type: 'marker',
 			image: icon,
 			value: 0,
 			position: new Vector2(
-				(e.clientX - gameManager.translate.x - 40) / gameManager.zoom,
-				(e.clientY - gameManager.translate.y - 40) / gameManager.zoom
+				2160/2,
+				1080/2
 			)
 		});
 		active = false;

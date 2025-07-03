@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import BoardPositionSelect from '$lib/components/BoardPositionSelect.svelte';
 	import ConnectionSelector from '$lib/components/ConnectionSelector.svelte';
 	import DeckSelector from '$lib/components/DeckSelector.svelte';
 	import PlayMatSelector from '$lib/components/PlayMatSelector.svelte';
@@ -26,7 +27,7 @@
 	let active_deck = $state<ArchidektDeck | null>(null);
 	let code = $state('');
 	let playmat_url = $state('');
-	let capacity = $state(2);
+	let capacity = $state(3);
 
 	$effect(() => {
 		if (status != 'connected' && connectionManager.peer_cnt == capacity - 1) {
@@ -38,7 +39,7 @@
 		}
 	});
 
-	function ready() {
+	function ready(n: number) {
 		if (gameManager.ready) return;
 
 		gameManager.shuffle('library');
@@ -48,19 +49,20 @@
 		connectionManager.send_pile_update('exile');
 		connectionManager.send_pile_update('commander');
 
-		connectionManager.send_ready();
+
+		connectionManager.send_ready(n);
 	}
 </script>
 
 <div class="main">
 	{#if status == 'config'}
-		<DeckSelector bind:deck={active_deck} />
 		{#if active_deck}
-			<PlayMatSelector bind:selected={playmat_url} />
 			{#if playmat_url}
 				<ConnectionSelector bind:capacity bind:code connect={start} />
 			{/if}
+			<PlayMatSelector bind:selected={playmat_url} />
 		{/if}
+		<DeckSelector bind:deck={active_deck} />
 	{:else if status == 'connecting'}
 		<div
 			class="absolute left-0 flex h-full w-full flex-col items-center justify-center gap-8 text-4xl font-bold text-white"
@@ -71,19 +73,9 @@
 		</div>
 	{:else if status == 'connected'}
 		{#if capacity > 2}
-			<h1>Choose board position</h1>
+			<h2>Choose your board position</h2>
 		{/if}
-		<div class="">
-			<button
-				onclick={ready}
-				class="cursor-pointer rounded-xl border-4 border-white px-10 py-4 text-xl font-bold text-white opacity-50 transition-all hover:bg-white hover:text-black active:scale-95"
-				class:ready={gameManager.ready}>READY</button
-			>
-
-			<p>
-				{connectionManager.ready_cnt}/{capacity}
-			</p>
-		</div>
+		<BoardPositionSelect {capacity} choose={ready} />
 	{/if}
 
 	<!-- 
@@ -101,6 +93,17 @@
 </div>
 
 <style>
+	h2 {
+		font-size: 24px;
+		color: white;
+		font-weight: bold;
+		margin-bottom: 5px;
+		margin-top: 50px;
+
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
 	.ready {
 		/* @apply bg-white text-black; */
 		background: white;

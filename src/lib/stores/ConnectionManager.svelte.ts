@@ -23,7 +23,9 @@ type BoardUpdate = {
 }
 
 type Ready = {
-    playmat: string
+    playmat: string,
+    deck_img: string,
+    playmat_id: number
 }
 
 type TrinketsUpdate = {
@@ -38,14 +40,6 @@ type HandUpdate = {
 }
 
 
-const playmat_gap = 200;
-const roots: [Vector2, boolean][] = [
-    [new Vector2(0, 0), false],
-    [new Vector2(2160, -playmat_gap), true],
-    [new Vector2(2160 + playmat_gap, 0), false],
-    [new Vector2(2160 * 2 + playmat_gap, -playmat_gap), true]
-];
-
 export class ConnectionManager {
     config: BaseRoomConfig & RelayConfig & TurnConfig = {
         appId: "https://mtg-player-default-rtdb.europe-west1.firebasedatabase.app",
@@ -57,6 +51,7 @@ export class ConnectionManager {
     connected: boolean = $state(false);
     game_managers: Record<string, GameStateManager> = $state({});
     ready_cnt = $state(0);
+    playmat_users = $state<string[]>(new Array(10).fill(''));
 
     private _dispatch_pile_update: ActionSender<PileUpdate> | null = null;
     private _dispatch_board_update: ActionSender<BoardUpdate> | null = null;
@@ -65,7 +60,7 @@ export class ConnectionManager {
     private _dispatch_hand_update: ActionSender<HandUpdate> | null = null;
 
     constructor() {
-
+        // this.playmat_users[1] = "https://storage.googleapis.com/archidekt-card-images/slx/c35accd3-92ee-4b0b-a30a-4dcd3252d1b8_art_crop.jpg";
     }
     connect(code: string) {
         this.room = joinRoom(this.config, code);
@@ -92,8 +87,6 @@ export class ConnectionManager {
         this.peers = this.room.getPeers();
 
         this.game_managers[peerId] = new GameStateManager(true);
-        this.game_managers[peerId].root = roots[this.peer_cnt + 1][0];
-        this.game_managers[peerId].flipped = roots[this.peer_cnt + 1][1];
         this.peer_cnt++;
     }
     private onPeerLeave(peerId: string) {
@@ -133,8 +126,7 @@ export class ConnectionManager {
         const gm = this.game_managers[peer_id];
         const pile = gm.piles[pile_name];
 
-        const sgn = gm.flipped ? -1 : 1;
-        const pos = new Vector2(data.position[0], data.position[1]).scale(sgn).add(gm.root);
+        const pos = new Vector2(data.position[0], data.position[1]);
 
         const cards = data["cards"].map((card) => {
             return {
@@ -175,12 +167,8 @@ export class ConnectionManager {
     }
 
     private on_board_update(data: BoardUpdate, peer_id: string) {
-        const gm = this.game_managers[peer_id];
-
-        const sgn = gm.flipped ? -1 : 1;
-
         const cards = data["cards"].map((card) => {
-            const pos = new Vector2(card.position[0], card.position[1]).scale(sgn).add(gm.root);
+            const pos = new Vector2(card.position[0], card.position[1]);
             return {
                 ...card,
                 position: pos
@@ -203,17 +191,34 @@ export class ConnectionManager {
     }
     private on_ready(data: Ready, peer_id: string) {
         this.game_managers[peer_id].ready = true;
+
         this.game_managers[peer_id].playmat_url = data.playmat;
+        this.game_managers[peer_id].deck_image = data.deck_img;
+        // this.game_managers[peer_id].playmat_id = data.playmat_id;
+
+        this.game_managers[peer_id].playmat_index = data.playmat_id;
+        this.playmat_users[data.playmat_id] = data.deck_img;
+
+        console.log("rcv", data.playmat_id);
+
         this.ready_cnt++;
     }
 
-    send_ready() {
+    send_ready(playmat_id: number) {
         assert(this.room);
         assert(this._dispatch_ready);
+        console.log("self", playmat_id);
         this._dispatch_ready({
-            playmat: gameManager.playmat_url
+            playmat: gameManager.playmat_url,
+            deck_img: gameManager.deck_image,
+            playmat_id: playmat_id
         });
         gameManager.ready = true;
+        gameManager.playmat_index = playmat_id;
+        if([2,3].includes (playmat_id)) {
+            gameManager.flipped = true;
+        }
+        this.playmat_users[playmat_id] = gameManager.deck_image;
         this.ready_cnt++;
     }
 
@@ -283,8 +288,7 @@ export class ConnectionManager {
 
     private on_trinket_update(data: TrinketsUpdate, peer_id: string) {
         const trinkets = data["trinkets"].map((trinket) => {
-            const sgn = this.game_managers[peer_id].flipped ? -1 : 1;
-            const pos = new Vector2(trinket.position[0], trinket.position[1]).scale(sgn).add(this.game_managers[peer_id].root);
+            const pos = new Vector2(trinket.position[0], trinket.position[1]);
             return {
                 ...trinket,
                 position: pos

@@ -8,6 +8,7 @@
 	import { assert } from '$lib/util/assert';
 	import ContextMenu from './ContextMenu.svelte';
 	import { connectionManager } from '$lib/stores/ConnectionManager.svelte';
+	import { playmat_positions } from '$lib/data/playmats';
 
 	let handElement: HTMLDivElement;
 
@@ -25,6 +26,13 @@
 	let activeCardIndex: number = $state(-1);
 	let dragging_out = $state(false);
 	let pending_removal = $state<CardData | undefined>(undefined);
+
+	let root = $derived(
+		new Vector2(
+			playmat_positions[gameManager.playmat_index][0].x,
+			playmat_positions[gameManager.playmat_index][0].y
+		)
+	);
 
 	function onmousemove(e: MouseEvent & { currentTarget: HTMLElement }) {
 		let match = null;
@@ -112,17 +120,31 @@
 		>
 			<div class="card-wrapper" style="--index: {Math.round(i - gameManager.hand.length / 2)}">
 				<Card
+					{root}
 					data={card}
 					in_hand
-					start_drag={() => {
+					start_drag={(x, y) => {
 						dragging_out = true;
 						gameManager.dragging_card_origin = 'hand';
+						if (gameManager.playmat_index == 2) {
+							card.position.x = (x - gameManager.translate.x) / gameManager.zoom - 200 - root.x;
+							card.position.y = (y - gameManager.translate.y) / gameManager.zoom - 500;
+						} else if (gameManager.playmat_index == 1) {
+							card.position.x = (x - gameManager.translate.x) / gameManager.zoom - 200;
+							card.position.y = (y - gameManager.translate.y) / gameManager.zoom - 200;
+						} else if (gameManager.playmat_index == 3) {
+							card.position.x = (x - gameManager.translate.x) / gameManager.zoom - 200 - root.x;
+							card.position.y = (y - gameManager.translate.y) / gameManager.zoom - 600;
+						} else if (gameManager.playmat_index == 4) {
+							card.position.x = (x - gameManager.translate.x) / gameManager.zoom - 100 - root.x;
+							card.position.y = (y - gameManager.translate.y) / gameManager.zoom - 200;
+						}
 						gameManager.addToBoardDragging(card);
 						pending_removal = card;
 						return true;
 					}}
 					end_drag={() => {}}
-					trigger_context={(x,y) => {
+					trigger_context={(x, y) => {
 						context_card = card;
 						context_position = new Vector2(x, y);
 					}}

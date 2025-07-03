@@ -4,12 +4,20 @@
 	import { Vector2 } from '$lib/util/math.svelte';
 	import { onMount } from 'svelte';
 	import Window from './Window.svelte';
+	import { playmat_positions } from '$lib/data/playmats';
 
 	let { active = $bindable(false) } = $props();
 	let search = $state('');
 	let results: CardSearchResults | null = $state(null);
 	let images: string[] = $state([]);
 	let recent = $state<string[]>([]);
+
+	let root = $derived(
+		new Vector2(
+			playmat_positions[gameManager.playmat_index][0].x,
+			playmat_positions[gameManager.playmat_index][0].y
+		)
+	);
 
 	async function submit() {
 		const url = 'https://api.scryfall.com/cards/search?q=is:token+' + encodeURIComponent(search);
@@ -26,12 +34,26 @@
 
 	function addToken(card: string, x: number, y: number) {
 		if (card) {
-			gameManager.addToBoardDragging({
+			gameManager.addToBoard({
 				id: Math.random(),
-				name: "", // TODO
+				name: '', // TODO
 				img: card,
 				order: 0,
-				position: new Vector2(x, y),
+				position: new Vector2(
+					//  (x - gameManager.translate.x) / gameManager.zoom,
+					//  (y - gameManager.translate.y + 1280) / gameManager.zoom,
+					// x * gameManager.zoom - gameManager.translate.x,
+					// y * gameManager.zoom - gameManager.translate.y
+
+					// (x - gameManager.translate.x) / gameManager.zoom - root.x,
+					// (y - gameManager.translate.y) / gameManager.zoom - root.y
+					// (x - gameManager.translate.x) / gameManager.zoom + root.x,
+					// (y - gameManager.translate.y) / gameManager.zoom + root.y
+					// (x - gameManager.translate.x + root.x) / gameManager.zoom, (y - gameManager.translate.y) / gameManager.zoom
+					2160 / 2,1080/2
+					// ((-gameManager.translate.x + x) - root.x) / gameManager.zoom,
+					// ((-gameManager.translate.y +y)) / gameManager.zoom,
+				),
 
 				tapped: false,
 

@@ -8,21 +8,21 @@
 	import { card_preview } from '$lib/stores/GlobalContext.svelte';
 
 	let {
+		root,
 		data,
 		start_drag,
 		end_drag,
 		can_tap,
 		in_hand,
-		flipped,
 		trigger_context
 	}: {
+		root: Vector2;
 		data: CardData;
-		start_drag: () => void | true;
+		start_drag: (x: number, y: number) => void | true;
 		trigger_context?: (x: number, y: number) => void;
 		end_drag: () => void;
 		can_tap?: boolean;
 		in_hand?: boolean; // for appearance
-		flipped?: boolean;
 	} = $props();
 
 	let dragStart = Vector2.zero;
@@ -42,7 +42,7 @@
 			return;
 		}
 		if (e.buttons == 1) {
-			if (start_drag()) return;
+			if (start_drag(e.clientX, e.clientY)) return;
 
 			dragStart.x = e.clientX;
 			dragStart.y = e.clientY;
@@ -106,10 +106,8 @@
 			dragStart.x = gameManager.cursor_position.x;
 			dragStart.y = gameManager.cursor_position.y;
 
-			initialPosition.x =
-				(gameManager.cursor_position.x - boardRect.left - rect.width / 2) / gameManager.zoom;
-			initialPosition.y =
-				(gameManager.cursor_position.y - boardRect.top - rect.height / 2) / gameManager.zoom;
+			initialPosition.x = data.position.x;
+			initialPosition.y = data.position.y;
 
 			dragging = true;
 			moved = true;
@@ -124,9 +122,7 @@
 	class:hand={in_hand}
 	class:tapped={data.tapped}
 	class:dragging
-	style="--x: {flipped ? data.position.x - 200 : data.position.x}px; --y: {flipped
-		? data.position.y - 280
-		: data.position.y}px; z-index: {data.order}; --flip: {flipped ? '-1' : '1'};"
+	style="--x: {data.position.x}px; --y: {data.position.y}px; z-index: {data.order}"
 	hidden={dragging &&
 		!in_hand &&
 		(gameManager.hand_dropping_index != undefined || gameManager.pile_dropping != undefined)}
@@ -152,7 +148,6 @@
 		/* box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.24); */
 		transform-origin: center;
 
-		scale: var(--flip);
 		translate: var(--x) var(--y);
 
 		transition:
@@ -179,11 +174,11 @@
 		}
 
 		&:hover {
-			scale: calc(1.025 * var(--flip)) !important;
+			scale: calc(1.025) !important;
 			box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, 0.24);
 		}
 		&.dragging {
-			scale: calc(1.025 * var(--flip)) !important;
+			scale: calc(1.025) !important;
 			z-index: 1000000;
 			pointer-events: none;
 		}
