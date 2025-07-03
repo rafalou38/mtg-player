@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { gameManager } from '$lib/stores/GameStateManager.svelte';
+	import { gameManager, GameStateManager } from '$lib/stores/GameStateManager.svelte';
 	import type { Trinket } from '$lib/types/Trinkets';
 	import { Vector2 } from '$lib/util/math.svelte';
 
-	export const { trinket, flipped }: { trinket: Trinket, flipped?: boolean } = $props();
-
+	let { trinket, flipped, gm }: { trinket: Trinket; flipped?: boolean; gm: GameStateManager } =
+		$props();
 	let dragStart = Vector2.zero;
 	let initialPosition = Vector2.zero;
 	let dragging = false;
@@ -29,6 +29,11 @@
 		dragging = false;
 		gameManager.dragging_trinket = false;
 	}
+
+	let ff = $derived(
+		((gameManager.playmat_index == 2 || gameManager.playmat_index == 3) && (gm.playmat_index == 1 || gm.playmat_index == 4)) || 
+		((gm.playmat_index == 2 || gm.playmat_index == 3) && (gameManager.playmat_index == 1 || gameManager.playmat_index == 4))
+	);
 </script>
 
 <svelte:body {onmousemove} {onmouseup} />
@@ -39,7 +44,7 @@
 	onmousedown={start_drag}
 	style="--xp: {flipped ? trinket.position.x - 65 : trinket.position.x}px; --yp: {flipped
 		? trinket.position.y - 65
-		: trinket.position.y}px"
+		: trinket.position.y}px; --flip: {ff ? -1 : 1}"
 >
 	<i class="ms ms-{trinket.image}">-</i>
 </div>
@@ -67,5 +72,7 @@
 		font-size: 30px;
 
 		box-shadow: 2px 2px 1px 2px #16161643;
+
+		scale: 1 calc(1 * var(--flip));
 	}
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { playmat_positions } from '$lib/data/playmats';
 	import type { GameStateManager } from '$lib/stores/GameStateManager.svelte';
+	import { Vector2 } from '$lib/util/math.svelte';
 
 	let {
 		gameManager,
@@ -9,16 +11,23 @@
 		flipped: boolean;
 	} = $props();
 
+	let root = $derived(
+		new Vector2(
+			playmat_positions[gameManager.playmat_index][0].x,
+			playmat_positions[gameManager.playmat_index][0].y
+		)
+	);
+
 	let position = $derived.by(() => {
 		if (flipped) {
 			return {
-				x: gameManager.root.x - 2160,
-				y: gameManager.root.y - 1080 - 250
+				x: root.x - 2160,
+				y: root.y - 1080 - 250
 			};
 		} else {
 			return {
-				x: gameManager.root.x,
-				y: gameManager.root.y + 1080
+				x: root.x,
+				y: root.y + 1080
 			};
 		}
 	});

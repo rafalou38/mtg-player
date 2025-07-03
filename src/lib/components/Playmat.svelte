@@ -80,16 +80,16 @@
 >
 	{#each gameManager.trinkets as trinket}
 		{#if trinket.type == 'marker'}
-			<Marker {trinket} />
+			<Marker {trinket} flipped={flip} gm={gameManager} />
 		{:else if trinket.type == 'counter'}
-			<Counter {trinket} />
+			<Counter {trinket} flipped={flip} gm={gameManager} />
 		{/if}
 	{/each}
 </div>
 
-<!-- {#if gameManager.passive}
-	<OtherHand {gameManager} {flipped} />
-{/if} -->
+{#if gameManager.passive}
+	<OtherHand {gameManager} flipped={flip} />
+{/if}
 
 <style>
 	.wrapper {

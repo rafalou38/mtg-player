@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { gameManager } from '$lib/stores/GameStateManager.svelte';
+	import { gameManager, GameStateManager } from '$lib/stores/GameStateManager.svelte';
 	import type { Trinket } from '$lib/types/Trinkets';
 	import { Vector2 } from '$lib/util/math.svelte';
 
-	let { trinket, flipped }: { trinket: Trinket; flipped?: boolean } = $props();
+	let { trinket, flipped, gm }: { trinket: Trinket; flipped?: boolean; gm: GameStateManager } =
+		$props();
 
 	let dragStart = Vector2.zero;
 	let initialPosition = Vector2.zero;
@@ -77,18 +78,23 @@
 	$effect(() => {
 		if (saved_value != trinket.value) reset_timer();
 	});
+
+	let ff = $derived(
+		((gameManager.playmat_index == 2 || gameManager.playmat_index == 3) && (gm.playmat_index == 1 || gm.playmat_index == 4)) || 
+		((gm.playmat_index == 2 || gm.playmat_index == 3) && (gameManager.playmat_index == 1 || gameManager.playmat_index == 4))
+	);
 </script>
 
 <svelte:body {onmousemove} {onmouseup} />
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class:hp={trinket.image == "hp"}
+	class:hp={trinket.image == 'hp'}
 	class="counter"
 	onmousedown={start_drag}
 	style="--xp: {flipped ? trinket.position.x - 300 : trinket.position.x}px; --yp: {flipped
 		? trinket.position.y - 100
-		: trinket.position.y}px"
+		: trinket.position.y}px; --flip: {ff ? -1 : 1}"
 	class:m11={trinket.image == '/'}
 >
 	<div class="popup" class:visible={saved_value - trinket.value != 0 && diff_visible}>
@@ -149,7 +155,7 @@
 		}
 	}
 	.counter {
-		scale: 0.8;
+		scale: 0.8 calc(0.8 * var(--flip));
 		cursor: pointer;
 
 		position: absolute;
@@ -196,8 +202,8 @@
 			outline: none;
 		}
 	}
-	.hp{
-		scale: 1;
+	.hp {
+		scale: 1 var(--flip);
 	}
 
 	.m11 .label {
