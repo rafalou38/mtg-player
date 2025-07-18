@@ -1,0 +1,1422 @@
+{
+  "Courageous 1": {
+    "img": "https://media.wizards.com/2023/ltr/en_07fa72c00e.png",
+    "name": "Courageous 1",
+    "cards": [
+      {
+        "name": "Saradoc, Master of Buckland",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_cb3020d6a1.png"
+      },
+      {
+        "name": "Esquire of the King",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1c8164c1c9.png"
+      },
+      {
+        "name": "Samwise the Stouthearted",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_cf602939c5.png"
+      },
+      {
+        "name": "Took Reaper",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_785f31044c.png"
+      },
+      {
+        "name": "Rosie Cotton of South Lane",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d14e6907c1.png"
+      },
+      {
+        "name": "Errand-Rider of Gondor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4598dcbf80.png"
+      },
+      {
+        "name": "Bill the Pony",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_e17173d51d.png"
+      },
+      {
+        "name": "Lost to Legend",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6c014101f9.png"
+      },
+      {
+        "name": "Slip On the Ring",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11ea22b237.png"
+      },
+      {
+        "name": "Escape from Orthanc",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_12878ff16f.png"
+      },
+      {
+        "name": "Fog on the Barrow-Downs",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_114709bfc0.png"
+      },
+      {
+        "name": "Plains",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_9382dc8313.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Courageous 2": {
+    "img": "https://media.wizards.com/2023/ltr/en_07fa72c00e.png",
+    "name": "Courageous 2",
+    "cards": [
+      {
+        "name": "Saradoc, Master of Buckland",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_cb3020d6a1.png"
+      },
+      {
+        "name": "Nimble Hobbit",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_61015f5221.png"
+      },
+      {
+        "name": "Samwise the Stouthearted",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_cf602939c5.png"
+      },
+      {
+        "name": "Took Reaper",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_785f31044c.png"
+      },
+      {
+        "name": "Rosie Cotton of South Lane",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d14e6907c1.png"
+      },
+      {
+        "name": "Eastfarthing Farmer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8a58d8be64.png"
+      },
+      {
+        "name": "Bill the Pony",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_e17173d51d.png"
+      },
+      {
+        "name": "Reprieve",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4091fe02ca.png"
+      },
+      {
+        "name": "Hobbit's Sting",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1d876a0c71.png"
+      },
+      {
+        "name": "Slip On the Ring",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11ea22b237.png"
+      },
+      {
+        "name": "Escape from Orthanc",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_12878ff16f.png"
+      },
+      {
+        "name": "Plains",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_9382dc8313.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Tricksy 1": {
+    "img": "https://media.wizards.com/2023/ltr/en_5bd9d12298.png",
+    "name": "Tricksy 1",
+    "cards": [
+      {
+        "name": "Elvish Mariner",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3b57dbb147.png"
+      },
+      {
+        "name": "Nimrodel Watcher",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_53e84de989.png"
+      },
+      {
+        "name": "Pelargir Survivor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6fd2eda998.png"
+      },
+      {
+        "name": "Captain of Umbar",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_00fa6c4c74.png"
+      },
+      {
+        "name": "Elrond, Lord of Rivendell",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3c8590a426.png"
+      },
+      {
+        "name": "Meneldor, Swift Savior",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11d165d417.png"
+      },
+      {
+        "name": "Willow-Wind",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6f628ba5c6.png"
+      },
+      {
+        "name": "Glorious Gale",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c0c7b1a6b2.png"
+      },
+      {
+        "name": "Council's Deliberation",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6cb3c900e6.png"
+      },
+      {
+        "name": "Arwen's Gift",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_9f44c7876f.png"
+      },
+      {
+        "name": "Horses of the Bruinen",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1754cd4582.png"
+      },
+      {
+        "name": "Island",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_b156eff326.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Tricksy 2": {
+    "img": "https://media.wizards.com/2023/ltr/en_5bd9d12298.png",
+    "name": "Tricksy 2",
+    "cards": [
+      {
+        "name": "Elvish Mariner",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3b57dbb147.png"
+      },
+      {
+        "name": "Nimrodel Watcher",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_53e84de989.png"
+      },
+      {
+        "name": "Pelargir Survivor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6fd2eda998.png"
+      },
+      {
+        "name": "Ithilien Kingfisher",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_56e1006133.png"
+      },
+      {
+        "name": "Elrond, Lord of Rivendell",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3c8590a426.png"
+      },
+      {
+        "name": "Saruman the White",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ee6504b5f4.png"
+      },
+      {
+        "name": "Willow-Wind",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6f628ba5c6.png"
+      },
+      {
+        "name": "Glorious Gale",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c0c7b1a6b2.png"
+      },
+      {
+        "name": "Saruman's Trickery",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_aa46cacaa4.png"
+      },
+      {
+        "name": "Arwen's Gift",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_9f44c7876f.png"
+      },
+      {
+        "name": "Horses of the Bruinen",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1754cd4582.png"
+      },
+      {
+        "name": "Island",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_b156eff326.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Mordor 1": {
+    "img": "https://media.wizards.com/2023/ltr/en_db64281b91.png",
+    "name": "Mordor 1",
+    "cards": [
+      {
+        "name": "Ringwraiths",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8c3f9bcdf5.png"
+      },
+      {
+        "name": "Gollum, Patient Plotter",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_00e57c099b.png"
+      },
+      {
+        "name": "Uruk-hai Berserker",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_25252136f0.png"
+      },
+      {
+        "name": "Nazgûl",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_45a624b64e.png"
+      },
+      {
+        "name": "Gothmog, Morgul Lieutenant",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_eb21c9891c.png"
+      },
+      {
+        "name": "Cirith Ungol Patrol",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_a1f408a2fd.png"
+      },
+      {
+        "name": "Mordor Muster",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0dd81ed58b.png"
+      },
+      {
+        "name": "Claim the Precious",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_63317096c7.png"
+      },
+      {
+        "name": "Gollum's Bite",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5ff18eff43.png"
+      },
+      {
+        "name": "Nasty End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d47092127c.png"
+      },
+      {
+        "name": "Shelob's Ambush",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5c42ef9321.png"
+      },
+      {
+        "name": "Swamp",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_d5c1884437.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Mordor 2": {
+    "img": "https://media.wizards.com/2023/ltr/en_db64281b91.png",
+    "name": "Mordor 2",
+    "cards": [
+      {
+        "name": "Ringwraiths",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8c3f9bcdf5.png"
+      },
+      {
+        "name": "Gollum, Patient Plotter",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_00e57c099b.png"
+      },
+      {
+        "name": "Dunland Crebain",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0decfe86ea.png"
+      },
+      {
+        "name": "Gríma Wormtongue",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_7027ae8a56.png"
+      },
+      {
+        "name": "Gothmog, Morgul Lieutenant",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_eb21c9891c.png"
+      },
+      {
+        "name": "Cirith Ungol Patrol",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_a1f408a2fd.png"
+      },
+      {
+        "name": "Mordor Muster",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0dd81ed58b.png"
+      },
+      {
+        "name": "Lash of the Balrog",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_116a130c5a.png"
+      },
+      {
+        "name": "Bitter Downfall",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_185478962f.png"
+      },
+      {
+        "name": "Nasty End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d47092127c.png"
+      },
+      {
+        "name": "Orcish Medicine",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c628b9ae7e.png"
+      },
+      {
+        "name": "Swamp",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_d5c1884437.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Marauders 1": {
+    "img": "https://media.wizards.com/2023/ltr/en_de46dca361.png",
+    "name": "Marauders 1",
+    "cards": [
+      {
+        "name": "Assault on Osgiliath",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_47e4eef325.png"
+      },
+      {
+        "name": "Swarming of Moria",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_fbe04a82e4.png"
+      },
+      {
+        "name": "Foray of Orcs",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ea6ca4a6f9.png"
+      },
+      {
+        "name": "Fear, Fire, Foes!",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d11d4c7647.png"
+      },
+      {
+        "name": "Quarrel's End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5497400660.png"
+      },
+      {
+        "name": "Erebor Flamesmith",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b0bf53e0a1.png"
+      },
+      {
+        "name": "Battle-Scarred Goblin",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ed7bd3b3b8.png"
+      },
+      {
+        "name": "Grishnákh, Brash Instigator",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_07d9908f7b.png"
+      },
+      {
+        "name": "Gimli, Counter of Kills",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4a9a2c8f8f.png"
+      },
+      {
+        "name": "Olog-hai Crusher",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_010b84bd31.png"
+      },
+      {
+        "name": "Gimli's Fury",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ff382dcab5.png"
+      },
+      {
+        "name": "Mountain",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_eddd486edc.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Marauders 2": {
+    "img": "https://media.wizards.com/2023/ltr/en_de46dca361.png",
+    "name": "Marauders 2",
+    "cards": [
+      {
+        "name": "Assault on Osgiliath",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_47e4eef325.png"
+      },
+      {
+        "name": "Swarming of Moria",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_fbe04a82e4.png"
+      },
+      {
+        "name": "Foray of Orcs",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ea6ca4a6f9.png"
+      },
+      {
+        "name": "Quarrel's End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5497400660.png"
+      },
+      {
+        "name": "Erebor Flamesmith",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b0bf53e0a1.png"
+      },
+      {
+        "name": "Goblin Fireleaper",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d76a1afa92.png"
+      },
+      {
+        "name": "Grishnákh, Brash Instigator",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_07d9908f7b.png"
+      },
+      {
+        "name": "Gimli, Counter of Kills",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4a9a2c8f8f.png"
+      },
+      {
+        "name": "Olog-hai Crusher",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_010b84bd31.png"
+      },
+      {
+        "name": "Smite the Deathless",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_22c731e948.png"
+      },
+      {
+        "name": "Rush the Room",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_fe694665c5.png"
+      },
+      {
+        "name": "Mountain",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_eddd486edc.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Journey 1": {
+    "img": "https://media.wizards.com/2023/ltr/en_dbcf3145a3.png",
+    "name": "Journey 1",
+    "cards": [
+      {
+        "name": "Elanor Gardner",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11c3900926.png"
+      },
+      {
+        "name": "Mirkwood Spider",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b35ead032c.png"
+      },
+      {
+        "name": "Meriadoc Brandybuck",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_e21ff1c1cf.png"
+      },
+      {
+        "name": "Brandywine Farmer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8b09039b7c.png"
+      },
+      {
+        "name": "Mirrormere Guardian",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_adcbe99ec1.png"
+      },
+      {
+        "name": "Dúnedain Rangers",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1810b755e1.png"
+      },
+      {
+        "name": "Quickbeam, Upstart Ent",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_feafbaab13.png"
+      },
+      {
+        "name": "Ent's Fury",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_f8b210bfd4.png"
+      },
+      {
+        "name": "Revive the Shire",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_635bd9c6e1.png"
+      },
+      {
+        "name": "Gift of Strands",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_979e072a37.png"
+      },
+      {
+        "name": "Bombadil's Song",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ba172bbd79.png"
+      },
+      {
+        "name": "Forest",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_3e8899d0cb.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Journey 2": {
+    "img": "https://media.wizards.com/2023/ltr/en_dbcf3145a3.png",
+    "name": "Journey 2",
+    "cards": [
+      {
+        "name": "Elanor Gardner",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11c3900926.png"
+      },
+      {
+        "name": "Wose Pathfinder",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_26269c8ae0.png"
+      },
+      {
+        "name": "Meriadoc Brandybuck",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_e21ff1c1cf.png"
+      },
+      {
+        "name": "Brandywine Farmer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8b09039b7c.png"
+      },
+      {
+        "name": "Peregrin Took",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_eb2af05f02.png"
+      },
+      {
+        "name": "Enraged Huorn",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_264a2a6e7c.png"
+      },
+      {
+        "name": "Quickbeam, Upstart Ent",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_feafbaab13.png"
+      },
+      {
+        "name": "Stew the Coneys",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_29e54e4e7c.png"
+      },
+      {
+        "name": "Pippin's Bravery",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_817110a499.png"
+      },
+      {
+        "name": "Galadhrim Bow",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_2143b2e437.png"
+      },
+      {
+        "name": "Revive the Shire",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_635bd9c6e1.png"
+      },
+      {
+        "name": "Forest",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_3e8899d0cb.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Mortals 1": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_f869530eb9.png",
+    "name": "Mortals 1",
+    "cards": [
+      {
+        "name": "Eagle of Deliverance",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5346b9cc34.png"
+      },
+      {
+        "name": "Took Reaper",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_785f31044c.png"
+      },
+      {
+        "name": "Eastfarthing Farmer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8a58d8be64.png"
+      },
+      {
+        "name": "Soldier of the Grey Host",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_81164cf7b2.png"
+      },
+      {
+        "name": "Shire Shirriff",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_83a3a8121e.png"
+      },
+      {
+        "name": "Éowyn, Lady of Rohan",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_436948e509.png"
+      },
+      {
+        "name": "Faramir, Field Commander",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_dbc7f8ba82.png"
+      },
+      {
+        "name": "Second Breakfast",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3fee6126d8.png"
+      },
+      {
+        "name": "Fog on the Barrow-Downs",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_114709bfc0.png"
+      },
+      {
+        "name": "Banish from Edoras",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_748e3cfb49.png"
+      },
+      {
+        "name": "Barrow-Blade",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8cf5d06b58.png"
+      },
+      {
+        "name": "Plains",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_9382dc8313.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Mortals 2": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_f869530eb9.png",
+    "name": "Mortals 2",
+    "cards": [
+      {
+        "name": "Eagle of Deliverance",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5346b9cc34.png"
+      },
+      {
+        "name": "East-Mark Cavalier",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ffff91cc3e.png"
+      },
+      {
+        "name": "Took Reaper",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_785f31044c.png"
+      },
+      {
+        "name": "Errand-Rider of Gondor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4598dcbf80.png"
+      },
+      {
+        "name": "Samwise the Stouthearted",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_cf602939c5.png"
+      },
+      {
+        "name": "Faramir, Field Commander",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_dbc7f8ba82.png"
+      },
+      {
+        "name": "Landroval, Horizon Witness",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_db546d2278.png"
+      },
+      {
+        "name": "Slip On the Ring",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11ea22b237.png"
+      },
+      {
+        "name": "Reprieve",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4091fe02ca.png"
+      },
+      {
+        "name": "Banish from Edoras",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_748e3cfb49.png"
+      },
+      {
+        "name": "Inherited Envelope",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_54c3c9d1da.png"
+      },
+      {
+        "name": "Plains",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_9382dc8313.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Cunning 1": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4a4a748edb.png",
+    "name": "Cunning 1",
+    "cards": [
+      {
+        "name": "Minas Tirith Garrison",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1b36b03e4a.png"
+      },
+      {
+        "name": "Pelargir Survivor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6fd2eda998.png"
+      },
+      {
+        "name": "Captain of Umbar",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_00fa6c4c74.png"
+      },
+      {
+        "name": "Knights of Dol Amroth",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_f5bf3458dd.png"
+      },
+      {
+        "name": "Ioreth of the Healing House",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_2fe2f2cd20.png"
+      },
+      {
+        "name": "Meneldor, Swift Savior",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_11d165d417.png"
+      },
+      {
+        "name": "Bewitching Leechcraft",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_610573f983.png"
+      },
+      {
+        "name": "The Bath Song",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_dfd7523c55.png"
+      },
+      {
+        "name": "Glorious Gale",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c0c7b1a6b2.png"
+      },
+      {
+        "name": "Arwen's Gift",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_9f44c7876f.png"
+      },
+      {
+        "name": "Horses of the Bruinen",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1754cd4582.png"
+      },
+      {
+        "name": "Island",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_b156eff326.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Cunning 2": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4a4a748edb.png",
+    "name": "Cunning 2",
+    "cards": [
+      {
+        "name": "Minas Tirith Garrison",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1b36b03e4a.png"
+      },
+      {
+        "name": "Pelargir Survivor",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6fd2eda998.png"
+      },
+      {
+        "name": "Captain of Umbar",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_00fa6c4c74.png"
+      },
+      {
+        "name": "Knights of Dol Amroth",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_f5bf3458dd.png"
+      },
+      {
+        "name": "Bill Ferny, Bree Swindler",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_116104adf8.png"
+      },
+      {
+        "name": "Elrond, Lord of Rivendell",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3c8590a426.png"
+      },
+      {
+        "name": "Bewitching Leechcraft",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_610573f983.png"
+      },
+      {
+        "name": "Isolation at Orthanc",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4e6a5f819f.png"
+      },
+      {
+        "name": "Lórien Revealed",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_aef33e595b.png"
+      },
+      {
+        "name": "Horses of the Bruinen",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1754cd4582.png"
+      },
+      {
+        "name": "Mirror of Galadriel",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_856332e4d5.png"
+      },
+      {
+        "name": "Island",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_b156eff326.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Orcish 1": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_2403210e8b.png",
+    "name": "Orcish 1",
+    "cards": [
+      {
+        "name": "Warg Rider",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1fe64e15c5.png"
+      },
+      {
+        "name": "Easterling Vanguard",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_7764a81a27.png"
+      },
+      {
+        "name": "Dunland Crebain",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0decfe86ea.png"
+      },
+      {
+        "name": "Mirkwood Bats",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_bafdb429f2.png"
+      },
+      {
+        "name": "Gorbag of Minas Morgul",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4cbbf0e680.png"
+      },
+      {
+        "name": "Gothmog, Morgul Lieutenant",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_eb21c9891c.png"
+      },
+      {
+        "name": "Mordor Muster",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0dd81ed58b.png"
+      },
+      {
+        "name": "Sam's Desperate Rescue",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d233e5498f.png"
+      },
+      {
+        "name": "Orcish Medicine",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c628b9ae7e.png"
+      },
+      {
+        "name": "Bitter Downfall",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_185478962f.png"
+      },
+      {
+        "name": "Grond, the Gatebreaker",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_2e20eeca91.png"
+      },
+      {
+        "name": "Swamp",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_d5c1884437.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Orcish 2": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_2403210e8b.png",
+    "name": "Orcish 2",
+    "cards": [
+      {
+        "name": "Warg Rider",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1fe64e15c5.png"
+      },
+      {
+        "name": "Easterling Vanguard",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_7764a81a27.png"
+      },
+      {
+        "name": "Dunland Crebain",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0decfe86ea.png"
+      },
+      {
+        "name": "Mordor Trebuchet",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c9e9ec9286.png"
+      },
+      {
+        "name": "Gorbag of Minas Morgul",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4cbbf0e680.png"
+      },
+      {
+        "name": "Gothmog, Morgul Lieutenant",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_eb21c9891c.png"
+      },
+      {
+        "name": "Voracious Fell Beast",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_72f04ad1c0.png"
+      },
+      {
+        "name": "Mordor Muster",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0dd81ed58b.png"
+      },
+      {
+        "name": "Lash of the Balrog",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_116a130c5a.png"
+      },
+      {
+        "name": "Nasty End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d47092127c.png"
+      },
+      {
+        "name": "March from the Black Gate",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ca0f9698a4.png"
+      },
+      {
+        "name": "Swamp",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_d5c1884437.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Riders 1": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ac37908d89.png",
+    "name": "Riders 1",
+    "cards": [
+      {
+        "name": "Riders of the Mark",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3db8725ccd.png"
+      },
+      {
+        "name": "Rohirrim Lancer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6863b27088.png"
+      },
+      {
+        "name": "Relentless Rohirrim",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0d61823fdd.png"
+      },
+      {
+        "name": "Erkenbrand, Lord of Westfold",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c773a5a11d.png"
+      },
+      {
+        "name": "Éomer of the Riddermark",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_511c298693.png"
+      },
+      {
+        "name": "Rally at the Hornburg",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1411d07716.png"
+      },
+      {
+        "name": "Quarrel's End",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5497400660.png"
+      },
+      {
+        "name": "Fear, Fire, Foes!",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d11d4c7647.png"
+      },
+      {
+        "name": "Gimli's Fury",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ff382dcab5.png"
+      },
+      {
+        "name": "Smite the Deathless",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_22c731e948.png"
+      },
+      {
+        "name": "Rising of the Day",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1919656f86.png"
+      },
+      {
+        "name": "Mountain",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_eddd486edc.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Riders 2": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ac37908d89.png",
+    "name": "Riders 2",
+    "cards": [
+      {
+        "name": "Riders of the Mark",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_3db8725ccd.png"
+      },
+      {
+        "name": "Rohirrim Lancer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_6863b27088.png"
+      },
+      {
+        "name": "Haradrim Spearmaster",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4d2e12f002.png"
+      },
+      {
+        "name": "Relentless Rohirrim",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_0d61823fdd.png"
+      },
+      {
+        "name": "Erkenbrand, Lord of Westfold",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_c773a5a11d.png"
+      },
+      {
+        "name": "Éomer of the Riddermark",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_511c298693.png"
+      },
+      {
+        "name": "Rally at the Hornburg",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1411d07716.png"
+      },
+      {
+        "name": "Fear, Fire, Foes!",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_d11d4c7647.png"
+      },
+      {
+        "name": "Smite the Deathless",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_22c731e948.png"
+      },
+      {
+        "name": "Gimli's Axe",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_a5de24c5fb.png"
+      },
+      {
+        "name": "Book of Mazarbul",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_1253de4b88.png"
+      },
+      {
+        "name": "Mountain",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_eddd486edc.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Elven 1": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_bc51fcb960.png",
+    "name": "Elven 1",
+    "cards": [
+      {
+        "name": "Mirkwood Channeler",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b82016dba3.png"
+      },
+      {
+        "name": "Lothlórien Lookout",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8a70f7b062.png"
+      },
+      {
+        "name": "Chance-Met Elves",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_88f584e271.png"
+      },
+      {
+        "name": "Galadhrim Guide",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8c0a955e24.png"
+      },
+      {
+        "name": "Enraged Huorn",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_264a2a6e7c.png"
+      },
+      {
+        "name": "Glorfindel, Dauntless Rescuer",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_13d06bd34e.png"
+      },
+      {
+        "name": "Celeborn the Wise",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5deebf2cd1.png"
+      },
+      {
+        "name": "Shower of Arrows",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_e993cec967.png"
+      },
+      {
+        "name": "Stew the Coneys",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_29e54e4e7c.png"
+      },
+      {
+        "name": "Entish Restoration",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_4504baae39.png"
+      },
+      {
+        "name": "Lembas",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_96734e7a64.png"
+      },
+      {
+        "name": "Forest",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_3e8899d0cb.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  },
+  "Elven 2": {
+    "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_bc51fcb960.png",
+    "name": "Elven 2",
+    "cards": [
+      {
+        "name": "Mirkwood Channeler",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b82016dba3.png"
+      },
+      {
+        "name": "Mirkwood Spider",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_b35ead032c.png"
+      },
+      {
+        "name": "Lothlórien Lookout",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8a70f7b062.png"
+      },
+      {
+        "name": "Chance-Met Elves",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_88f584e271.png"
+      },
+      {
+        "name": "Galadhrim Guide",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_8c0a955e24.png"
+      },
+      {
+        "name": "Celeborn the Wise",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_5deebf2cd1.png"
+      },
+      {
+        "name": "Quickbeam, Upstart Ent",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_feafbaab13.png"
+      },
+      {
+        "name": "Bombadil's Song",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_ba172bbd79.png"
+      },
+      {
+        "name": "Stew the Coneys",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_29e54e4e7c.png"
+      },
+      {
+        "name": "Revive the Shire",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_635bd9c6e1.png"
+      },
+      {
+        "name": "Ent-Draught Basin",
+        "n": "1",
+        "img": "https://media.wizards.com/2023/ltr/ltr_op_b2BkgM2Vtw/en_29aed8b842.png"
+      },
+      {
+        "name": "Forest",
+        "n": "8",
+        "img": "https://media.wizards.com/2025/eoe/2gys51z9yb73/en_3e8899d0cb.webp"
+      },
+      {
+        "name": "Rare or mythic rare",
+        "n": "1",
+        "img": ""
+      }
+    ]
+  }
+}
