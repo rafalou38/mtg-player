@@ -5,43 +5,49 @@
 	import { onMount } from 'svelte';
 	import Window from './Window.svelte';
 	import type { PileType } from '$lib/types/Pile';
+	import type { CardData } from '$lib/types/Card';
 
-	let { pile = $bindable() }: { pile: PileType | undefined } = $props();
+	let {
+		pile = $bindable(),
+		card_list = $bindable()
+	}: {
+		pile?: PileType;
+		card_list?: CardData[];
+	} = $props<{
+		pile?: PileType;
+		card_list?: CardData[];
+	}>();
 
+	let cards = $derived(pile ? gameManager.piles[pile].cards : card_list || []);
 	let search = $state('');
 
 	function submit() {}
-
-	function addC(card: string, x: number, y: number) {
-		if (card) {
-		}
-
-		gameManager.blocked = false;
-		pile = undefined;
-	}
 </script>
 
 <Window
-	active={pile != undefined}
+	active={cards.length > 0}
 	on_close={() => {
 		pile = undefined;
+		card_list = undefined;
 		gameManager.blocked = false;
 	}}
 >
 	<div class="wrapper">
-		{#if pile}
+		{#if cards.length > 0}
 			<form class="window-body" onsubmit={submit}>
 				<input type="text" placeholder="search" bind:value={search} />
 			</form>
 			<div class="results">
-				{#each gameManager.piles[pile].cards.filter((c) => c.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) as card}
+				{#each cards.filter((c) => c.name
+						.toLocaleLowerCase()
+						.includes(search.toLocaleLowerCase())) as card}
 					<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 					<img
 						src={card.img}
 						alt=""
 						onmousedown={(e) => {
-							if(!pile) return;
-                            gameManager.removeCardFromPile(card, pile);
+							if (!pile) return;
+							gameManager.removeCardFromPile(card, pile);
 							gameManager.addCardToHand(card, 0);
 						}}
 					/>
