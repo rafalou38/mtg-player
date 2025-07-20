@@ -4,6 +4,7 @@
 	import CardSearch from './CardSearch.svelte';
 	import type { CardData } from '$lib/types/Card';
 	import { Vector2 } from '$lib/util/math.svelte';
+	import { gameManager } from '$lib/stores/GameStateManager.svelte';
 
 	let { ready = $bindable(false) } = $props<{
 		ready: boolean;
@@ -33,6 +34,12 @@
 		const theme_2 = Object.keys(data)[Math.floor(Math.random() * Object.keys(data).length)];
 
 		chosen_themes = [data[theme_1], data[theme_2]];
+	}
+
+	function submit() {
+		gameManager.loadJumpStart(chosen_themes);
+		
+		ready = true
 	}
 
 	let preview_cards = $state<CardData[]>([]);
@@ -76,7 +83,7 @@
 		>
 		<button
 			class="mx-auto my-4 w-1/3 cursor-pointer rounded-xl border-4 border-white px-10 py-4 text-xl font-bold text-white transition-all hover:bg-white hover:text-black active:scale-95"
-			onclick={() => (ready = true)}>SUBMIT</button
+			onclick={submit}>SUBMIT</button
 		>
 	</div>
 {:else}

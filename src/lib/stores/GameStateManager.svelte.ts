@@ -7,6 +7,7 @@ import { assert } from "$lib/util/assert";
 import { connectionManager } from "./ConnectionManager.svelte";
 import type { ArchidektDeck } from "$lib/types/ArchidektApi";
 import type { Trinket } from "$lib/types/Trinkets";
+import type { JumpStartTheme } from "$lib/types/JumpStart";
 
 export class GameStateManager {
 
@@ -153,7 +154,7 @@ export class GameStateManager {
         this.board.push(card);
         if (card) this.putCardOnTop(card.id, false);
         connectionManager.send_board_update(card, true);
-        
+
     }
     moveCardFromHandToBoard(cardId: CardId, position: Vector2) {
         const cardIndex = this.hand.findIndex(c => c.id === cardId);
@@ -339,6 +340,27 @@ export class GameStateManager {
         }
 
         console.log(this.piles);
+    }
+    loadJumpStart(themes: JumpStartTheme[]) {
+        this.deck_image = themes[0].img;
+
+        this.piles["library"].cards = [];
+        
+
+        themes.forEach(t =>
+            t.cards.forEach((c) => {
+                for (let i = 0; i < parseInt(c.n); i++) {
+                    this.piles["library"].cards.push({
+                        id: Math.random(),
+                        img: c.img,
+                        name: c.name,
+                        order: 0,
+                        position: Vector2.zero,
+                        tapped: false,
+                        equipped_to: undefined
+                    });
+                }
+            }));
     }
 
     shuffle(pile: PileType) {
