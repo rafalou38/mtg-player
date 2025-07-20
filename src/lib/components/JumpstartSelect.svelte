@@ -38,8 +38,8 @@
 
 	function submit() {
 		gameManager.loadJumpStart(chosen_themes);
-		
-		ready = true
+
+		ready = true;
 	}
 
 	let preview_cards = $state<CardData[]>([]);
@@ -47,6 +47,12 @@
 		preview_cards = [];
 
 		t.cards.forEach((c) => {
+			if (c.img == '') {
+				console.log(`Replacing ${c.name} with Fabled Passage`);
+				c.img =
+					'https://cards.scryfall.io/large/front/6/a/6a21ecc8-f6fd-4670-91d8-94b9ce94c2fe.jpg?1752944504';
+				c.name = 'Fabled Passage';
+			}
 			for (let i = 0; i < parseInt(c.n); i++) {
 				preview_cards.push({
 					id: Math.random(),

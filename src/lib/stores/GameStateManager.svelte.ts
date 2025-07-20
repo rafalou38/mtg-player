@@ -345,11 +345,16 @@ export class GameStateManager {
         this.deck_image = themes[0].img;
 
         this.piles["library"].cards = [];
-        
+
 
         themes.forEach(t =>
             t.cards.forEach((c) => {
                 for (let i = 0; i < parseInt(c.n); i++) {
+                    if (c.img == "") {
+                        console.log(`Replacing ${c.name} with Fabled Passage`);
+                        c.img = "https://cards.scryfall.io/large/front/6/a/6a21ecc8-f6fd-4670-91d8-94b9ce94c2fe.jpg?1752944504"
+                        c.name = "Fabled Passage"
+                    }
                     this.piles["library"].cards.push({
                         id: Math.random(),
                         img: c.img,
